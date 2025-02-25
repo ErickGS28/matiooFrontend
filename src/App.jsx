@@ -1,35 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import '@mantine/core/styles.css';
+import { MantineProvider, Button, AngleSlider, Table } from '@mantine/core';
+import './index.css';
+import Demo from './Demo';
+import Img from './Img';
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <MantineProvider withGlobalStyles withNormalizeCSS>
+      <h1 className="text-3xl font-bold underline text-center text-blue-500 mb-0">
+        Hello world!
+      </h1>
+      <div className="flex flex-col items-center justify-center mt-2">
+        <Button>Hola, Mantine!</Button>
+        <AngleSlider className='mt-5' aria-label="Angle slider" size={60} thumbSize={8} />
+        <Demo /> 
+
+
+       
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </MantineProvider>
+  );
 }
 
-export default App
+export default App;

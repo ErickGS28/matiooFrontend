@@ -1,31 +1,25 @@
-import React from 'react';
-import '@mantine/core/styles.css';
-import { MantineProvider, Button, AngleSlider, Table } from '@mantine/core';
-import './index.css';
-import Demo from './Demo';
-import Img from './components/ui/Img';
-
-import Muestreo from './Muestreo';
-
-
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { MantineProvider } from "@mantine/core";
+import { Form } from "./components/Form";
+import Home from "./components/Home";
 
 function App() {
-  return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
-      <h1 className="text-3xl font-bold underline text-center text-blue-500 mb-0">
-        Hello world!
-      </h1>
-      <div className="flex flex-col items-center justify-center mt-2">
-        <Button>Hola, Mantine!</Button>
-        <AngleSlider className='mt-5' aria-label="Angle slider" size={60} thumbSize={8} />
-        <Demo /> 
+  const [user, setUser] = useState(null);
 
-        <div className='shadow-xl rounded-2xl w-3/4 py-3 px-10 '>
-        <Muestreo/>
+  return (
+    <Router>
+      <MantineProvider withGlobalStyles withNormalizeCSS>
+        <div className="flex items-center justify-center mt-5 min-h-screen">
+          <div className="flex justify-center items-center shadow-lg h-auto p-12 w-lg">
+            <Routes>
+              <Route path="/" element={<Form setUser={setUser} />} />
+              <Route path="/home" element={<Home user={user} />} />
+            </Routes>
+          </div>
         </div>
-        
-      </div>
-    </MantineProvider>
+      </MantineProvider>
+    </Router>
   );
 }
 

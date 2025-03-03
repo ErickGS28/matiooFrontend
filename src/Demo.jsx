@@ -1,6 +1,6 @@
 import { useDisclosure } from '@mantine/hooks';
 import { Modal, Button } from '@mantine/core';
-import Img from './Img';
+import Img from './components/ui/Img';
 
 function Demo() {
   const [opened, { open, close }] = useDisclosure(false);

@@ -1,1 +1,48 @@
 @import "tailwindcss";
+
+
+
+@theme {
+
+    /* Barra lateral */
+    --color-purple-bg-aside: rgba(197, 174, 255, 1);
+    --color-darkpurple-icon: rgba(42, 0, 78, 1);
+    --color-red-bg-icon: rgba(198, 35, 0, 1);
+    --color-skyblue-bg-icon: rgba(209, 255, 255, 1);
+    --color-darkpurple-icon: rgba(42, 0, 78, 1);
+
+
+    /* Logos */
+    --color-darkpurple-logo-icon: rgba(42, 0, 78, 1);
+    --color-purple-shadow: rgba(106, 66, 194, 0.25);
+
+
+    /* Botones */
+    --color-green-confirm: rgba(74, 205, 163, 1);
+    --color-red-cancel: rgba(198, 35, 0, 1);
+
+    /* Alertas */
+
+    --color-skyblue-success: rgba(209, 255, 255, 1);
+    --color-red-fail: rgba(205, 74, 91, 1);
+
+    /* Tablas */
+    --color-darkpurple-bg-thead: rgba(42, 0, 78, 1);
+    --color-skyblue-row: rgba(209, 255, 255, 1);
+    --color-lightpurple-row: rgba(197, 174, 255, 1);
+    --color-purple-row-btn: rgba(86, 58, 156, 1);
+
+
+    /* Letras */
+    --color-darkpurple-title: rgba(42, 0, 78, 1);
+    --color-mdpurple-htext: rgba(86, 58, 156, 1);
+    --color-lightpurple-text: rgba(197, 174, 255, 1);
+    --color-gray-pagination: rgba(120, 120, 120, 1);
+    
+
+
+   
+
+
+
+  }

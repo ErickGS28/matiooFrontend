@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Importamos useNavigate
-import Btn from "./ui/Btn"; // Si necesitas un botón personalizado, mantén este import
+import Btn from "../ui/Btn"; // Si necesitas un botón personalizado, mantén este import
 
 export const Form = ({ setUser }) => {
   const [nombre, setNombre] = useState(""); // Estado para el nombre

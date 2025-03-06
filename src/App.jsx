@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
-import { Form } from "./components/Form";
-import Home from "./components/Home";
+import { Form } from "./components/templates/Form";
+import {Home} from "./components/templates/Home";
 
 function App() {
   const [user, setUser] = useState(null);

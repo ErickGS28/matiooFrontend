@@ -10,8 +10,8 @@ function App() {
   return (
     <Router>
       <MantineProvider withGlobalStyles withNormalizeCSS>
-        <div className="flex items-center justify-center mt-5 min-h-screen">
-          <div className="flex justify-center items-center shadow-lg h-auto p-12 w-lg">
+        <div className="min-h-full">
+          <div >
             <Routes>
               <Route path="/" element={<Form setUser={setUser} />} />
               <Route path="/home" element={<Home user={user} />} />

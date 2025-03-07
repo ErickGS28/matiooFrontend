@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
 import { Form } from "./components/templates/Form";
 import {Home} from "./components/templates/Home";
+import Item from "./components/templates/Item";
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -11,10 +13,11 @@ function App() {
     <Router>
       <MantineProvider withGlobalStyles withNormalizeCSS>
         <div className="min-h-full">
-          <div >
+          <div>
             <Routes>
               <Route path="/" element={<Form setUser={setUser} />} />
               <Route path="/home" element={<Home user={user} />} />
+              <Route path="/item" element={<Item user={user} />} />
             </Routes>
           </div>
         </div>

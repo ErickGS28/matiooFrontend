@@ -1,31 +1,101 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import LogoAside from "./ui/logoAside";
 
 export default function AsideBar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate('/'); // Navega a la página anterior en el historial
+  };
+
+  const handleProfileClick = () => {
+    navigate('/perfil'); // Navega a la ruta de la vista "Perfil"
+  };
+
+  const handleItem = () => {
+    navigate('/item');
+  }
+
+  const handleHome = () => {
+    navigate('/home');
+  }
+
   return (
     <div className="min-h-full bg-purple-bg-aside shadow flex flex-col">
       {/* Elementos superiores */}
       <div>
-        <div className="p-4 bg-white shadow">
+        <div className="p-4 bg-white shadow cursor-pointer" onClick={handleHome}>
           <LogoAside />
         </div>
         <div className="w-[1.8em] m-auto mt-[1em]">
-          <img src="/menu.png" alt="Menu" />
+          <img src="/asidebarIMG/menu.png" alt="Menu" />
         </div>
 
-        <div className="w-[2.5em] h-[2.5em] m-auto mt-[2em] bg-white rounded-full flex items-center justify-center">
-          <img src="/caja.png" alt="Caja" className="w-[1.8em]" />
+        <div 
+          className="w-[2.5em] h-[2.5em] m-auto mt-[2em] bg-white rounded-full flex items-center justify-center cursor-pointer"
+          onClick={handleItem}
+        >
+          <img src="/asidebarIMG/responsible.png" alt="Caja" className="w-[1.2em]" />
+        </div>
+
+        <div 
+          className="w-[2.5em] h-[2.5em] m-auto mt-[2em] bg-white rounded-full flex items-center justify-center cursor-pointer"
+          onClick={handleItem}
+        >
+          <img src="/asidebarIMG/interns.png" alt="Caja" className="w-[1.8em]" />
+        </div>
+
+        <div 
+          className="w-[2.5em] h-[2.5em] m-auto mt-[2em] bg-white rounded-full flex items-center justify-center cursor-pointer"
+          onClick={handleItem}
+        >
+          <img src="/asidebarIMG/notes.png" alt="Caja" className="w-[1.5em]" />
+        </div>
+
+        <div 
+          className="w-[2.5em] h-[2.5em] m-auto mt-[2em] bg-white rounded-full flex items-center justify-center cursor-pointer"
+          onClick={handleItem}
+        >
+          <img src="/asidebarIMG/zona.png" alt="Caja" className="w-[1.5em]" />
+        </div>
+
+        <div 
+          className="w-[2.5em] h-[2.5em] m-auto mt-[2em] bg-white rounded-full flex items-center justify-center cursor-pointer"
+          onClick={handleItem}
+        >
+          <img src="/asidebarIMG/item2.png" alt="Caja" className="w-[1.8em]" />
+        </div>
+
+        <div 
+          className="w-[2.5em] h-[2.5em] m-auto mt-[2em] bg-white rounded-full flex items-center justify-center cursor-pointer"
+          onClick={handleItem}
+        >
+          <img src="/asidebarIMG/item.png" alt="Caja" className="w-[1.8em]" />
+        </div>
+
+        <div 
+          className="w-[2.5em] h-[2.5em] m-auto mt-[2em] bg-white rounded-full flex items-center justify-center cursor-pointer"
+          onClick={handleItem}
+        >
+          <img src="/asidebarIMG/notaChida.png" alt="Caja" className="w-[1.2em]" />
         </div>
       </div>
 
-      {/* Elementos inferiores que deseas abajo */}
+      {/* Elementos inferiores */}
       <div className="mt-auto mb-4">
-        <div className="w-[2.5em] h-[2.5em] m-auto bg-white rounded-full flex items-center justify-center">
-          <img src="/profile.png" alt="Perfil" className="w-[1.5em]" />
+        <div
+          className="w-[2.5em] h-[2.5em] m-auto bg-white rounded-full flex items-center justify-center cursor-pointer"
+          onClick={handleProfileClick}
+        >
+          <img src="/asidebarIMG/profile.png" alt="Perfil" className="w-[1.5em]" />
         </div>
 
-        <div className="w-[2.5em] h-[2.5em] m-auto mt-[1em] bg-red-bg-icon rounded-full flex items-center justify-center">
-          <img src="/closeAccount.png" alt="Cerrar sesión" className="w-[1.2em]" />
+        <div
+          className="w-[2.5em] h-[2.5em] m-auto mt-[1em] bg-red-bg-icon rounded-full flex items-center justify-center cursor-pointer"
+          onClick={handleLogout}
+        >
+          <img src="/asidebarIMG/closeAccount.png" alt="Cerrar sesión" className="w-[1.2em]" />
         </div>
       </div>
     </div>

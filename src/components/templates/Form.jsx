@@ -1,124 +1,104 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importamos useNavigate
-import Btn from "../ui/Btn"; // Si necesitas un botón personalizado, mantén este import
+import { useNavigate } from "react-router-dom";
+import Alert from "../ui/Alert";
 
 export const Form = ({ setUser }) => {
-  const [nombre, setNombre] = useState(""); // Estado para el nombre
-  const [contra, setContra] = useState(""); // Estado para la contraseña
+  const [nombre, setNombre] = useState("");
+  const [contra, setContra] = useState("");
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  const navigate = useNavigate(); // Hook para redirección
+  const navigate = useNavigate();
 
-  // Función para manejar el envío del formulario
   const handleSubmit = (e) => {
-    e.preventDefault(); // Evitar el refresco de la página
+    e.preventDefault();
     if (nombre === "" || contra === "") {
-      setError(true); // Si los campos están vacíos, mostrar error
+      setError(true);
+      setSuccess(false);
       return;
     } else if (nombre === "admin" && contra === "admin") {
-      setError(false); // Si no hay errores, limpia el error
-      setUser([nombre]); // Asignar el usuario (aunque no se especifica qué hace esta función)
-      navigate("/home"); // Redirigir a la página 'home'
+      setError(false);
+      setSuccess(true);
+      setUser([nombre]);
+      // Muestra el mensaje de éxito por un breve tiempo antes de redirigir
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000); // 2 segundos de demora
     } else {
+      setError(true);
+      setSuccess(false);
     }
-    setError(false); // Si no hay errores, limpia el error
-    setUser([nombre]); // Asignar el usuario (aunque no se especifica qué hace esta función)
-    navigate("/home"); // Redirigir a la página 'home'
   };
 
   return (
-    <>
+    <div className="flex justify-center m-auto gap-6 w-[800px] shadow-2xl mt-12 p-6 rounded-lg shadow shadow-purple-300 shadow-lg">
+      <div className="w-1/2 m-auto rounded-2xl">
+        <img src="/login.png" alt="" className="h-lg object-cover m-auto rounded-2xl" />
+      </div>
 
+      <div className="w-1/2 mx-auto">
+        <section className="m-auto">
+          <img src="/logomatioo.png" alt="" className="h-1/3 w-[150px] m-auto" />
+          <h1 className="text-center text-2xl font-semibold mt-2">
+            Te damos la bienvenida...
+          </h1>
+        </section>
 
-    
-      <div className="flex justify-center m-auto gap-6 w-[800px] shadow-2xl mt-12 p-6 rounded-lg ">
+        {error && (
+          <Alert
+            message="Error al iniciar sesión."
+            bgColor="bg-red-fail"
+            textColor="text-white"
+            imageSrc="/alertFail.png"
+          />
+        )}
 
-        <div className="w-1/2 m-auto rounded-2xl">
-          <img src="/login.png" alt="" className="h-lg  object-cover m-auto rounded-2xl " />
-        </div>
+        {success && (
+          <Alert
+            message="Iniciando sesión correctamente."
+            bgColor="bg-skyblue-success"
+            textColor="text-black"
+            imageSrc="/alertSuccess.png"
+          />
+        )}
 
-        <div className="w-1/2 mx-auto">
-          <section className="m-auto">
-            <img
-              src="/logomatioo.png"
-              alt=""
-              className="h-1/3 w-[150px] m-auto"
-            />
-            <h1 className="text-center text-2xl font-semibold mt-2">
-              Te damos la bienvenida...
-            </h1>
-          </section>
-
+        <form onSubmit={handleSubmit}>
           <section>
-            <div className="my-3 mt-16">
-            <p className="mb-2 mx-2">Ingresa tu usuario </p>
-            <input
-              type="text"
-              className="rounded-full py-2 px-4 border-1 w-full"
-            />
+            <div className="my-3 mt-5">
+              <p className="mb-2 mx-2 font-medium">Ingresa tu usuario</p>
+              <input
+                type="text"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                className="rounded-full py-2 px-4 border-2 border-purple-900 w-full"
+              />
             </div>
 
             <div className="my-2">
-            <p className="mb-2 mx-2">Ingresa tu contraseña</p>
-            <input
-              type="password"
-              className="rounded-full  px-4 border-1 w-full py-2"
-            />
+              <p className="mb-2 mx-2 font-medium">Ingresa tu contraseña</p>
+              <input
+                type="password"
+                value={contra}
+                onChange={(e) => setContra(e.target.value)}
+                className="rounded-full px-4 border-2 border-purple-900 w-full py-2"
+              />
             </div>
-            
-
-
           </section>
 
-          <div className="text-right ">
-          <button type="submit" className="bg-green-confirm text-white py-2 px-4 rounded-full  mt-12 w-[160px] shadow-lg">
-              Continuar
-          </button>
+          <div className="flex mt-[3em]">
+            <img src="/forgetPassword.png" alt="" className="w-[2em] mx-[1em]"/>
+            <a href="https://tailwindcss.com/docs/text-decoration-line" className="text-decoration-line: underline font-semibold text-mdpurple-htext">¿Olvidaste tu contraseña?</a>
           </div>
 
-          
-        </div>
+          <div className="text-right">
+            <button type="submit" className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full mt-12 w-[160px] shadow shadow-purple-200 shadow-lg">
+              Continuar
+            </button>
+          </div>
+        </form>
       </div>
-
-    </>
+    </div>
   );
 };
 
-// <section>
-//   <h1 className="text-center text-3xl mb-3 font-bold">Inicia sesión</h1>
-//   <form className="formulario" onSubmit={handleSubmit}>
-//     <input
-//       type="text"
-//       placeholder="Ingresa tu usuario"
-//       value={nombre}
-//       onChange={(e) => setNombre(e.target.value)}
-//       className="border-2 border-purple-600 p-2 rounded-lg w-xs"
-//     />
-//     <br />
-//     <br />
-//     <input
-//       type="password"
-//       placeholder="Ingresa tu contraseña"
-//       required
-//       value={contra}
-//       onChange={(e) => setContra(e.target.value)}
-//       className="border-2 border-purple-600 p-2 rounded-lg w-xs"
-//     />
-//     <br />
-//     <br />
-//     <div className="flex justify-center">
-//       {/* Aquí puedes dejar el Btn o usar un botón estándar */}
-//       <button
-//         type="submit"  // Aseguramos que este sea un submit que ejecute handleSubmit
-//         className="py-2 px-4 bg-violet-500 rounded-full text-amber-50"
-//       >
-//         Entrar
-//       </button>
-//     </div>
-//   </form>
-//   {error && (
-//     <div className="flex justify-center mt-4">
-//       <p className="text-red-500">Todos los campos son obligatorios</p>
-//     </div>
-//   )}
-// </section>
+export default Form;

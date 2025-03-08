@@ -92,7 +92,7 @@ export const Form = ({ setUser }) => {
             </div>
   
             <div className="text-center mt-4">
-              <button type="submit" className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow shadow-purple-200 shadow-lg">
+              <button type="submit" className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow shadow-purple-200 shadow-lg cursor-pointer">
                 Continuar
               </button>
             </div>

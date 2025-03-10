@@ -1,5 +1,5 @@
 import React from "react";
-import AsideBar from "../AsideBar";
+import AsideBar from "../../AsideBar";
 
 export const Home = () => {
   return (

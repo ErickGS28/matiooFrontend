@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
-import { Form } from "./components/templates/Form";
+import { Form } from "./components/templates/login/Form";
 import { Home } from "./components/templates/admin/Home";
 import Responsible from "./components/templates/admin/Responsible";
 import Interns from "./components/templates/admin/Interns";
@@ -11,6 +11,9 @@ import ItemType from "./components/templates/admin/ItemType";
 import Item from "./components/templates/admin/Item";
 import Brand from "./components/templates/admin/Brand";
 import Model from "./components/templates/admin/Model";
+import CheckEmail from "./components/templates/login/CheckEmail";
+import ConfirmCode from "./components/templates/login/ConfirmCode";
+import NewPassword from "./components/templates/login/NewPassword";
 
 
 function App() {
@@ -32,6 +35,9 @@ function App() {
               <Route path="/item" element={<Item user={user}/>} />
               <Route path="/brand" element={<Brand user={user}/>} />
               <Route path="/model" element={<Model user={user}/>} />
+              <Route path="/checkEmail" element={<CheckEmail user={user}/>} />
+              <Route path="/confirmCode" element={<ConfirmCode user={user}/>} />
+              <Route path="/newPassword" element={<NewPassword user={user}/>} />
             </Routes>
           </div>
         </div>

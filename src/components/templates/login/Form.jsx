@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Alert from "../ui/Alert";
+import Alert from "../../ui/Alert";
 
 export const Form = ({ setUser }) => {
   const [nombre, setNombre] = useState("");
@@ -30,13 +30,17 @@ export const Form = ({ setUser }) => {
     }
   };
 
+  const handleCheckEmailClick = () => {
+    navigate('/checkEmail');
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-purple-50">
       <div className="flex justify-center gap-6 w-[800px] shadow-2xl p-6 rounded-lg shadow shadow-purple-300 shadow-lg bg-white">
         <div className="w-1/2 rounded-2xl">
           <img src="/login.png" alt="" className="h-lg object-cover rounded-2xl" />
         </div>
-  
+
         <div className="w-1/2">
           <section className="text-center">
             <img src="/logomatioo.png" alt="" className="h-1/3 w-[150px] mx-auto" />
@@ -44,7 +48,7 @@ export const Form = ({ setUser }) => {
               Te damos la bienvenida...
             </h1>
           </section>
-  
+
           {error && (
             <Alert
               message="Error al iniciar sesión."
@@ -53,7 +57,7 @@ export const Form = ({ setUser }) => {
               imageSrc="/alertFail.png"
             />
           )}
-  
+
           {success && (
             <Alert
               message="Iniciando sesión correctamente."
@@ -62,7 +66,7 @@ export const Form = ({ setUser }) => {
               imageSrc="/alertSuccess.png"
             />
           )}
-  
+
           <form onSubmit={handleSubmit}>
             <section>
               <div className="my-3 mt-5">
@@ -74,7 +78,7 @@ export const Form = ({ setUser }) => {
                   className="rounded-full py-2 px-4 border-2 border-purple-900 w-full"
                 />
               </div>
-  
+
               <div className="my-2">
                 <p className="mb-2 mx-2 font-medium">Ingresa tu contraseña</p>
                 <input
@@ -85,12 +89,17 @@ export const Form = ({ setUser }) => {
                 />
               </div>
             </section>
-  
+
             <div className="flex mt-[3em] justify-center">
               <img src="/forgetPassword.png" alt="" className="w-[2em] mx-[1em]"/>
-              <a href="https://tailwindcss.com/docs/text-decoration-line" className="underline font-semibold text-mdpurple-htext">¿Olvidaste tu contraseña?</a>
+              <span
+                onClick={handleCheckEmailClick}
+                className="underline font-semibold text-mdpurple-htext cursor-pointer"
+              >
+                ¿Olvidaste tu contraseña?
+              </span>
             </div>
-  
+
             <div className="text-center mt-4">
               <button type="submit" className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow shadow-purple-200 shadow-lg cursor-pointer">
                 Continuar
@@ -101,7 +110,6 @@ export const Form = ({ setUser }) => {
       </div>
     </div>
   );
-  
 };
 
 export default Form;

@@ -22,7 +22,7 @@ export default function Brand() {
                                             type="text"
                                             value={navegar}
                                             onChange={(e) => setNavegar(e.target.value)}
-                                            className="w-[25em] rounded-full px-8 border-2 shadow shadow-purple-200 shadow-lg flex-grow py-2 bg-gray-100 font-medium"
+                                            className="w-[25em] rounded-full px-8 border-2  shadow-purple-200 shadow-lg flex-grow py-2 bg-gray-100 font-medium"
                                             placeholder="Buscar marca..."
                                         />
                                         <div className="w-[1.8em] h-[1.8em] bg-darkpurple-icon rounded-full flex items-center justify-center ml-4">
@@ -34,7 +34,7 @@ export default function Brand() {
                                     </div>
                                     <button
                                         type="submit"
-                                        className="ml-[37em] bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow shadow-purple-200 shadow-lg ml-4 cursor-pointer"
+                                        className="ml-[37em] bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px]  shadow-purple-200 shadow-lg cursor-pointer"
                                     >
                                         Registrar
                                     </button>

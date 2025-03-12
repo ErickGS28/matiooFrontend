@@ -1,10 +1,12 @@
 import { Image } from '@mantine/core';
 
-function LogoAside() {
+function LogoAside({ isExpanded }) {
+  const logoSrc = isExpanded ? "matioo.png" : "/logomatioo.png";
+
   return (
     <Image
       radius="md"
-      src="/logomatioo.png"
+      src={logoSrc}
       className='h-[25px] max-w-[6em]'
     />
   );

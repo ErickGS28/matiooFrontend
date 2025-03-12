@@ -1,9 +1,21 @@
 import React, { useState } from "react";
 import AsideBar from "../../AsideBar";
 import Pages from "../../ui/Pages";
+import Table from "@/components/ui/Table";
+
 
 export default function Interns() {
     const [navegar, setNavegar] = useState("");
+    const tableData = [
+        { name: "Monitor", brand: "LG", details: "...",  },
+        { name: "Silla plegable", brand: "IKEA", details: "...", },
+        { name: "Escritorio", brand: "Yanpol", details: "...", },
+        { name: "Monitor", brand: "LG", details: "...",  },
+        { name: "Silla plegable", brand: "IKEA", details: "...", },
+        { name: "Escritorio", brand: "Yanpol", details: "...", },
+      ];
+    
+    
 
     return (
         <>
@@ -22,7 +34,7 @@ export default function Interns() {
                                     type="text"
                                     value={navegar}
                                     onChange={(e) => setNavegar(e.target.value)}
-                                    className="w-[25em] rounded-full px-8 border-2 shadow shadow-purple-200 shadow-lg flex-grow py-2 bg-gray-100 font-medium"
+                                    className="w-[25em] rounded-full px-8 border-2  shadow-purple-200 shadow-lg flex-grow py-2 bg-gray-100 font-medium"
                                     placeholder="Buscar becarios..."
                                 />
                                 <div className="w-[1.8em] h-[1.8em] bg-darkpurple-icon rounded-full flex items-center justify-center ml-4">
@@ -40,10 +52,13 @@ export default function Interns() {
                             </button>
                         </div>
 
-                        <div className="flex items-center justify-center mt-[3em] bg-gray-500">
-                            <h1>Tabla</h1>
-                        </div>
-                        <Pages/>
+                          {/* Tabla */}
+                                    <Table data={tableData} />
+                        
+                                    {/* Paginación */}
+                                    <Pages />
+
+                        
                     </div>
                 </div>
             </div>

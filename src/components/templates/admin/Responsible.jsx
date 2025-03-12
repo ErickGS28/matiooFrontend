@@ -1,9 +1,28 @@
 import React, { useState } from "react";
 import AsideBar from "../../AsideBar";
 import Pages from "../../ui/Pages";
+import Table from "@/components/ui/Table";
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function Responsible() {
   const [navegar, setNavegar] = useState("");
+
+  const tableData = [
+    { name: "Monitor", brand: "LG", details: "..." },
+    { name: "Silla plegable", brand: "IKEA", details: "..." },
+    { name: "Escritorio", brand: "Yanpol", details: "..." },
+    { name: "Monitor", brand: "LG", details: "..." },
+    { name: "Silla plegable", brand: "IKEA", details: "..." },
+  ];
 
   return (
     <>
@@ -48,42 +67,37 @@ export default function Responsible() {
               </button>
             </div>
 
-            {/* Contenedor con scroll horizontal SOLO para la tabla */}
-            <div className="mt-5 w-full overflow-x-auto">
-              <table className="w-full bg-white shadow-md rounded-lg border-separate border-spacing-y-4 min-w-[600px]">
-                <thead className="bg-purple-600 text-white">
-                  <tr>
-                    <th className="py-2 px-4">Nombre</th>
-                    <th className="py-2 px-4">Marca</th>
-                    <th className="py-2 px-4">Detalles</th>
-                    <th className="py-2 px-4">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-blue-100">
-                    <td className="py-2 px-4 rounded-l-2xl">Monitor</td>
-                    <td className="py-2 px-4">LG</td>
-                    <td className="py-2 px-4">...</td>
-                    <td className="py-2 px-4 rounded-r-2xl">...</td>
-                  </tr>
-                  <tr className="bg-purple-100">
-                    <td className="py-2 px-4 rounded-l-2xl">Silla plegable</td>
-                    <td className="py-2 px-4">IKEA</td>
-                    <td className="py-2 px-4">...</td>
-                    <td className="py-2 px-4 rounded-r-2xl">...</td>
-                  </tr>
-                  <tr className="bg-blue-100">
-                    <td className="py-2 px-4 rounded-l-2xl">Escritorio</td>
-                    <td className="py-2 px-4">Yanpol</td>
-                    <td className="py-2 px-4">...</td>
-                    <td className="py-2 px-4 rounded-r-2xl">...</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            {/* Tabla */}
+            <Table data={tableData} />
 
             {/* Paginación */}
-            <Pages />
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious href="#" />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#">1</PaginationLink>
+                </PaginationItem>
+
+                <PaginationItem>
+                  <PaginationLink href="#">2</PaginationLink>
+                </PaginationItem>
+
+
+                <PaginationItem>
+                  <PaginationLink href="#">3</PaginationLink>
+                </PaginationItem>
+
+                
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext href="#" />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         </div>
       </div>

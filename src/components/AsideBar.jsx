@@ -3,6 +3,12 @@ import { useNavigate } from "react-router-dom";
 import LogoAside from "./ui/logoAside";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+
+
+
 
 export default function AsideBar({ activePage = "" }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -47,7 +53,7 @@ export default function AsideBar({ activePage = "" }) {
 
           <div className={iconClasses('commonArea')} onClick={() => handleNavigation('/commonArea')}>
             <img src="/asidebarIMG/zona.png" alt="Zona" className="w-[1.5em]" />
-            {isExpanded && <span className="ml-4">Areas comunes</span>}
+            {isExpanded && <span className="ml-4">Áreas comunes</span>}
           </div>
 
           <div className={iconClasses('itemType')} onClick={() => handleNavigation('/itemType')}>
@@ -72,7 +78,7 @@ export default function AsideBar({ activePage = "" }) {
         </div>
 
         <div className="mt-8 mb-4 flex flex-col items-center space-y-4">
-          <Popover>
+        <Popover className="mt-10">
             <PopoverTrigger asChild>
               <div
                 className={`flex items-center ${isExpanded ? "justify-start" : "justify-center"} cursor-pointer bg-white ${isExpanded ? "w-[94%] px-4 py-2 rounded-2xl" : "w-[2.5em] h-[2.5em] rounded-full"} transition-all duration-300 ease-in-out`}
@@ -81,20 +87,50 @@ export default function AsideBar({ activePage = "" }) {
                 {isExpanded && <span className="ml-4">Mi Perfil</span>}
               </div>
             </PopoverTrigger>
-            <PopoverContent className="p-4">
+            <PopoverContent className="p-4 ml-[4em]">
               <div>
-                <p>Tu correo: usuario@example.com</p>
-                <Button className="mt-2">Editar Perfil</Button>
+                <p>Correo: usuario@example.com</p>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="mt-2 bg-green-confirm">Editar Perfil</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px] ">
+                    <DialogHeader>
+                      <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">Editar Perfil</DialogTitle>
+                      <DialogDescription>
+                        Correo: usuario@example.com
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="usuario" className="text-right text-[1em]">
+                          Usuario
+                        </Label>
+                        <Input id="usuario" value="Jony Boy" className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full" />
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="email" className="text-right text-[1em]">
+                          Correo
+                        </Label>
+                        <Input id="email" value="usuario@example.com" className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full" />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button type="submit" className="bg-green-confirm">Guardar cambios</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </PopoverContent>
           </Popover>
+          
 
           <div
             className={`flex items-center ${isExpanded ? "justify-start" : "justify-center"} cursor-pointer bg-red-bg-icon ${isExpanded ? "w-[94%] px-4 py-2 rounded-2xl" : "w-[2.5em] h-[2.5em] rounded-full"} transition-all duration-300 ease-in-out`}
             onClick={() => handleNavigation("/")}
           >
             <img src="/asidebarIMG/closeAccount.png" alt="Cerrar sesión" className="w-[1.2em]" />
-            {isExpanded && <span className="ml-4">Cerrar sesión</span>}
+            {isExpanded && <span className="ml-4 text-white">Cerrar sesión</span>}
           </div>
         </div>
       </div>

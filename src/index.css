@@ -22,7 +22,6 @@
     --color-red-cancel: rgba(198, 35, 0, 1);
 
     /* Alertas */
-
     --color-skyblue-success: rgba(209, 255, 255, 1);
     --color-red-fail: rgba(205, 74, 91, 1);
 
@@ -37,6 +36,9 @@
     --color-mdpurple-htext: rgba(86, 58, 156, 1);
     --color-lightpurple-text: rgba(197, 174, 255, 1);
     --color-gray-pagination: rgba(120, 120, 120, 1);
+
+    /* Modal */
+    --color-modal: rgba(247, 246, 246, 1);
 
   }
 

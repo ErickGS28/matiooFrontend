@@ -2,20 +2,21 @@ import React, { useState } from "react";
 import AsideBar from "../../AsideBar";
 import Pages from "../../ui/Pages";
 import Table from "@/components/ui/Table";
+import BtnRegistrar from "@/components/ui/btnRegistar";
 
 
 export default function Interns() {
     const [navegar, setNavegar] = useState("");
     const tableData = [
-        { name: "Monitor", brand: "LG", details: "...",  },
+        { name: "Monitor", brand: "LG", details: "...", },
         { name: "Silla plegable", brand: "IKEA", details: "...", },
         { name: "Escritorio", brand: "Yanpol", details: "...", },
-        { name: "Monitor", brand: "LG", details: "...",  },
+        { name: "Monitor", brand: "LG", details: "...", },
         { name: "Silla plegable", brand: "IKEA", details: "...", },
         { name: "Escritorio", brand: "Yanpol", details: "...", },
-      ];
-    
-    
+    ];
+
+
 
     return (
         <>
@@ -28,7 +29,7 @@ export default function Interns() {
                             <img src="/becarios.png" alt="becario" className="ml-auto w-[5em]" />
                         </div>
 
-                        <div className="my-3 mt-5 w-full flex items-center">
+                        <div className="my-3 mt-5 w-full flex items-center flex-wrap gap-4">
                             <div className="flex items-center">
                                 <input
                                     type="text"
@@ -44,21 +45,18 @@ export default function Interns() {
                                     <img src="/filter.png" alt="" />
                                 </div>
                             </div>
-                            <button
-                                type="submit"
-                                className="ml-[37em] bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow shadow-purple-200 shadow-lg ml-4 cursor-pointer"
-                            >
-                                Registrar
-                            </button>
+                            <div className="flex justify-end flex-grow">
+                                <BtnRegistrar />
+                            </div>
                         </div>
 
-                          {/* Tabla */}
-                                    <Table data={tableData} />
-                        
-                                    {/* Paginación */}
-                                    <Pages />
+                        {/* Tabla */}
+                        <Table data={tableData} />
 
-                        
+                        {/* Paginación */}
+                        <Pages />
+
+
                     </div>
                 </div>
             </div>

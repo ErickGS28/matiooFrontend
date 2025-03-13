@@ -12,6 +12,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import BtnRegistrar from "@/components/ui/btnRegistar";
 
 export default function Responsible() {
   const [navegar, setNavegar] = useState("");
@@ -49,7 +50,7 @@ export default function Responsible() {
                   type="text"
                   value={navegar}
                   onChange={(e) => setNavegar(e.target.value)}
-                  className="w-[25em] rounded-full px-8 border-2 shadow shadow-purple-200 flex-grow py-2 bg-gray-100 font-medium"
+                  className="w-[25em] rounded-full px-8 border-2 shadow-lg shadow-purple-200 py-2 bg-gray-100 font-medium"
                   placeholder="Buscar responsables..."
                 />
                 <div className="w-[1.8em] h-[1.8em] bg-darkpurple-icon rounded-full flex items-center justify-center ml-4">
@@ -59,13 +60,12 @@ export default function Responsible() {
                   <img src="/filter.png" alt="Filtrar" />
                 </div>
               </div>
-              <button
-                type="submit"
-                className="ml-auto bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow-purple-200 shadow-lg cursor-pointer"
-              >
-                Registrar
-              </button>
+              <div className="flex justify-end flex-grow">
+                <BtnRegistrar />
+              </div>
             </div>
+
+
 
             {/* Tabla */}
             <Table data={tableData} />
@@ -89,7 +89,7 @@ export default function Responsible() {
                   <PaginationLink href="#">3</PaginationLink>
                 </PaginationItem>
 
-                
+
                 <PaginationItem>
                   <PaginationEllipsis />
                 </PaginationItem>

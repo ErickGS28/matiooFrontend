@@ -23,11 +23,11 @@ export default function Responsible() {
   };
 
   const tableData = [
-    { name: "Monitor", brand: "LG", details: "..." },
-    { name: "Silla plegable", brand: "IKEA", details: "..." },
-    { name: "Escritorio", brand: "Yanpol", details: "..." },
-    { name: "Monitor", brand: "LG", details: "..." },
-    { name: "Silla plegable", brand: "IKEA", details: "..." },
+    { name: "Erick", lastname: "Salgado", details: "..." },
+    { name: "Ivan", lastname: "Matinez", details: "..." },
+    { name: "Santiago", lastname: "Murga", details: "..." },
+    { name: "Jony", lastname: "Ocampo", details: "..." },
+    { name: "Ximena", lastname: "Guitierrez", details: "..." },
   ];
 
   return (

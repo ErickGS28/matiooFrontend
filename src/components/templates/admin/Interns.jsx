@@ -4,18 +4,16 @@ import Pages from "../../ui/Pages";
 import Table from "@/components/ui/Table";
 import BtnRegistrar from "@/components/ui/btnRegistar";
 
-
 export default function Interns() {
     const [navegar, setNavegar] = useState("");
-    const tableData = [
-        { name: "Monitor", brand: "LG", details: "...", },
-        { name: "Silla plegable", brand: "IKEA", details: "...", },
-        { name: "Escritorio", brand: "Yanpol", details: "...", },
-        { name: "Monitor", brand: "LG", details: "...", },
-        { name: "Silla plegable", brand: "IKEA", details: "...", },
-        { name: "Escritorio", brand: "Yanpol", details: "...", },
-    ];
 
+    const tableData = [
+        { name: "Monitor", brand: "LG", details: "..." },
+        { name: "Silla plegable", brand: "IKEA", details: "..." },
+        { name: "Escritorio", brand: "Yanpol", details: "..." },
+        { name: "Monitor", brand: "LG", details: "..." },
+        { name: "Silla plegable", brand: "IKEA", details: "..." },
+    ];
 
 
     return (

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
-import { Form } from "./components/templates/login/Form";
-import { Home } from "./components/templates/admin/Home";
+import Form from "./components/templates/login/Form";
+import Home from "./components/templates/admin/Home";
 import Responsible from "./components/templates/admin/Responsible";
 import Interns from "./components/templates/admin/Interns";
 import ListItem from "./components/templates/admin/ListItem";
@@ -14,7 +14,6 @@ import Model from "./components/templates/admin/Model";
 import CheckEmail from "./components/templates/login/CheckEmail";
 import ConfirmCode from "./components/templates/login/ConfirmCode";
 import NewPassword from "./components/templates/login/NewPassword";
-
 
 function App() {
   const [user, setUser] = useState(null);

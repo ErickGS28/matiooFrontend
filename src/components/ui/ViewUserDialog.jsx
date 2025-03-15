@@ -19,7 +19,7 @@ export function ViewUserDialog({ user }) {
   </DialogTrigger>
   <DialogContent className="w-[35%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
     <DialogHeader>
-      <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">Editar responsable</DialogTitle>
+      <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">Ver responsable</DialogTitle>
     </DialogHeader>
     <div className="grid grid-cols-2 gap-6">
       <div className="flex items-center justify-center">

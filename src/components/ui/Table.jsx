@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Button } from "../ui/button";
 import { Switch } from "@/components/ui/switch";
 import { ViewUserDialog } from "@/components/ui/ViewUserDialog";
 import { EditUserDialog } from "@/components/ui/EditUserDialog";

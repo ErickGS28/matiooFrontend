@@ -40,6 +40,9 @@
     /* Modal */
     --color-modal: rgba(247, 246, 246, 1);
 
+    /* Cards */
+    --color-card-bg: rgba(247, 246, 246, 1);
+
   }
 
 :root {

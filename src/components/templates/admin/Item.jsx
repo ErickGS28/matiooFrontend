@@ -1,49 +1,70 @@
-import React, { useState } from "react";
+import React from "react";
 import AsideBar from "../../AsideBar";
-import Pages from "../../ui/Pages";
-import BtnRegistrar from "@/components/ui/btnRegistar";
+import Header from "@/components/ui/Header";
+import TableItem from "@/components/ui/TableItem";
+
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination";
+
 
 export default function Item() {
-    const [navegar, setNavegar] = useState("");
+    const tableData = [
+        { itemType: "Electrónico", name: "Monitor", brand: "LG", model: "L-flat01", code: "1667 1234 5673 4567", location: "Sala", intern: "Erick", responsible: "Santiago" },
+        { itemType: "Mueble", name: "Silla eco", brand: "IKEA", model: "L-flat02", code: "2667 1234 5673 4567", location: "Comedor", intern: "Erick", responsible: "Santiago" },
+        { itemType: "Mueble", name: "Escritorio", brand: "Mesk-Yanpol", model: "L-flat03", code: "3667 1234 5673 4567", location: "Area 1", intern: "Erick", responsible: "Santiago" },
+        { itemType: "Mueble", name: "Mesa", brand: "IKEA", model: "L-flat04", code: "4667 1234 5673 4567", location: "Area 2", intern: "Xime", responsible: "Iván" },
+        { itemType: "Mueble", name: "Silla gamer", brand: "Razer", model: "L-flat05", code: "5667 1234 5673 4567", location: "Area 3", intern: "Iván", responsible: "Santiago" },
+      ];
+
+      
 
     return (
         <>
             <div className="flex min-h-screen w-full">
                 <AsideBar activePage="item" />
-                <div className="flex flex-1 items-center justify-center">
-                    <div className="flex flex-col p-20 w-full max-w-full min-h-screen">
-                        <div className="flex items-center">
-                            <h1 className="text-darkpurple-title text-[2.5em] font-semibold">Bien</h1>
-                            <img src="/item.png" alt="itemType" className="ml-auto w-[5em]" />
-                        </div>
+                <main className="flex-1 flex flex-col">
+                    <div className="flex flex-col p-5 md:p-20 w-full">
+                        <Header title="Bien" image="/item.png" filterInput="Buscar bien..." />
 
-                        <div className="my-3 mt-5 w-full flex items-center flex-wrap gap-4">
-                            <div className="flex items-center">
-                                <input
-                                    type="text"
-                                    value={navegar}
-                                    onChange={(e) => setNavegar(e.target.value)}
-                                    className="w-[25em] rounded-full px-8 border-2 shadow shadow-purple-200 shadow-lg flex-grow py-2 bg-gray-100 font-medium"
-                                    placeholder="Buscar bien..."
-                                />
-                                <div className="w-[1.8em] h-[1.8em] bg-darkpurple-icon rounded-full flex items-center justify-center ml-4">
-                                    <img src="/find.png" alt="Buscar" className="w-[1.2em]" />
-                                </div>
-                                <div className="w-[2em] h-[2em] flex items-center justify-center ml-4">
-                                    <img src="/filter.png" alt="" />
-                                </div>
-                            </div>
-                            <div className="flex justify-end flex-grow">
-                                <BtnRegistrar />
-                            </div>
-                        </div>
+                        {/* Tabla */}
+                        <TableItem data={tableData} />
 
-                        <div className="flex items-center justify-center mt-[3em] bg-gray-500">
-                            <h1>Tabla</h1>
-                        </div>
-                        <Pages />
+                        {/* Paginación */}
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious href="#" />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink href="#">1</PaginationLink>
+                                </PaginationItem>
+
+                                <PaginationItem>
+                                    <PaginationLink href="#">2</PaginationLink>
+                                </PaginationItem>
+
+                                <PaginationItem>
+                                    <PaginationLink href="#">3</PaginationLink>
+                                </PaginationItem>
+
+
+                                <PaginationItem>
+                                    <PaginationEllipsis />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationNext href="#" />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
                     </div>
-                </div>
+                </main>
             </div>
         </>
     );

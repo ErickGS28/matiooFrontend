@@ -3,9 +3,6 @@ import { useState } from "react";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
-import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -24,13 +21,11 @@ export default function BtnRegistrar() {
                     </button>
                 </div>
             </PopoverTrigger>
-            <PopoverContent className="p-4 w-[20em] mr-[12em] bg-cyan-50 shadow-md shadow-cyan-200">
+            <PopoverContent className="p-4 w-[20em] mr-[12em] bg-white border-1 border-black">
                 <div className="w-[90%] m-auto">
-                    <div className="mb-[1em] flex items-center justify-center">
-                        <img src="/popoverRegister.png" alt="Cerrar sesión" className="w-[4em]" />
+                    <div className="mb-[1em] flex items-center justify-center border-b border-purple-100">
+                        <img src="/responsiblePopover.png" alt="Cerrar sesión" className="w-[4em]" />
                     </div>
-
-                    <DropdownMenuSeparator className="border-1 border-black" />
 
                     <div className="mt-[1em] grid w-full max-w-sm items-center gap-1.5">
                         <Label htmlFor="name" className="text-darkpurple-title">Nombre</Label>

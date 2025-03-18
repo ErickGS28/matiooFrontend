@@ -16,12 +16,12 @@ import {
 export default function Interns() {
 
     const tableData = [
-        { name: "Monitor", brand: "LG", details: "..." },
-        { name: "Silla plegable", brand: "IKEA", details: "..." },
-        { name: "Escritorio", brand: "Yanpol", details: "..." },
-        { name: "Monitor", brand: "LG", details: "..." },
-        { name: "Silla plegable", brand: "IKEA", details: "..." },
-    ];
+        { name: "Santi", lastname: "Salgado", details: "..." },
+        { name: "Xime", lastname: "Matinez", details: "..." },
+        { name: "Eri", lastname: "Murga", details: "..." },
+        { name: "Sagan", lastname: "Ocampo", details: "..." },
+        { name: "Iván", lastname: "Guitierrez", details: "..." },
+      ];
 
 
     return (

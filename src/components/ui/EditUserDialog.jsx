@@ -97,5 +97,5 @@ export function EditUserDialog({ user, onSave }) {
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

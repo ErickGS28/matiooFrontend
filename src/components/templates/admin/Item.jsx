@@ -2,7 +2,6 @@ import React from "react";
 import AsideBar from "../../AsideBar";
 import Header from "@/components/ui/Header";
 import TableItem from "@/components/ui/TableItem";
-
 import {
     Pagination,
     PaginationContent,
@@ -21,9 +20,9 @@ export default function Item() {
         { itemType: "Mueble", name: "Escritorio", brand: "Mesk-Yanpol", model: "L-flat03", code: "3667 1234 5673 4567", location: "Area 1", intern: "Erick", responsible: "Santiago" },
         { itemType: "Mueble", name: "Mesa", brand: "IKEA", model: "L-flat04", code: "4667 1234 5673 4567", location: "Area 2", intern: "Xime", responsible: "Iván" },
         { itemType: "Mueble", name: "Silla gamer", brand: "Razer", model: "L-flat05", code: "5667 1234 5673 4567", location: "Area 3", intern: "Iván", responsible: "Santiago" },
-      ];
+    ];
 
-      
+
 
     return (
         <>
@@ -31,7 +30,8 @@ export default function Item() {
                 <AsideBar activePage="item" />
                 <main className="flex-1 flex flex-col">
                     <div className="flex flex-col p-5 md:p-20 w-full">
-                        <Header title="Bien" image="/item.png" filterInput="Buscar bien..." />
+                        <Header title="Bienes" image="/item.png" filterInput="Buscar bien..." />
+
 
                         {/* Tabla */}
                         <TableItem data={tableData} />

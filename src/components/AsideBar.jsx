@@ -45,7 +45,7 @@ export default function AsideBar({ activePage = "", onExpandChange }) {
             <LogoAside isExpanded={isExpanded} />
           </div>
 
-          <div className="flex flex-col flex-grow items-center mt-8 space-y-4 font-semibold">
+          <div className="flex flex-col flex-grow items-center mt-8 space-y-4 gap-3 font-semibold">
             <div className={iconClasses('responsible')} onClick={() => handleNavigation('/responsible')}>
               <img src="/asidebarIMG/responsible.png" alt="Responsable" className={imageClasses} />
               <span className={textClasses}>Responsables</span>
@@ -56,10 +56,7 @@ export default function AsideBar({ activePage = "", onExpandChange }) {
               <span className={textClasses}>Becarios</span>
             </div>
 
-            <div className={iconClasses('listItem')} onClick={() => handleNavigation('/listItem')}>
-              <img src="/asidebarIMG/listItem.png" alt="Notas" className={imageClasses} />
-              <span className={textClasses}>Notas</span>
-            </div>
+           
 
             <div className={iconClasses('commonArea')} onClick={() => handleNavigation('/commonArea')}>
               <img src="/asidebarIMG/zona.png" alt="Zona" className={imageClasses} />
@@ -86,7 +83,7 @@ export default function AsideBar({ activePage = "", onExpandChange }) {
               <span className={textClasses}>Modelos</span>
             </div>
 
-            <div className="mt-8 mb-4 flex flex-col items-center space-y-4 w-full">
+            <div className="mt-20 mb-4 flex flex-col items-center space-y-4 w-full">
               <Popover>
                 <PopoverTrigger asChild>
                   <div className={`flex items-center ${isExpanded ? "justify-start gap-4 h-10 w-[90%] px-4 rounded-2xl" : "justify-center w-[2.5em] h-[2.5em] rounded-full"} cursor-pointer bg-white hover:bg-skyblue-bg-icon transition-all duration-300 ease-in-out hover:scale-105`}>

@@ -24,8 +24,8 @@ export function ViewItemDialog({ item }) {
           {item.name}
           </DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-6">
-          <div className="flex flex-col items-center">
+        <div className="grid grid-cols-2 gap-12">
+          <div className="flex flex-col">
             <img
               src="/defaultItem.png"
               alt="item"

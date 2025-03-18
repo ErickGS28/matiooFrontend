@@ -1,18 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import AsideBar from "../../AsideBar";
 import HeaderCard from "@/components/ui/HeaderCard";
-
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
+import EditCommonAreaDialog from "@/components/ui/EditCommonAreaDialog";
+import BtnRegisterHeader from "@/components/ui/BtnRegisterHeader";
 
 export default function CommonArea() {
+    const [userStatus, setUserStatus] = useState({});
+
+    const handleStatusChange = (userId) => {
+        setUserStatus(prev => ({
+            ...prev,
+            [userId]: !prev[userId]
+        }));
+    };
+
     const cardData = [
         { name: "Sala", img: "/defaultCommonArea.png" },
         { name: "Comedor", img: "/defaultCommonArea.png" },
@@ -21,6 +22,11 @@ export default function CommonArea() {
         { name: "Cubículo 3", img: "/defaultCommonArea.png" },
     ];
 
+    const handleSave = (formData) => {
+        // Aquí iría la lógica para guardar los cambios
+        console.log('Datos guardados:', formData);
+    };
+
     return (
         <>
             <div className="flex min-h-screen w-full">
@@ -28,6 +34,9 @@ export default function CommonArea() {
                 <main className="flex-1 flex flex-col">
                     <div className="flex flex-col p-5 md:p-20 w-full">
                         <HeaderCard title="Áreas comunes" image="/commonArea.png" filterInput="Buscar bien..." />
+                        <div className="flex justify-end flex-grow">
+                            <BtnRegisterHeader tileBtn="Agregar" imgPopover="/commonAreaPopover.png" infoLabel="Seleccionar área" infoBtn="Agregar Área" />
+                        </div>
 
                         {/* Cards Container */}
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mt-[3em]">
@@ -38,16 +47,21 @@ export default function CommonArea() {
                                     </div>
                                     <div className="px-3">
                                         <h3 className="text-[1.8em] font-semibold text-darkpurple-title">{card.name}</h3>
-                                        
-                                        <button className="bg-cyan-200 hover:bg-purple-300 text-gray-800 font-semibold py-1 px-3 rounded-full mt-4">
-                                            Editar
-                                        </button>
+
+                                        <EditCommonAreaDialog
+                                            user={{
+                                                name: card.name,
+                                                img: card.img,
+                                                status: userStatus[index]
+                                            }}
+                                            onSave={handleSave}
+                                        />
                                     </div>
                                 </div>
                             ))}
                         </div>
 
-                        
+
                     </div>
                 </main>
             </div>

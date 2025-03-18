@@ -12,14 +12,14 @@ import { Label } from "@/components/ui/label";
 
 export function EditItemDialog({ item, onSave }) {
   const [formData, setFormData] = React.useState({
-    name: item.name,
-    itemType: item.itemType,
-    brand: item.brand,
-    model: item.model,
-    code: item.code,
-    location: item.location,
-    intern: item.intern,
-    responsible: item.responsible,
+    name: item.name || "",
+    itemType: item.itemType || "",
+    brand: item.brand || "",
+    model: item.model || "",
+    code: item.code || "",
+    location: item.location || "",
+    intern: item.intern || "",
+    responsible: item.responsible || "",
   });
 
   const handleSave = () => {
@@ -38,11 +38,11 @@ export function EditItemDialog({ item, onSave }) {
       <DialogContent className="w-[35%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
         <DialogHeader>
           <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
-          {item.name}
+            {item.name}
           </DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-6">
-          <div className="flex flex-col items-center">
+        <div className="grid grid-cols-2 gap-12">
+          <div className="flex flex-col">
             <img
               src="/defaultItem.png"
               alt="item"
@@ -87,7 +87,7 @@ export function EditItemDialog({ item, onSave }) {
                     setFormData((prev) => ({ ...prev, intern: value }))
                   }
                 >
-                  <SelectTrigger className="rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                  <SelectTrigger className=" rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-white border-2 border-purple-900 rounded-[1em] shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
@@ -114,7 +114,7 @@ export function EditItemDialog({ item, onSave }) {
                     setFormData((prev) => ({ ...prev, responsible: value }))
                   }
                 >
-                  <SelectTrigger className="rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                  <SelectTrigger className=" rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-white border-2 border-purple-900 rounded-[1em] shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
@@ -146,6 +146,7 @@ export function EditItemDialog({ item, onSave }) {
                   }
                   className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
                 />
+
               </div>
               <div>
                 <Label className="text-darkpurple-title font-medium">

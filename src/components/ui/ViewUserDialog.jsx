@@ -31,7 +31,7 @@ export function ViewUserDialog({ user }) {
             <Label className="text-darkpurple-title font-medium">Nombre</Label>
             <input
               type="text"
-              value="Jonathan"
+              value={user.name}
               className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
               readOnly
             />
@@ -40,7 +40,7 @@ export function ViewUserDialog({ user }) {
             <Label className="text-darkpurple-title font-medium">Apellidos</Label>
             <input
               type="text"
-              value="Ocampo Flores"
+              value={user.lastname}
               className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
               readOnly
             />

@@ -11,7 +11,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 
+
 export function ViewUserDialog({ user }) {
+  const handleSave = () => {
+    onSave(formData);
+  };
+
   return (
     <Dialog>
   <DialogTrigger asChild>
@@ -76,6 +81,12 @@ export function ViewUserDialog({ user }) {
               </SelectContent>
             </Select>
           </div>
+
+          <div className="flex justify-end">
+                <Button onClick={handleSave} className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300">
+                  Ver bienes
+                </Button>
+              </div>
         </div>
       </div>
     </div>

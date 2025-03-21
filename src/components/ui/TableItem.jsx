@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { ViewItemDialog } from "@/components/ui/ViewItemDialog";
-import { EditItemDialog } from "@/components/ui/EditItemDialog";
+import { ViewItemDialog } from "@/components/templates/admin/dialog/ViewItemDialog";
+import { EditItemDialog } from "@/components/templates/admin/dialog/EditItemDialog";
 
 export default function TableItem({ data }) {
   const [items, setItems] = useState(data);

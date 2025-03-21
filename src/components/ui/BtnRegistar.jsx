@@ -44,7 +44,7 @@ export default function BtnRegistrar() {
 
                     <div className="mt-[0.5em] grid w-full max-w-sm items-center gap-1.5">
                         <Label htmlFor="password" className="text-darkpurple-title">Contraseña</Label>
-                        <Input type="text" id="password" placeholder="" className="border-black"/>
+                        <Input type="password" id="password" placeholder="" className="border-black"/>
                     </div>
 
                     <div className="mt-[0.5em]">
@@ -53,7 +53,7 @@ export default function BtnRegistrar() {
                             <SelectTrigger className="w-[180px] border-black">
                                 <SelectValue placeholder="Bien"/>
                             </SelectTrigger>
-                            <SelectContent className="bg-purple-100 border-black">
+                            <SelectContent className=" border-black">
                                 <SelectItem value="1">Monitor Barq</SelectItem>
                                 <SelectItem value="2">Mesa Yanpol</SelectItem>
                                 <SelectItem value="3">Mouse Razer Viper Mini</SelectItem>
@@ -62,7 +62,7 @@ export default function BtnRegistrar() {
                     </div>
 
                     <div className="mt-[1em] flex justify-center">
-                        <Button type="submit" className="bg-green-confirm">Agregar Responsable</Button>
+                        <Button type="submit" className="bg-green-confirm">Agregar</Button>
                     </div>
 
 

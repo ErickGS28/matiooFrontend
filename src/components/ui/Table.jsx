@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Switch } from "@/components/ui/switch";
-import { ViewUserDialog } from "@/components/ui/ViewUserDialog";
-import { EditUserDialog } from "@/components/ui/EditUserDialog";
+import { ViewUserDialog } from "@/components/templates/admin/dialog/ViewUserDialog";
+import { EditUserDialog } from "@/components/templates/admin/dialog/EditUserDialog";
 
 export default function Table({ data }) {
   const [userStatus, setUserStatus] = useState({});

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AsideBar from "../../AsideBar";
-import EditCommonAreaDialog from "@/components/ui/EditCommonAreaDialog";
+import EditCommonAreaDialog from "@/components/templates/admin/dialog/EditCommonAreaDialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"

@@ -34,8 +34,8 @@ export default function Responsible() {
     <>
       <div className="flex min-h-screen w-full">
         <AsideBar activePage="responsible" />
-        <main className="flex-1 flex flex-col">
-          <div className="flex flex-col p-5 md:p-20 w-full">
+        <main className="flex-1 flex flex-col h-screen overflow-hidden">
+          <div className="flex flex-col p-5 md:p-14 w-full">
             <Header title="Responsables" image="/responsible.png" filterInput="Buscar responsables..." />
 
             {/* Tabla */}

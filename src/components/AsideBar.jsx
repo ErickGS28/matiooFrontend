@@ -83,7 +83,7 @@ export default function AsideBar({ activePage = "", onExpandChange }) {
               <span className={textClasses}>Modelos</span>
             </div>
 
-            <div className="mt-20 mb-4 flex flex-col items-center space-y-4 w-full">
+            <div className="mt-[4em] mb-4 flex flex-col items-center space-y-4 w-full">
               <Popover>
                 <PopoverTrigger asChild>
                   <div className={`flex items-center ${isExpanded ? "justify-start gap-4 h-10 w-[90%] px-4 rounded-2xl" : "justify-center w-[2.5em] h-[2.5em] rounded-full"} cursor-pointer bg-white hover:bg-skyblue-bg-icon transition-all duration-300 ease-in-out hover:scale-105`}>

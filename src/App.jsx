@@ -14,6 +14,7 @@ import Model from "./components/templates/admin/Model";
 import CheckEmail from "./components/templates/login/CheckEmail";
 import ConfirmCode from "./components/templates/login/ConfirmCode";
 import NewPassword from "./components/templates/login/NewPassword";
+import ResponsibleHome from "./components/templates/responsible/responsibleHome";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -37,6 +38,9 @@ function App() {
               <Route path="/checkEmail" element={<CheckEmail user={user}/>} />
               <Route path="/confirmCode" element={<ConfirmCode user={user}/>} />
               <Route path="/newPassword" element={<NewPassword user={user}/>} />
+              <Route path="/responsibleHome" element={<ResponsibleHome />} /> 
+
+              
             </Routes>
           </div>
         </div>

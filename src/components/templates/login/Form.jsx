@@ -12,11 +12,15 @@ export const Form = ({ setUser }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     if (nombre === "" || contra === "") {
       setError(true);
       setSuccess(false);
       return;
-    } else if (nombre === "admin" && contra === "admin") {
+    }
+    
+    // Aquí agregamos las credenciales para los tres tipos de usuarios
+    if (nombre === "admin" && contra === "admin") {
       setError(false);
       setSuccess(true);
       setUser([nombre]);
@@ -24,6 +28,20 @@ export const Form = ({ setUser }) => {
       setTimeout(() => {
         navigate("/home");
       }, 2000); // 2 segundos de demora
+    } else if (nombre === "responsible" && contra === "responsible") {
+      setError(false);
+      setSuccess(true);
+      setUser([nombre]);
+      setTimeout(() => {
+        navigate("/responsibleHome");
+      }, 2000);
+    } else if (nombre === "intern" && contra === "intern") {
+      setError(false);
+      setSuccess(true);
+      setUser([nombre]);
+      setTimeout(() => {
+        navigate("/internHome");
+      }, 2000);
     } else {
       setError(true);
       setSuccess(false);
@@ -36,7 +54,7 @@ export const Form = ({ setUser }) => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-purple-50">
-      <div className="flex justify-center gap-6 w-[800px] shadow-2xl p-6 rounded-lg  shadow-purple-300  bg-white">
+      <div className="flex justify-center gap-6 w-[800px] shadow-2xl p-6 rounded-lg shadow-purple-300 bg-white">
         <div className="w-1/2 rounded-2xl">
           <img
             src="/login.png"

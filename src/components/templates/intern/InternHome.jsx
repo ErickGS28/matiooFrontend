@@ -1,10 +1,5 @@
 import Navbar from "./Navbar";
 import React, { useState } from "react";
-import EditCommonAreaDialog from "@/components/templates/admin/dialog/EditCommonAreaDialog";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button";
 
 export default function InternHome() {
     const [userStatus, setUserStatus] = useState({});
@@ -36,8 +31,8 @@ export default function InternHome() {
 
     return (
         <>
-            <Navbar />
-            <div className="flex min-h-screen w-full ">
+            <Navbar/>
+            <div className="flex min-h-screen w-full mb-[2em]">
 
                 <main className="flex-1 flex flex-col">
                     <div className="flex flex-col p-5 md:px-20 w-full">

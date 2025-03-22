@@ -120,6 +120,10 @@ export default function Brand() {
                                     <div className="px-3">
                                         <h3 className="text-[1.8em] font-semibold text-darkpurple-title">{card.name}</h3>
 
+                                        <div className="flex justify-between">
+
+                                        
+
                                         <EditCommonAreaDialog
                                             user={{
                                                 name: card.name,
@@ -128,6 +132,12 @@ export default function Brand() {
                                             }}
                                             onSave={handleSave}
                                         />
+
+                                        <Button className="py-1 px-3 bg-red-cancel rounded-full text-amber-50 mt-4">
+                                                                Eliminar
+                                                              </Button>
+
+                                                              </div>
                                     </div>
                                 </div>
                             ))}

@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import Navbar from "./Navbar";
 import React, { useState } from "react";
 
@@ -20,8 +21,8 @@ export default function InternHome() {
         { name: "Mouse Razer", img: "/defaultItem.png", description: "Mouse del god" },
         { name: "Silla gamer", img: "/defaultItem.png", description: "Silla gamer 100/10" },
         { name: "Escritorio 2", img: "/defaultItem.png", description: "Escritorio de papi Yanpol" },
-        { name: "Cubículo 2", img: "/defaultItem.png", description: "Cubículo 2 del Stamatioo" },
-        { name: "Silla gamer 2", img: "/defaultCommonArea.png", description: "Silla gamer 2 de Razer" },
+        { name: "Mousepad", img: "/defaultItem.png", description: "Mouse del Stamatioo" },
+    
     ];
 
     const handleSave = (formData) => {
@@ -53,7 +54,7 @@ export default function InternHome() {
                         <div className="my-3 mt-5 w-full flex items-center flex-wrap gap-4">
                             <div className="flex items-center">
                                 <input
-                                    type="text"
+                                    type="search"
                                     value={navegar}
                                     onChange={(e) => setNavegar(e.target.value)}
                                     className="w-[25em] rounded-full px-8 border-2 shadow-lg shadow-purple-200 py-2 bg-gray-100 font-medium"
@@ -79,13 +80,21 @@ export default function InternHome() {
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mt-[3em]">
                             {cardData.map((card, index) => (
                                 <div key={index} className="bg-card-bg rounded-lg shadow-md p-4">
-                                    <div className="text-center">
-                                        <img src={card.img} alt={card.name} className="mx-auto mb-4" />
+                                    <div className="flex justify-center bg-white rounded-2xl">
+                                        <img src={card.img} alt={card.name} className="mx-auto mb-4 w-[8em]" />
                                     </div>
                                     <div className="px-3">
                                         <h3 className="text-[1.8em] font-semibold text-mdpurple-htext">{card.name}</h3>
 
+                                        <div className="flex justify-between gap-4 align-middle">
+                                            
                                         <p className="text-gray-800">{card.description}</p>
+                                        <Button className="py-1 px-3 bg-red-cancel rounded-full text-amber-50">
+
+                                            Quitar
+                                        </Button>
+                                        </div>
+
                                     </div>
                                 </div>
                             ))}

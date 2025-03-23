@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import BtnRegistrar from "@/components/ui/btnRegistar";
+import BtnRegistrarItem from "./BtnRegistrarItem";
 
-export default function Header({ title, image, filterInput, onAgregar }) {
+export default function HeaderItem({ title, image, filterInput, onAgregar }) {
   const [navegar, setNavegar] = useState("");
 
   return (
@@ -33,9 +34,9 @@ export default function Header({ title, image, filterInput, onAgregar }) {
             <img src="/filter.png" alt="Filtrar" />
           </div>
         </div>
-        <div className="flex justify-end flex-grow">
-          <BtnRegistrar onAgregar={onAgregar} />
-        </div>
+      <div className="flex justify-end flex-grow">
+                <BtnRegistrarItem onAgregar={onAgregar} />
+              </div>
       </div>
     </>
   );

@@ -129,7 +129,7 @@ export default function CommonArea() {
                     <img
                       src={card.img}
                       alt={card.name}
-                      className="mx-auto mb-4"
+                      className="mx-auto mb-4 w-[10em]"
                     />
                   </div>
                   <div className="px-3">

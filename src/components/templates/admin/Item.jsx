@@ -1,6 +1,5 @@
 import React from "react";
 import AsideBar from "../../AsideBar";
-import Header from "@/components/ui/Header";
 import TableItem from "@/components/ui/TableItem";
 import {
     Pagination,
@@ -11,6 +10,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
+import HeaderItem from "@/components/ui/HeaderItem";
 
 
 export default function Item() {
@@ -30,7 +30,7 @@ export default function Item() {
                 <AsideBar activePage="item" />
                 <main className="flex-1 flex flex-col">
                     <div className="flex flex-col p-5 md:p-20 w-full">
-                        <Header title="Bienes" image="/item.png" filterInput="Buscar bien..." />
+                        <HeaderItem title="Bienes" image="/item.png" filterInput="Buscar bien..." />
 
 
                         {/* Tabla */}

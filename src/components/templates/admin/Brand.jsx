@@ -115,7 +115,7 @@ export default function Brand() {
                             {cardData.map((card, index) => (
                                 <div key={index} className="bg-card-bg rounded-lg shadow-md p-4">
                                     <div className="text-center">
-                                        <img src={card.img} alt={card.name} className="mx-auto mb-4" />
+                                        <img src={card.img} alt={card.name} className="mx-auto mb-4 w-[11em]" />
                                     </div>
                                     <div className="px-3">
                                         <h3 className="text-[1.8em] font-semibold text-darkpurple-title">{card.name}</h3>

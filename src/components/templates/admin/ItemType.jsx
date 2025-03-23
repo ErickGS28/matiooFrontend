@@ -23,10 +23,7 @@ export default function ItemType() {
 
   const cardData = [
     { name: "Electrónico", img: "/defaultItemType.png" },
-    { name: "Mueble", img: "/defaultItemType.png" },
-    { name: "Mueble 1", img: "/defaultItemType.png" },
-    { name: "Mueble 2", img: "/defaultItemType.png" },
-    { name: "Mueble 3", img: "/defaultItemType.png" },
+    
   ];
 
   const handleSave = (formData) => {
@@ -129,7 +126,7 @@ export default function ItemType() {
                     <img
                       src={card.img}
                       alt={card.name}
-                      className="mx-auto mb-4"
+                      className="mx-auto mb-4 w-[10em]"
                     />
                   </div>
                   <div className="px-3">

@@ -8,41 +8,41 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { updateCommonArea } from "../../../../services/common_area/commonAreaService"
+import { updateItemType } from "../../../../services/item_type/itemTypeService"
 
-export default function EditCommonAreaDialog({ user, onSave, onStatusChange }) {
+export default function EditItemTypeDialog({ itemType, onSave }) {
     // Initialize formData with default values
     const [formData, setFormData] = React.useState({
-        id: user?.id || 0,
-        name: user?.name || '',
-        img: user?.img || '/defaultCommonArea.png',
-        status: user?.status || false,
+        id: itemType?.id || 0,
+        name: itemType?.name || '',
+        img: itemType?.img || '/defaultItemType.png',
+        status: itemType?.status || false,
     });
     
     const [isOpen, setIsOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
 
-    // Update formData when user prop changes
+    // Update formData when itemType prop changes
     // Use JSON.stringify to compare objects and prevent infinite loops
     React.useEffect(() => {
-        // Only update if the user prop actually changed
-        const newUserData = {
-            id: user?.id || 0,
-            name: user?.name || '',
-            img: user?.img || '/defaultCommonArea.png',
-            status: user?.status || false,
+        // Only update if the itemType prop actually changed
+        const newItemTypeData = {
+            id: itemType?.id || 0,
+            name: itemType?.name || '',
+            img: itemType?.img || '/defaultItemType.png',
+            status: itemType?.status || false,
         };
         
         // Compare current formData with new data from props
-        if (JSON.stringify(newUserData) !== JSON.stringify({
+        if (JSON.stringify(newItemTypeData) !== JSON.stringify({
             id: formData.id,
             name: formData.name,
             img: formData.img,
             status: formData.status
         })) {
-            setFormData(newUserData);
+            setFormData(newItemTypeData);
         }
-    }, [user?.id, user?.name, user?.img, user?.status]);
+    }, [itemType?.id, itemType?.name, itemType?.img, itemType?.status]);
 
     const handleSave = async () => {
       try {
@@ -52,7 +52,7 @@ export default function EditCommonAreaDialog({ user, onSave, onStatusChange }) {
           return;
         }
         
-        await updateCommonArea(formData.id, formData.name);
+        await updateItemType(formData.id, formData.name);
         
         if (onSave && typeof onSave === 'function') {
           onSave(formData);
@@ -60,7 +60,7 @@ export default function EditCommonAreaDialog({ user, onSave, onStatusChange }) {
         
         setIsOpen(false);
       } catch (error) {
-        console.error("Error updating common area:", error);
+        console.error("Error updating item type:", error);
       } finally {
         setLoading(false);
       }
@@ -75,11 +75,11 @@ export default function EditCommonAreaDialog({ user, onSave, onStatusChange }) {
           </DialogTrigger>
           <DialogContent className="w-[35%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
             <DialogHeader>
-              <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">Editar área común</DialogTitle>
+              <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">Editar tipo de bien</DialogTitle>
             </DialogHeader>
             <div className="grid grid-cols-2 gap-6 mt-[3em] mb-[3em]">
               <div className="flex items-center justify-center">
-                <img src={formData.img || "/defaultCommonArea.png"} alt="Área común" className="w-full h-auto max-w-[200px]" />
+                <img src={formData.img || "/defaultItemType.png"} alt="Tipo de bien" className="w-full h-auto max-w-[200px]" />
               </div>
               <div>
                 <div className="grid grid-cols-1 gap-6">

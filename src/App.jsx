@@ -16,6 +16,7 @@ import ConfirmCode from "./components/templates/login/ConfirmCode";
 import NewPassword from "./components/templates/login/NewPassword";
 import ResponsibleHome from "./components/templates/responsible/responsibleHome";
 import InternHome from "./components/templates/intern/InternHome";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -26,23 +27,103 @@ function App() {
         <div className="min-h-full">
           <div>
             <Routes>
+              {/* Public routes */}
               <Route path="/" element={<Form setUser={setUser} />} />
-              <Route path="/home" element={<Home user={user} />} />
-              <Route path="/responsible" element={<Responsible user={user} />} />
-              <Route path="/interns" element={<Interns user={user} />} />
-              <Route path="/listItem" element={<ListItem user={user}/>} />
-              <Route path="/commonArea" element={<CommonArea user={user}/>} />
-              <Route path="/itemType" element={<ItemType user={user}/>} />
-              <Route path="/item" element={<Item user={user}/>} />
-              <Route path="/brand" element={<Brand user={user}/>} />
-              <Route path="/model" element={<Model user={user}/>} />
               <Route path="/checkEmail" element={<CheckEmail user={user}/>} />
               <Route path="/confirmCode" element={<ConfirmCode user={user}/>} />
               <Route path="/newPassword" element={<NewPassword user={user}/>} />
-              <Route path="/responsibleHome" element={<ResponsibleHome />} /> 
-              <Route path="/internHome" element={<InternHome />} /> 
-
               
+              {/* Admin only routes */}
+              <Route 
+                path="/home" 
+                element={
+                  <ProtectedRoute allowedRoles="ADMIN">
+                    <Home user={user} />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/responsible" 
+                element={
+                  <ProtectedRoute allowedRoles="ADMIN">
+                    <Responsible user={user} />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/interns" 
+                element={
+                  <ProtectedRoute allowedRoles="ADMIN">
+                    <Interns user={user} />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/listItem" 
+                element={
+                  <ProtectedRoute allowedRoles="ADMIN">
+                    <ListItem user={user}/>
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/commonArea" 
+                element={
+                  <ProtectedRoute allowedRoles="ADMIN">
+                    <CommonArea user={user}/>
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/itemType" 
+                element={
+                  <ProtectedRoute allowedRoles="ADMIN">
+                    <ItemType user={user}/>
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/item" 
+                element={
+                  <ProtectedRoute allowedRoles="ADMIN">
+                    <Item user={user}/>
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/brand" 
+                element={
+                  <ProtectedRoute allowedRoles="ADMIN">
+                    <Brand user={user}/>
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/model" 
+                element={
+                  <ProtectedRoute allowedRoles="ADMIN">
+                    <Model user={user}/>
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* Role-specific routes */}
+              <Route 
+                path="/responsibleHome" 
+                element={
+                  <ProtectedRoute allowedRoles="RESPONSIBLE">
+                    <ResponsibleHome />
+                  </ProtectedRoute>
+                } 
+              /> 
+              <Route 
+                path="/internHome" 
+                element={
+                  <ProtectedRoute allowedRoles="INTERN">
+                    <InternHome />
+                  </ProtectedRoute>
+                } 
+              /> 
             </Routes>
           </div>
         </div>

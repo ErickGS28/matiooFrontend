@@ -1,50 +1,123 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alert from "../../ui/Alert";
+import { API_URL } from "../../../constants";
 
 export const Form = ({ setUser }) => {
-  const [nombre, setNombre] = useState("");
-  const [contra, setContra] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (nombre === "" || contra === "") {
+    if (email === "" || password === "") {
       setError(true);
+      setErrorMessage("Por favor, completa todos los campos");
       setSuccess(false);
       return;
     }
     
-    // Aquí agregamos las credenciales para los tres tipos de usuarios
-    if (nombre === "admin" && contra === "admin") {
-      setError(false);
-      setSuccess(true);
-      setUser([nombre]);
-      // Muestra el mensaje de éxito por un breve tiempo antes de redirigir
-      setTimeout(() => {
-        navigate("/home");
-      }, 2000); // 2 segundos de demora
-    } else if (nombre === "responsible" && contra === "responsible") {
-      setError(false);
-      setSuccess(true);
-      setUser([nombre]);
-      setTimeout(() => {
-        navigate("/responsibleHome");
-      }, 2000);
-    } else if (nombre === "intern" && contra === "intern") {
-      setError(false);
-      setSuccess(true);
-      setUser([nombre]);
-      setTimeout(() => {
-        navigate("/internHome");
-      }, 2000);
-    } else {
+    try {
+      console.log('Attempting login with:', { email });
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        credentials: 'include',
+        mode: 'cors',
+        body: JSON.stringify({ email, password })
+      });
+
+      console.log('Login response status:', response.status);
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Login error response:', errorData);
+        setError(true);
+        setErrorMessage(errorData || "Error en el inicio de sesión");
+        setSuccess(false);
+        return;
+      }
+
+      // Get the token directly from the response text
+      const token = await response.text();
+      if (!token) {
+        setError(true);
+        setErrorMessage("Token no recibido del servidor");
+        setSuccess(false);
+        return;
+      }
+
+      // Log token details and format it
+      const formattedToken = token.trim();
+      const tokenWithBearer = formattedToken.startsWith('Bearer ') ? formattedToken : `Bearer ${formattedToken}`;
+      
+      // Store the token in localStorage
+      localStorage.setItem('token', tokenWithBearer);
+      
+      // Decode and display token information
+      const tokenPayload = decodeToken(tokenWithBearer);
+      if (tokenPayload) {
+        console.log('Role from token:', tokenPayload.role);
+        console.log('User ID from token:', tokenPayload.sub);
+        console.log('Email from token:', tokenPayload.email);
+        
+        // Set user information
+        setUser([tokenPayload.email, tokenPayload.role]);
+        
+        // Show success message
+        setError(false);
+        setSuccess(true);
+        
+        // Redirect based on role
+        setTimeout(() => {
+          switch(tokenPayload.role) {
+            case "ADMIN":
+              navigate("/home");
+              break;
+            case "RESPONSIBLE":
+              navigate("/responsibleHome");
+              break;
+            case "INTERN":
+              navigate("/internHome");
+              break;
+            default:
+              navigate("/home");
+          }
+        }, 2000); // 2 segundos de demora
+      }
+    } catch (error) {
+      console.error('Error details:', error);
       setError(true);
+      setErrorMessage(error.message || "Error de conexión con el servidor");
       setSuccess(false);
+    }
+  };
+
+  // Function to decode token
+  const decodeToken = (token) => {
+    try {
+      // Remove 'Bearer ' prefix if present
+      const tokenWithoutBearer = token.startsWith('Bearer ') ? token.slice(7) : token;
+      
+      // Decode the token
+      const base64Url = tokenWithoutBearer.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
     }
   };
 
@@ -77,7 +150,7 @@ export const Form = ({ setUser }) => {
 
           {error && (
             <Alert
-              message="Error al iniciar sesión."
+              message={errorMessage || "Error al iniciar sesión."}
               bgColor="bg-red-fail"
               textColor="text-white"
               imageSrc="/alertFail.png"
@@ -96,21 +169,22 @@ export const Form = ({ setUser }) => {
           <form onSubmit={handleSubmit}>
             <section className="mt-8">
               <div className="my-3 mt-2">
-                <p className="mb-2 mx-2 font-medium">Ingresa tu usuario</p>
+                <p className="mb-2 mx-2 font-medium">Correo electrónico</p>
                 <input
-                  type="text"
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="rounded-full py-2 px-4 border-2 border-purple-900 w-full"
+                  placeholder="ejemplo@correo.com"
                 />
               </div>
 
               <div className="my-2">
-                <p className="mb-2 mx-2 font-medium">Ingresa tu contraseña</p>
+                <p className="mb-2 mx-2 font-medium">Contraseña</p>
                 <input
                   type="password"
-                  value={contra}
-                  onChange={(e) => setContra(e.target.value)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="rounded-full px-4 border-2 border-purple-900 w-full py-2"
                 />
               </div>

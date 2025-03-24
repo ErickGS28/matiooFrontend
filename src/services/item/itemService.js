@@ -351,7 +351,7 @@ export const itemService = {
         console.log("Llamando a createItem con datos:", dto);
         
         try {
-            const response = await fetch(`${API_URL}/items/save`, {
+            const response = await fetch(`${API_URL}/items/create`, {
                 method: 'POST',
                 headers: {
                     ...getAuthHeader(),
@@ -412,8 +412,8 @@ export const itemService = {
         console.log(`Llamando a changeItemStatus(${id})`);
         
         try {
-            const response = await fetch(`${API_URL}/items/changeStatus/${id}`, {
-                method: 'PATCH',
+                const response = await fetch(`${API_URL}/items/change-status/${id}`, {
+                method: 'PUT',
                 headers: getAuthHeader(),
                 mode: 'cors'
             });

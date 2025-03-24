@@ -55,11 +55,12 @@ export default function BtnRegistrarItem({ onAgregar }) {
 
           // Cargar usuarios activos
           const usersResponse = await getActiveUsers();
-          console.log("Respuesta completa de getActiveUsers:", usersResponse);
 
           // Mostrar los primeros 2 elementos para inspeccionar estructura
           // (1) Bloque para respuesta tipo array “directo”
+          console.log("USER RESPONSEEEEEEEEEEEEEEE", usersResponse);
           if (
+            
             usersResponse &&
             Array.isArray(usersResponse) &&
             usersResponse.length > 0
@@ -80,6 +81,7 @@ export default function BtnRegistrarItem({ onAgregar }) {
             );
 
             setResponsibleUsers(responsible);
+            console.log("Usuarios responsablesSSSSSSSSSSSSS:", responsible);
             setAllUsers(users);
           } else {
             console.error(
@@ -166,61 +168,56 @@ export default function BtnRegistrarItem({ onAgregar }) {
     setCommonAreaId("");
   };
 
-  const handleClick = async () => {
-    if (
-      !itemTypeId ||
-      !brandId ||
-      !modelId ||
-      !name ||
-      !code ||
-      !serialNumber ||
-      !ownerId
-    ) {
-      setFormError("Por favor, completa todos los campos requeridos.");
-      return;
-    }
+  // en handleClick
+const handleClick = () => {
+  if (
+    !itemTypeId ||
+    !brandId ||
+    !modelId ||
+    !name ||
+    !code ||
+    !serialNumber ||
+    !ownerId
+  ) {
+    setFormError("Por favor, completa todos los campos requeridos.");
+    return;
+  }
 
-    try {
-      // Armar payload con las relaciones correctas
-      const payload = {
-        name,
-        code,
-        serialNumber,
-        status: true,
-        itemType: { id: parseInt(itemTypeId) },
-        brand: { id: parseInt(brandId) },
-        model: { id: parseInt(modelId) },
-        owner: { id: parseInt(ownerId) },
-        // Si hay un usuario asignado, incluir su ID
-        assigned:
-          assignedToId && assignedToId !== "none"
-            ? { id: parseInt(assignedToId) }
-            : null,
-      };
+  let finalLocation = location; 
+  if (useCommonArea && commonAreaId) {
+    // Buscar el objeto que coincide con ese ID
+    const areaSeleccionada = commonAreas.find(
+      (area) => area.id === parseInt(commonAreaId)
+    );
+    
+    // Tomamos su nombre como la “ubicación”
+    finalLocation = areaSeleccionada ? areaSeleccionada.name : "";
+  }
 
-      // Si se usa un área común, incluirlo; de lo contrario, usar la ubicación personalizada
-      if (useCommonArea && commonAreaId) {
-        payload.commonArea = { id: parseInt(commonAreaId) };
-        payload.location = null;
-      } else {
-        payload.commonArea = null;
-        payload.location = location || null;
-      }
-
-      console.log("Payload enviado para crear item:", JSON.stringify(payload));
-
-      if (onAgregar) {
-        onAgregar(payload);
-        setIsOpen(false);
-        resetForm();
-      }
-    } catch (error) {
-      console.error("Error al enviar el formulario:", error);
-      setFormError(
-        "Error al enviar el formulario. Por favor, inténtalo de nuevo."
-      );
-    }
+  const payload = {
+    name,
+    code,
+    serialNumber,
+    status: true,
+    itemTypeId: parseInt(itemTypeId),
+    brandId: parseInt(brandId),
+    modelId: parseInt(modelId),
+    ownerId: parseInt(ownerId),
+    assignedToId: assignedToId && assignedToId !== "none"
+      ? parseInt(assignedToId)
+      : null,
+    location: finalLocation,
   };
+
+  console.log("Payload enviado para crear item:", JSON.stringify(payload));
+
+  if (onAgregar) {
+    onAgregar(payload);
+    setIsOpen(false);
+    resetForm();
+  }
+};
+
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -401,7 +398,7 @@ export default function BtnRegistrarItem({ onAgregar }) {
                               key={user.id}
                               value={user.id.toString()}
                             >
-                              {user.fullname ||
+                              {user.fullName ||
                                 `${user.name || ""} ${user.surname || ""}`}
                             </SelectItem>
                           ))
@@ -436,7 +433,7 @@ export default function BtnRegistrarItem({ onAgregar }) {
                               key={user.id}
                               value={user.id.toString()}
                             >
-                              {user.fullname ||
+                              {user.fullName ||
                                 `${user.name || ""} ${user.surname || ""}`}
                             </SelectItem>
                           ))

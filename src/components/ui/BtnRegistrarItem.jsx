@@ -60,7 +60,6 @@ export default function BtnRegistrarItem({ onAgregar }) {
           // (1) Bloque para respuesta tipo array “directo”
           console.log("USER RESPONSEEEEEEEEEEEEEEE", usersResponse);
           if (
-            
             usersResponse &&
             Array.isArray(usersResponse) &&
             usersResponse.length > 0
@@ -176,8 +175,7 @@ const handleClick = () => {
     !modelId ||
     !name ||
     !code ||
-    !serialNumber ||
-    !ownerId
+    !serialNumber
   ) {
     setFormError("Por favor, completa todos los campos requeridos.");
     return;
@@ -202,7 +200,7 @@ const handleClick = () => {
     itemTypeId: parseInt(itemTypeId),
     brandId: parseInt(brandId),
     modelId: parseInt(modelId),
-    ownerId: parseInt(ownerId),
+    ownerId: ownerId && ownerId !== "none" ? parseInt(ownerId) : null,
     assignedToId: assignedToId && assignedToId !== "none"
       ? parseInt(assignedToId)
       : null,
@@ -387,11 +385,12 @@ const handleClick = () => {
                     >
                       Dueño
                     </Label>
-                    <Select value={ownerId} onValueChange={setOwnerId}>
+                    <Select value={ownerId || "none"} onValueChange={setOwnerId}>
                       <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
                         <SelectValue placeholder="Selecciona un dueño" />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="none">Sin dueño</SelectItem>
                         {responsibleUsers && responsibleUsers.length > 0 ? (
                           responsibleUsers.map((user) => (
                             <SelectItem

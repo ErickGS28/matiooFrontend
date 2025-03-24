@@ -18,6 +18,9 @@ import {
 import { Label } from "@/components/ui/label";
 import { getAllUsers } from "@/services/users/userService";
 import { getActiveCommonAreas } from "@/services/common_area/commonAreaService";
+import { getActiveBrands } from "@/services/brand/brandService";
+import { getActiveItemTypes } from "@/services/item_type/itemTypeService";
+import { getActiveModels } from "@/services/model/modelService";
 
 export function EditItemDialog({ item, onSave }) {
   // Estado inicial: si un campo no existe, se pone 0 (sin selección).
@@ -40,6 +43,9 @@ export function EditItemDialog({ item, onSave }) {
   const [responsibleUsers, setResponsibleUsers] = React.useState([]);
   const [allUsers, setAllUsers] = React.useState([]);
   const [commonAreas, setCommonAreas] = React.useState([]);
+  const [brands, setBrands] = React.useState([]);
+  const [itemTypes, setItemTypes] = React.useState([]);
+  const [models, setModels] = React.useState([]);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   // Cargar usuarios y áreas comunes cuando se abre el diálogo
@@ -72,6 +78,36 @@ export function EditItemDialog({ item, onSave }) {
         ) {
           setCommonAreas(areasResponse.result);
         }
+        
+        // Cargar marcas
+        const brandsResponse = await getActiveBrands();
+        if (
+          brandsResponse &&
+          brandsResponse.type === "SUCCESS" &&
+          Array.isArray(brandsResponse.result)
+        ) {
+          setBrands(brandsResponse.result);
+        }
+        
+        // Cargar tipos de item
+        const typesResponse = await getActiveItemTypes();
+        if (
+          typesResponse &&
+          typesResponse.type === "SUCCESS" &&
+          Array.isArray(typesResponse.result)
+        ) {
+          setItemTypes(typesResponse.result);
+        }
+        
+        // Cargar modelos
+        const modelsResponse = await getActiveModels();
+        if (
+          modelsResponse &&
+          modelsResponse.type === "SUCCESS" &&
+          Array.isArray(modelsResponse.result)
+        ) {
+          setModels(modelsResponse.result);
+        }
       } catch (error) {
         console.error("Error al cargar datos:", error);
       }
@@ -91,27 +127,29 @@ export function EditItemDialog({ item, onSave }) {
         finalLocation = areaSeleccionada ? areaSeleccionada.name : "";
       }
 
-      // Convertimos los IDs a número (o null si <= 0)
-      const numericItemTypeId = parseInt(formData.itemTypeId);
-      const numericBrandId = parseInt(formData.brandId);
-      const numericModelId = parseInt(formData.modelId);
-      const numericOwnerId = parseInt(formData.ownerId);
-      const numericAssignedId = parseInt(formData.assignedToId);
+      // Preparamos los valores para el envío
+      const itemTypeId = parseInt(formData.itemTypeId);
+      const brandId = parseInt(formData.brandId);
+      const modelId = parseInt(formData.modelId);
       
       const updatedItem = {
         // Id del propio item
         id: parseInt(formData.id),
 
         // Relaciones
-        itemTypeId: numericItemTypeId > 0 ? numericItemTypeId : null,
-        brandId: numericBrandId > 0 ? numericBrandId : null,
-        modelId: numericModelId > 0 ? numericModelId : null,
+        itemTypeId: !isNaN(itemTypeId) && itemTypeId > 0 ? itemTypeId : null,
+        brandId: !isNaN(brandId) && brandId > 0 ? brandId : null,
+        modelId: !isNaN(modelId) && modelId > 0 ? modelId : null,
 
-        // Dueño (owner)
-        ownerId: numericOwnerId > 0 ? numericOwnerId : null,
+        // Dueño (owner) - siguiendo el patrón de BtnRegistrarItem.jsx
+        ownerId: formData.ownerId && formData.ownerId !== "none"
+          ? parseInt(formData.ownerId)
+          : null,
 
-        // Asignado (assignedTo)
-        assignedToId: numericAssignedId > 0 ? numericAssignedId : null,
+        // Asignado (assignedTo) - siguiendo el patrón de BtnRegistrarItem.jsx
+        assignedToId: formData.assignedToId && formData.assignedToId !== "none"
+          ? parseInt(formData.assignedToId)
+          : null,
 
         // Campos simples
         serialNumber: formData.serialNumber,
@@ -199,10 +237,11 @@ export function EditItemDialog({ item, onSave }) {
                   <SelectValue placeholder="Selecciona un tipo" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">Electrónico</SelectItem>
-                  <SelectItem value="2">Mueble</SelectItem>
-                  <SelectItem value="3">Herramienta</SelectItem>
-                  <SelectItem value="4">Otro</SelectItem>
+                  {itemTypes.map((type) => (
+                    <SelectItem key={type.id} value={type.id.toString()}>
+                      {type.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -225,12 +264,11 @@ export function EditItemDialog({ item, onSave }) {
                   <SelectValue placeholder="Selecciona una marca" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">HP</SelectItem>
-                  <SelectItem value="2">Dell</SelectItem>
-                  <SelectItem value="3">Lenovo</SelectItem>
-                  <SelectItem value="4">Apple</SelectItem>
-                  <SelectItem value="5">Samsung</SelectItem>
-                  <SelectItem value="6">Otra</SelectItem>
+                  {brands.map((brand) => (
+                    <SelectItem key={brand.id} value={brand.id.toString()}>
+                      {brand.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -253,12 +291,11 @@ export function EditItemDialog({ item, onSave }) {
                   <SelectValue placeholder="Selecciona un modelo" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">Pavilion</SelectItem>
-                  <SelectItem value="2">Inspiron</SelectItem>
-                  <SelectItem value="3">ThinkPad</SelectItem>
-                  <SelectItem value="4">MacBook</SelectItem>
-                  <SelectItem value="5">Galaxy</SelectItem>
-                  <SelectItem value="6">Otro</SelectItem>
+                  {models.map((model) => (
+                    <SelectItem key={model.id} value={model.id.toString()}>
+                      {model.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -307,7 +344,6 @@ export function EditItemDialog({ item, onSave }) {
                 Dueño
               </Label>
               <Select
-                // Muestra 'none' si es 0; si no, muestra su valor
                 value={formData.ownerId > 0 ? formData.ownerId.toString() : "none"}
                 onValueChange={(value) =>
                   setFormData((prev) => ({
@@ -323,7 +359,6 @@ export function EditItemDialog({ item, onSave }) {
                   <SelectValue placeholder="Selecciona un dueño" />
                 </SelectTrigger>
                 <SelectContent>
-                  {/* Opción Sin dueño */}
                   <SelectItem value="none">Sin dueño</SelectItem>
                   {responsibleUsers.map((user) => (
                     <SelectItem key={user.id} value={user.id.toString()}>
@@ -340,11 +375,7 @@ export function EditItemDialog({ item, onSave }) {
                 Asignado a
               </Label>
               <Select
-                value={
-                  formData.assignedToId > 0
-                    ? formData.assignedToId.toString()
-                    : "none"
-                }
+                value={formData.assignedToId > 0 ? formData.assignedToId.toString() : "none"}
                 onValueChange={(value) =>
                   setFormData((prev) => ({
                     ...prev,

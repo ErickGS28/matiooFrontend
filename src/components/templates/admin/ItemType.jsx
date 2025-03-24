@@ -342,7 +342,7 @@ export default function ItemType() {
                           <Label className={`text-sm ${type.status ? 'text-green-confirm' : 'text-gray-500'}`}>
                             {type.status ? 'Activo' : 'Inactivo'}
                           </Label>
-                          <Switch 
+                          <Switch className="cursor-pointer"
                             checked={type.status} 
                             onCheckedChange={(checked) => handleStatusChange(type.id, checked)}
                           />

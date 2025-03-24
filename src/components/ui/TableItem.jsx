@@ -157,7 +157,7 @@ export default function TableItem({ data }) {
                   checked={itemStatus[item.code] || false}
                   onCheckedChange={() => handleStatusChange(item.code)}
                   disabled={isDialogOpen}
-                  className={`${itemStatus[item.code] ? 'bg-green-confirm' : 'bg-gray-600'} transition-colors duration-300`}
+                  className={`${itemStatus[item.code] ? 'bg-green-confirm' : 'bg-gray-600'} transition-colors duration-300 cursor-pointer`}
                 />
               </td>
               <td className="py-2 px-4 rounded-r-2xl h-[3.5rem] relative">

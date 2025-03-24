@@ -391,7 +391,7 @@ export default function Interns() {
               <div className="flex justify-center sm:justify-end flex-grow w-full md:w-auto">
                 <Button 
                   onClick={() => setIsDialogOpen(true)}
-                  className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow-purple-200 shadow-lg"
+                  className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow-purple-200 shadow-lg cursor-pointer"
                 >
                   Registrar
                 </Button>

@@ -24,7 +24,7 @@ export function EstadoDialogUser({ item, isOpen, onClose, onConfirm, onCancel })
           <Button
             variant="outline"
             onClick={onCancel}
-            className="bg-gray-200 hover:bg-gray-300 text-darkpurple-title"
+            className="bg-gray-200 hover:bg-gray-300 text-darkpurple-title cursor-pointer"
           >
             Cancelar
           </Button>
@@ -33,7 +33,7 @@ export function EstadoDialogUser({ item, isOpen, onClose, onConfirm, onCancel })
               onConfirm(item.name + item.lastname); // Usar el identificador único
               onClose();
             }}
-            className="bg-green-confirm hover:bg-green-700 text-white"
+            className="bg-green-confirm hover:bg-green-700 text-white cursor-pointer"
           >
             Confirmar
           </Button>

@@ -335,7 +335,7 @@ export default function Brand() {
                           <Label className={`text-sm ${brand.status ? 'text-green-confirm' : 'text-gray-500'}`}>
                             {brand.status ? 'Activo' : 'Inactivo'}
                           </Label>
-                          <Switch 
+                          <Switch className="cursor-pointer"
                             checked={brand.status} 
                             onCheckedChange={(checked) => handleStatusChange(brand.id, checked)}
                           />

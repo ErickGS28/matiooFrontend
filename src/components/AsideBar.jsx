@@ -99,16 +99,18 @@ export default function AsideBar({ activePage = "", onToggle }) {
               </div>
 
               <div
-                className={iconClasses("commonArea")}
-                onClick={() => handleNavigation("/commonArea")}
+                className={iconClasses("item")}
+                onClick={() => handleNavigation("/item")}
               >
                 <img
-                  src="/asidebarIMG/zona.png"
-                  alt="Zona"
+                  src="/asidebarIMG/item.png"
+                  alt="Item"
                   className={imageClasses}
                 />
-                <span className={textClasses}>Áreas comunes</span>
+                <span className={textClasses}>Bienes</span>
               </div>
+
+             
 
               <div
                 className={iconClasses("itemType")}
@@ -122,17 +124,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
                 <span className={textClasses}>Tipos de bien</span>
               </div>
 
-              <div
-                className={iconClasses("item")}
-                onClick={() => handleNavigation("/item")}
-              >
-                <img
-                  src="/asidebarIMG/item.png"
-                  alt="Item"
-                  className={imageClasses}
-                />
-                <span className={textClasses}>Bienes</span>
-              </div>
+              
 
               <div
                 className={iconClasses("brand")}
@@ -156,6 +148,18 @@ export default function AsideBar({ activePage = "", onToggle }) {
                   className={imageClasses}
                 />
                 <span className={textClasses}>Modelos</span>
+              </div>
+
+              <div
+                className={iconClasses("commonArea")}
+                onClick={() => handleNavigation("/commonArea")}
+              >
+                <img
+                  src="/asidebarIMG/zona.png"
+                  alt="Zona"
+                  className={imageClasses}
+                />
+                <span className={textClasses}>Áreas comunes</span>
               </div>
             </div>
 

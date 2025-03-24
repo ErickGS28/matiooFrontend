@@ -79,14 +79,14 @@ export default function Table({ data, onStatusChange, onSave, showRoleColumn = f
               <td className="py-3 px-4 font-semibold text-darkpurple-title">{user.email}</td>
               <td className="py-3 px-4 font-semibold text-darkpurple-title">{user.location}</td>
               <td className="py-3 px-4">
-                <ViewUserDialog user={user} />
+                <ViewUserDialog  user={user} />
               </td>
               <td className="py-3 px-4 h-[3.5rem] flex items-center justify-center">
                 <Switch
                   checked={user.status} 
                   onCheckedChange={() => handleStatusChange(user.id)} 
                   disabled={isDialogOpen} 
-                  className={`${user.status ? 'bg-green-confirm' : 'bg-gray-600'} transition-colors duration-300`}
+                  className={`${user.status ? 'bg-green-confirm' : 'bg-gray-600'} transition-colors duration-300 cursor-pointer`}
                 />
               </td>
               <td className="py-2 px-4 rounded-r-2xl h-[3.5rem] relative">

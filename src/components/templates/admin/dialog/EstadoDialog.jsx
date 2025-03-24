@@ -21,7 +21,7 @@ export function EstadoDialog({ item, isOpen, onClose, onConfirm }) {
           <Button
             variant="outline"
             onClick={onClose}
-            className="bg-gray-200 hover:bg-gray-300 text-darkpurple-title"
+            className="bg-gray-200 hover:bg-gray-300 text-darkpurple-title cursor-pointer"
           >
             Cancelar
           </Button>
@@ -30,7 +30,7 @@ export function EstadoDialog({ item, isOpen, onClose, onConfirm }) {
               onConfirm(item.code);
               onClose();
             }}
-            className="bg-green-confirm hover:bg-green-700 text-white"
+            className="bg-green-confirm hover:bg-green-700 text-white cursor-pointer "
           >
             Confirmar
           </Button>

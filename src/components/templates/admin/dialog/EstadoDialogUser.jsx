@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
@@ -11,6 +11,9 @@ export function EstadoDialogUser({ item, isOpen, onClose, onConfirm, onCancel })
           <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
             Confirmar cambio de estado
           </DialogTitle>
+          <DialogDescription className="text-sm text-gray-500">
+            Esta acción cambiará el estado actual del usuario.
+          </DialogDescription>
         </DialogHeader>
         <div className="mb-6">
           <Label className="text-darkpurple-title font-medium">

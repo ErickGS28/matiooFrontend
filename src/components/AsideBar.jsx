@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { logout } from "@/services/utils/authUtils";
 
-export default function AsideBar({ activePage = "", onExpandChange }) {
+export default function AsideBar({ activePage = "", onToggle }) {
   const [isExpanded, setIsExpanded] = useState(() => {
     const saved = localStorage.getItem("asideBarExpanded");
     return saved ? JSON.parse(saved) : false;
@@ -24,14 +25,17 @@ export default function AsideBar({ activePage = "", onExpandChange }) {
 
   const toggleMenu = () => {
     setIsExpanded(!isExpanded);
-    onExpandChange?.(!isExpanded);
+    onToggle?.(!isExpanded);
   };
 
   const iconClasses = (iconName) => {
+    const isActive = activePage === iconName;
     return `flex items-center ${
       isExpanded ? "justify-start gap-4 h-10" : "justify-center"
     } cursor-pointer ${
-      activePage === iconName ? "bg-skyblue-bg-icon" : "bg-white hover:bg-skyblue-bg-icon"
+      isActive 
+        ? "bg-skyblue-bg-icon font-bold shadow-md" 
+        : "bg-white hover:bg-skyblue-bg-icon"
     } ${
       isExpanded ? "w-[90%] px-4 rounded-2xl" : "w-[2.5em] h-[2.5em] rounded-full"
     } transition-all duration-300 ease-in-out hover:scale-105`;
@@ -42,6 +46,13 @@ export default function AsideBar({ activePage = "", onExpandChange }) {
   }`;
   
   const imageClasses = "w-[1.3em] min-w-[1.3em] flex-shrink-0";
+
+  const handleLogout = () => {
+    // Eliminar el token del localStorage
+    logout();
+    // Redirigir a la página de inicio de sesión
+    navigate("/");
+  };
   
   return (
     <>
@@ -263,7 +274,7 @@ export default function AsideBar({ activePage = "", onExpandChange }) {
                     <div className="flex justify-end">
                       <button
                         className="px-3 py-1.5 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
-                        onClick={() => handleNavigation("/")}
+                        onClick={handleLogout}
                       >
                         Confirmar
                       </button>

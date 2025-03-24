@@ -1,41 +1,114 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { ViewItemDialog } from "@/components/templates/admin/dialog/ViewItemDialog";
 import { EditItemDialog } from "@/components/templates/admin/dialog/EditItemDialog";
-import { EstadoDialog } from "@/components/templates/admin/dialog/EstadoDialog"; // Importa el nuevo dialog
+import { EstadoDialog } from "@/components/templates/admin/dialog/EstadoDialog"; 
+import { itemService } from "@/services/item/itemService";
 
 export default function TableItem({ data }) {
   const [items, setItems] = useState(data);
-  const [itemStatus, setItemStatus] = useState({}); // Estado para controlar el Switch de cada ítem
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // Controla la apertura del dialog
-  const [currentItem, setCurrentItem] = useState(null); // El ítem que está siendo modificado
-  const [tempStatus, setTempStatus] = useState(null); // Estado temporal del switch antes de confirmar
+  const [itemStatus, setItemStatus] = useState({});
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentItem, setCurrentItem] = useState(null);
+  const [tempStatus, setTempStatus] = useState(null);
+
+  // Inicializar el estado de los switches cuando cambian los datos
+  useEffect(() => {
+    setItems(data);
+    // Crear un objeto con el estado de cada item basado en su propiedad status
+    const initialStatus = {};
+    data.forEach(item => {
+      initialStatus[item.code] = item.status || false;
+    });
+    setItemStatus(initialStatus);
+  }, [data]);
 
   const handleStatusChange = (itemCode) => {
-    setCurrentItem(items.find(item => item.code === itemCode)); // Establece el ítem actual
-    setTempStatus(itemStatus[itemCode]); // Guarda el estado actual para restaurarlo si el usuario cancela
-    setIsDialogOpen(true); // Abre el diálogo
+    setCurrentItem(items.find(item => item.code === itemCode));
+    setTempStatus(itemStatus[itemCode]);
+    setIsDialogOpen(true);
   };
 
-  const handleConfirmStatusChange = (itemCode) => {
-    // Cambia el estado solo del ítem correspondiente
-    setItemStatus((prev) => ({
-      ...prev,
-      [itemCode]: !prev[itemCode], // Cambia el estado del ítem
-    }));
-    setIsDialogOpen(false); // Cierra el diálogo después de confirmar
+  const handleConfirmStatusChange = async (itemCode) => {
+    try {
+      // Obtener el ID del item para llamar a la API
+      const item = items.find(item => item.code === itemCode);
+      if (item && item.id) {
+        // Llamar a la API para cambiar el estado
+        await itemService.changeItemStatus(item.id);
+        
+        // Actualizar el estado local
+        setItemStatus((prev) => ({
+          ...prev,
+          [itemCode]: !prev[itemCode],
+        }));
+      }
+    } catch (error) {
+      console.error("Error al cambiar el estado del item:", error);
+    } finally {
+      setIsDialogOpen(false);
+    }
   };
 
   const handleCancelStatusChange = () => {
     setItemStatus((prev) => ({
       ...prev,
-      [currentItem.code]: tempStatus, // Restaura el estado anterior del ítem si se cancela
+      [currentItem.code]: tempStatus,
     }));
-    setIsDialogOpen(false); // Cierra el diálogo
+    setIsDialogOpen(false);
   };
 
-  const handleSave = (updatedItem) => {
-    setItems(items.map((item) => (item.code === updatedItem.code ? updatedItem : item)));
+  const handleSave = async (updatedItem) => {
+    console.log("TableItem recibió para actualizar:", updatedItem);
+
+    try {
+      // Asegurarnos que todos los campos necesarios estén presentes y sean del tipo correcto
+      const itemToUpdate = {
+        id: parseInt(updatedItem.id),
+        itemTypeId: parseInt(updatedItem.itemTypeId),
+        brandId: parseInt(updatedItem.brandId),
+        modelId: parseInt(updatedItem.modelId),
+        serialNumber: updatedItem.serialNumber,
+        code: updatedItem.code,
+        ownerId: parseInt(updatedItem.ownerId),
+        assignedToId: updatedItem.assignedToId === null ? null : parseInt(updatedItem.assignedToId),
+        location: updatedItem.location,
+        name: updatedItem.name
+      };
+
+      console.log("Objeto formateado para enviar al backend:", itemToUpdate);
+      
+      // Llamar a la API para actualizar el item
+      const response = await itemService.updateItem(itemToUpdate);
+      console.log("Respuesta completa de updateItem:", response);
+      
+      if (response && response.type === "SUCCESS") {
+        console.log("Actualización exitosa, actualizando estado local");
+        
+        // Para asegurar que los datos están actualizados, refrescar desde el backend
+        const allItemsResponse = await itemService.getAllItems();
+        if (allItemsResponse && allItemsResponse.type === "SUCCESS") {
+          setItems(allItemsResponse.result);
+          
+          // Actualizar también el estado de los switches
+          const newStatus = {};
+          allItemsResponse.result.forEach(item => {
+            newStatus[item.code] = item.status || false;
+          });
+          setItemStatus(newStatus);
+        } else {
+          // Si no podemos refrescar todos los items, al menos actualizamos el que se modificó
+          setItems(prevItems => 
+            prevItems.map(item => 
+              item.id === itemToUpdate.id ? { ...item, ...response.result } : item
+            )
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error al actualizar el item:", error);
+      alert("Error al actualizar el item. Por favor, revisa la consola para más detalles.");
+    }
   };
 
   return (
@@ -46,7 +119,7 @@ export default function TableItem({ data }) {
             <th className="py-2 px-4">Nombre</th>
             <th className="py-2 px-4">Marca</th>
             <th className="py-2 px-4">Detalles</th>
-            <th className="py-2 px-4">Estado</th> {/* Aquí está la columna "Estado" */}
+            <th className="py-2 px-4">Estado</th>
             <th className="py-2 px-4">Acciones</th>
           </tr>
         </thead>
@@ -63,7 +136,9 @@ export default function TableItem({ data }) {
               <td className="py-3 px-4 rounded-l-2xl font-semibold text-darkpurple-title">
                 {item.name}
               </td>
-              <td className="py-3 px-4 font-semibold text-darkpurple-title">{item.brand}</td>
+              <td className="py-3 px-4 font-semibold text-darkpurple-title">
+                {item.brand && item.brand.name ? item.brand.name : 'Sin marca'}
+              </td>
               <td className="py-3 px-4">
                 <ViewItemDialog
                   item={{
@@ -72,27 +147,32 @@ export default function TableItem({ data }) {
                     brand: item.brand,
                     model: item.model,
                     code: item.code,
+                    location: item.location || "No asignada",
+                    serialNumber: item.serialNumber
                   }}
                 />
               </td>
               <td className="py-3 px-4 h-[3.5rem] flex items-center justify-center">
                 <Switch
-                  checked={itemStatus[item.code]} // Asigna el estado específico al ítem
-                  onCheckedChange={() => handleStatusChange(item.code)} // Abre el diálogo en lugar de cambiar el estado
-                  disabled={isDialogOpen} // Deshabilita el switch hasta que se confirme
+                  checked={itemStatus[item.code] || false}
+                  onCheckedChange={() => handleStatusChange(item.code)}
+                  disabled={isDialogOpen}
                   className={`${itemStatus[item.code] ? 'bg-green-confirm' : 'bg-gray-600'} transition-colors duration-300`}
                 />
               </td>
               <td className="py-2 px-4 rounded-r-2xl h-[3.5rem] relative">
                 <EditItemDialog
                   item={{
+                    id: item.id,
                     name: item.name,
                     brand: item.brand,
                     model: item.model,
                     code: item.code,
-                    location: item.location,
-                    intern: item.intern,
-                    responsible: item.responsible,
+                    location: item.location || "No asignada",
+                    intern: item.assignedTo || "No asignado",
+                    responsible: item.responsible || "No asignado",
+                    itemType: item.itemType,
+                    serialNumber: item.serialNumber,
                   }}
                   onSave={handleSave}
                 />
@@ -107,9 +187,9 @@ export default function TableItem({ data }) {
         <EstadoDialog
           item={currentItem}
           isOpen={isDialogOpen}
-          onClose={() => setIsDialogOpen(false)} // Cierra el diálogo
-          onConfirm={handleConfirmStatusChange} // Ejecuta el cambio de estado
-          onCancel={handleCancelStatusChange} // Cancela el cambio y restaura el estado original
+          onClose={() => setIsDialogOpen(false)}
+          onConfirm={handleConfirmStatusChange}
+          onCancel={handleCancelStatusChange}
         />
       )}
     </div>

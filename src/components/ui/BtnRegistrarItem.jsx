@@ -1,5 +1,9 @@
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useState } from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,251 +14,515 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getAllUsers, getActiveUsers } from "@/services/users/userService";
+import { getActiveCommonAreas } from "@/services/common_area/commonAreaService";
+import { getAllBrands, getActiveBrands } from "@/services/brand/brandService";
+import {
+  getAllItemTypes,
+  getActiveItemTypes,
+} from "@/services/item_type/itemTypeService";
+import { getAllModels, getActiveModels } from "@/services/model/modelService";
 
 export default function BtnRegistrarItem({ onAgregar }) {
-    const [item, setItem] = useState("");
-  // Estados para cada campo
-  const [itemType, setItemType] = useState("");
-  const [brand, setBrand] = useState("");
-  const [model, setModel] = useState("");
+  const [name, setName] = useState("");
+  const [itemTypeId, setItemTypeId] = useState("");
+  const [brandId, setBrandId] = useState("");
+  const [modelId, setModelId] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
   const [code, setCode] = useState("");
-  const [owner, setOwner] = useState("");
-  const [assignedTo, setAssignedTo] = useState("");
   const [location, setLocation] = useState("");
-  const [status, setStatus] = useState(true);
+  const [ownerId, setOwnerId] = useState("");
+  const [assignedToId, setAssignedToId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [useCommonArea, setUseCommonArea] = useState(false);
+  const [commonAreas, setCommonAreas] = useState([]);
+  const [commonAreaId, setCommonAreaId] = useState("");
+  const [responsibleUsers, setResponsibleUsers] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [itemTypes, setItemTypes] = useState([]);
+  const [models, setModels] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleClick = () => {
-    const newItem = {
-        item,
-      itemType,
-      brand,
-      model,
-      serialNumber,
-      code,
-      owner,
-      assignedTo,
-      location,
-      status,
-    };
-    if (onAgregar) onAgregar(newItem);
+  // Cargar todos los datos cuando se abre el popover
+  useEffect(() => {
+    if (isOpen) {
+      const fetchData = async () => {
+        setIsLoading(true);
+        try {
+          console.log("Cargando datos para el formulario de registro...");
+
+          // Cargar usuarios activos
+          const usersResponse = await getActiveUsers();
+          console.log("Respuesta completa de getActiveUsers:", usersResponse);
+
+          // Mostrar los primeros 2 elementos para inspeccionar estructura
+          // (1) Bloque para respuesta tipo array “directo”
+          if (
+            usersResponse &&
+            Array.isArray(usersResponse) &&
+            usersResponse.length > 0
+          ) {
+            // ...
+          }
+          // (2) Bloque para respuesta con { type: "SUCCESS", result: [...] }
+          else if (
+            usersResponse &&
+            usersResponse.type === "SUCCESS" &&
+            Array.isArray(usersResponse.result)
+          ) {
+            const users = usersResponse.result;
+
+            // Filtrar usuarios con rol RESPONSIBLE
+            const responsible = users.filter(
+              (user) => user.role && user.role === "RESPONSIBLE" // <-- AQUÍ ESTÁ EL DETALLE
+            );
+
+            setResponsibleUsers(responsible);
+            setAllUsers(users);
+          } else {
+            console.error(
+              "Error en el formato de respuesta de usuarios:",
+              usersResponse
+            );
+          }
+
+          // Cargar áreas comunes
+          const areasResponse = await getActiveCommonAreas();
+          console.log("Respuesta de getActiveCommonAreas:", areasResponse);
+
+          if (
+            areasResponse &&
+            areasResponse.type === "SUCCESS" &&
+            Array.isArray(areasResponse.result)
+          ) {
+            console.log("Áreas comunes cargadas:", areasResponse.result.length);
+            setCommonAreas(areasResponse.result);
+          }
+
+          // Cargar marcas
+          const brandsResponse = await getActiveBrands();
+          console.log("Respuesta de getActiveBrands:", brandsResponse);
+
+          if (
+            brandsResponse &&
+            brandsResponse.type === "SUCCESS" &&
+            Array.isArray(brandsResponse.result)
+          ) {
+            console.log("Marcas cargadas:", brandsResponse.result.length);
+            setBrands(brandsResponse.result);
+          }
+
+          // Cargar tipos de item
+          const typesResponse = await getActiveItemTypes();
+          console.log("Respuesta de getActiveItemTypes:", typesResponse);
+
+          if (
+            typesResponse &&
+            typesResponse.type === "SUCCESS" &&
+            Array.isArray(typesResponse.result)
+          ) {
+            console.log("Tipos de item cargados:", typesResponse.result.length);
+            setItemTypes(typesResponse.result);
+          }
+
+          // Cargar modelos
+          const modelsResponse = await getActiveModels();
+          console.log("Respuesta de getActiveModels:", modelsResponse);
+
+          if (
+            modelsResponse &&
+            modelsResponse.type === "SUCCESS" &&
+            Array.isArray(modelsResponse.result)
+          ) {
+            console.log("Modelos cargados:", modelsResponse.result.length);
+            setModels(modelsResponse.result);
+          }
+        } catch (error) {
+          console.error("Error al cargar datos:", error);
+          setFormError("Error al cargar datos. Por favor, inténtalo de nuevo.");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
+    }
+  }, [isOpen]);
+
+  const resetForm = () => {
+    setName("");
+    setItemTypeId("");
+    setBrandId("");
+    setModelId("");
+    setSerialNumber("");
+    setCode("");
+    setLocation("");
+    setOwnerId("");
+    setAssignedToId("");
+    setFormError("");
+    setUseCommonArea(false);
+    setCommonAreaId("");
+  };
+
+  const handleClick = async () => {
+    if (
+      !itemTypeId ||
+      !brandId ||
+      !modelId ||
+      !name ||
+      !code ||
+      !serialNumber ||
+      !ownerId
+    ) {
+      setFormError("Por favor, completa todos los campos requeridos.");
+      return;
+    }
+
+    try {
+      // Armar payload con las relaciones correctas
+      const payload = {
+        name,
+        code,
+        serialNumber,
+        status: true,
+        itemType: { id: parseInt(itemTypeId) },
+        brand: { id: parseInt(brandId) },
+        model: { id: parseInt(modelId) },
+        owner: { id: parseInt(ownerId) },
+        // Si hay un usuario asignado, incluir su ID
+        assigned:
+          assignedToId && assignedToId !== "none"
+            ? { id: parseInt(assignedToId) }
+            : null,
+      };
+
+      // Si se usa un área común, incluirlo; de lo contrario, usar la ubicación personalizada
+      if (useCommonArea && commonAreaId) {
+        payload.commonArea = { id: parseInt(commonAreaId) };
+        payload.location = null;
+      } else {
+        payload.commonArea = null;
+        payload.location = location || null;
+      }
+
+      console.log("Payload enviado para crear item:", JSON.stringify(payload));
+
+      if (onAgregar) {
+        onAgregar(payload);
+        setIsOpen(false);
+        resetForm();
+      }
+    } catch (error) {
+      console.error("Error al enviar el formulario:", error);
+      setFormError(
+        "Error al enviar el formulario. Por favor, inténtalo de nuevo."
+      );
+    }
   };
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-      <div>
-                      <button
-                        type="submit"
-                        className="flex items-center justify-center ml-auto bg-green-confirm text-white font-semibold py-1 px-4 rounded-full w-[160px] shadow-purple-200 shadow-lg cursor-pointer"
-                      >
-                        <p className="text-[1.5em] mr-2">+</p>
-                        Agregar
-                      </button>
-                    </div>
+        <div>
+          <button
+            type="button"
+            className="flex items-center justify-center ml-auto bg-green-confirm text-white font-semibold py-1 px-4 rounded-full w-[160px] shadow-purple-200 shadow-lg cursor-pointer"
+          >
+            <p className="text-[1.5em] mr-2">+</p>
+            <p>Agregar</p>
+          </button>
+        </div>
       </PopoverTrigger>
-
       <PopoverContent
-        side="right"
-        align="center"
-        sideOffset={5}
-        className="z-50 p-4 w-full max-w-[24em] bg-white border border-gray-200 overflow-y-auto max-h-[90vh] translate-y-5"
+        className="w-[450px] p-6 bg-white rounded-xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)] mx-auto"
+        aria-describedby="popover-description"
       >
-        <div className="w-full m-auto space-y-4 ">
-          <div className="mb-2 flex items-center justify-center border-b border-gray-200 pb-2">
-            <img src="/asidebarIMG/item.png" alt="Registrar Item" className="w-[4em]" />
-          </div>
+        <div className="flex justify-center">
+          <div className="max-h-[80vh] overflow-y-auto pr-2 w-full">
+            <div className="grid grid-cols-1 gap-6">
+              <div className="text-center">
+                <h3 className="text-xl font-semibold text-darkpurple-title">
+                  Registrar Bien
+                </h3>
+                <p
+                  id="popover-description"
+                  className="text-gray-500 text-sm mt-1"
+                >
+                  Completa el formulario para registrar un nuevo bien
+                </p>
+              </div>
 
+              {formError && (
+                <div className="p-2 text-sm text-red-600 bg-red-100 rounded-md">
+                  {formError}
+                </div>
+              )}
 
-          <div className="grid gap-2">
-            <Label htmlFor="item" className="text-gray-800">
-              Bien
-            </Label>
-            <Input
-              type="text"
-              id="item"
-              placeholder="Ingresa el bien"
-              className="border-gray-300"
-              value={item}
-              onChange={(e) => setItem(e.target.value)}
-            />
-          </div>
+              {isLoading ? (
+                <div className="text-center py-4">
+                  <p>Cargando datos...</p>
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <Label
+                      htmlFor="name"
+                      className="text-darkpurple-title font-medium"
+                    >
+                      Nombre
+                    </Label>
+                    <Input
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                      placeholder="Nombre del bien"
+                    />
+                  </div>
 
-          {/* Tipo de Bien */}
-          <div className="grid gap-2">
-            <Label htmlFor="itemType" className="text-gray-800">
-              Tipo de Bien
-            </Label>
-            <Select>
-              <SelectTrigger className="w-full border-gray-300">
-                <SelectValue placeholder="Selecciona un tipo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="monitor" onClick={() => setItemType("Monitor")}>
-                  Monitor
-                </SelectItem>
-                <SelectItem value="laptop" onClick={() => setItemType("Laptop")}>
-                  Laptop
-                </SelectItem>
-                <SelectItem value="tablet" onClick={() => setItemType("Tablet")}>
-                  Tablet
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                  <div>
+                    <Label
+                      htmlFor="itemType"
+                      className="text-darkpurple-title font-medium"
+                    >
+                      Tipo de bien
+                    </Label>
+                    <Select value={itemTypeId} onValueChange={setItemTypeId}>
+                      <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                        <SelectValue placeholder="Selecciona un tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {itemTypes.map((type) => (
+                          <SelectItem key={type.id} value={type.id.toString()}>
+                            {type.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-          {/* Marca */}
-          <div className="grid gap-2">
-            <Label htmlFor="brand" className="text-gray-800">
-              Marca
-            </Label>
-            <Select>
-              <SelectTrigger className="w-full border-gray-300">
-                <SelectValue placeholder="Selecciona una marca" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="brandA" onClick={() => setBrand("Brand A")}>
-                  Brand A
-                </SelectItem>
-                <SelectItem value="brandB" onClick={() => setBrand("Brand B")}>
-                  Brand B
-                </SelectItem>
-                <SelectItem value="brandC" onClick={() => setBrand("Brand C")}>
-                  Brand C
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                  <div>
+                    <Label
+                      htmlFor="brand"
+                      className="text-darkpurple-title font-medium"
+                    >
+                      Marca
+                    </Label>
+                    <Select value={brandId} onValueChange={setBrandId}>
+                      <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                        <SelectValue placeholder="Selecciona una marca" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {brands.map((brand) => (
+                          <SelectItem
+                            key={brand.id}
+                            value={brand.id.toString()}
+                          >
+                            {brand.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-          {/* Modelo */}
-          <div className="grid gap-2">
-            <Label htmlFor="model" className="text-gray-800">
-              Modelo
-            </Label>
-            <Select>
-              <SelectTrigger className="w-full border-gray-300">
-                <SelectValue placeholder="Selecciona un modelo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="modelX" onClick={() => setModel("Model X")}>
-                  Model X
-                </SelectItem>
-                <SelectItem value="modelY" onClick={() => setModel("Model Y")}>
-                  Model Y
-                </SelectItem>
-                <SelectItem value="modelZ" onClick={() => setModel("Model Z")}>
-                  Model Z
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                  <div>
+                    <Label
+                      htmlFor="model"
+                      className="text-darkpurple-title font-medium"
+                    >
+                      Modelo
+                    </Label>
+                    <Select value={modelId} onValueChange={setModelId}>
+                      <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                        <SelectValue placeholder="Selecciona un modelo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {models.map((model) => (
+                          <SelectItem
+                            key={model.id}
+                            value={model.id.toString()}
+                          >
+                            {model.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-          {/* Número de Serie */}
-          <div className="grid gap-2">
-            <Label htmlFor="serialNumber" className="text-gray-800">
-              Número de Serie
-            </Label>
-            <Input
-              type="text"
-              id="serialNumber"
-              placeholder="Ingresa número de serie"
-              className="border-gray-300"
-              value={serialNumber}
-              onChange={(e) => setSerialNumber(e.target.value)}
-            />
-          </div>
+                  <div>
+                    <Label
+                      htmlFor="code"
+                      className="text-darkpurple-title font-medium"
+                    >
+                      Código
+                    </Label>
+                    <Input
+                      id="code"
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                      className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                      placeholder="Código único del bien"
+                    />
+                  </div>
 
-          {/* Código */}
-          <div className="grid gap-2">
-            <Label htmlFor="code" className="text-gray-800">
-              Código
-            </Label>
-            <Input
-              type="text"
-              id="code"
-              placeholder="Ingresa el código"
-              className="border-gray-300"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
-          </div>
+                  <div>
+                    <Label
+                      htmlFor="serialNumber"
+                      className="text-darkpurple-title font-medium"
+                    >
+                      Número de Serie
+                    </Label>
+                    <Input
+                      id="serialNumber"
+                      value={serialNumber}
+                      onChange={(e) => setSerialNumber(e.target.value)}
+                      className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                      placeholder="Número de serie del bien"
+                    />
+                  </div>
 
-          {/* Propietario (Select) */}
-          <div className="grid gap-2">
-            <Label htmlFor="owner" className="text-gray-800">
-              Propietario
-            </Label>
-            <Select>
-              <SelectTrigger className="w-full border-gray-300">
-                <SelectValue placeholder="Selecciona un propietario" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="owner1" onClick={() => setOwner("Owner 1")}>
-                  Owner 1
-                </SelectItem>
-                <SelectItem value="owner2" onClick={() => setOwner("Owner 2")}>
-                  Owner 2
-                </SelectItem>
-                <SelectItem value="owner3" onClick={() => setOwner("Owner 3")}>
-                  Owner 3
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                  <div>
+                    <Label
+                      htmlFor="owner"
+                      className="text-darkpurple-title font-medium"
+                    >
+                      Dueño
+                    </Label>
+                    <Select value={ownerId} onValueChange={setOwnerId}>
+                      <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                        <SelectValue placeholder="Selecciona un dueño" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {responsibleUsers && responsibleUsers.length > 0 ? (
+                          responsibleUsers.map((user) => (
+                            <SelectItem
+                              key={user.id}
+                              value={user.id.toString()}
+                            >
+                              {user.fullname ||
+                                `${user.name || ""} ${user.surname || ""}`}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectItem value="no-users" disabled>
+                            No hay responsables disponibles
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-          {/* Asignado a (Select) */}
-          <div className="grid gap-2">
-            <Label htmlFor="assignedTo" className="text-gray-800">
-              Asignado a
-            </Label>
-            <Select>
-              <SelectTrigger className="w-full border-gray-300">
-                <SelectValue placeholder="Selecciona a quien se asigna" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="user1" onClick={() => setAssignedTo("User 1")}>
-                  User 1
-                </SelectItem>
-                <SelectItem value="user2" onClick={() => setAssignedTo("User 2")}>
-                  User 2
-                </SelectItem>
-                <SelectItem value="user3" onClick={() => setAssignedTo("User 3")}>
-                  User 3
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                  <div>
+                    <Label
+                      htmlFor="assignedTo"
+                      className="text-darkpurple-title font-medium"
+                    >
+                      Asignado a
+                    </Label>
+                    <Select
+                      value={assignedToId || "none"}
+                      onValueChange={setAssignedToId}
+                    >
+                      <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                        <SelectValue placeholder="Selecciona un usuario" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">Sin asignar</SelectItem>
+                        {allUsers && allUsers.length > 0 ? (
+                          allUsers.map((user) => (
+                            <SelectItem
+                              key={user.id}
+                              value={user.id.toString()}
+                            >
+                              {user.fullname ||
+                                `${user.name || ""} ${user.surname || ""}`}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectItem value="no-users" disabled>
+                            No hay usuarios disponibles
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-          {/* Ubicación (Select) */}
-          <div className="grid gap-2">
-            <Label htmlFor="location" className="text-gray-800">
-              Ubicación
-            </Label>
-            <Select>
-              <SelectTrigger className="w-full border-gray-300">
-                <SelectValue placeholder="Selecciona una ubicación" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="location1" onClick={() => setLocation("Ubicación 1")}>
-                  Ubicación 1
-                </SelectItem>
-                <SelectItem value="location2" onClick={() => setLocation("Ubicación 2")}>
-                  Ubicación 2
-                </SelectItem>
-                <SelectItem value="location3" onClick={() => setLocation("Ubicación 3")}>
-                  Ubicación 3
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex h-4 w-4 items-center justify-center rounded-sm border border-purple-900">
+                      <input
+                        type="checkbox"
+                        id="useCommonArea"
+                        checked={useCommonArea}
+                        onChange={(e) => setUseCommonArea(e.target.checked)}
+                        className="h-4 w-4 cursor-pointer"
+                      />
+                    </div>
+                    <Label
+                      htmlFor="useCommonArea"
+                      className="text-darkpurple-title font-medium cursor-pointer"
+                    >
+                      Usar área común
+                    </Label>
+                  </div>
 
-        
+                  {useCommonArea ? (
+                    <div>
+                      <Label
+                        htmlFor="commonArea"
+                        className="text-darkpurple-title font-medium"
+                      >
+                        Área común
+                      </Label>
+                      <Select
+                        value={commonAreaId}
+                        onValueChange={setCommonAreaId}
+                      >
+                        <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                          <SelectValue placeholder="Selecciona un área común" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {commonAreas.map((area) => (
+                            <SelectItem
+                              key={area.id}
+                              value={area.id.toString()}
+                            >
+                              {area.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ) : (
+                    <div>
+                      <Label
+                        htmlFor="location"
+                        className="text-darkpurple-title font-medium"
+                      >
+                        Ubicación
+                      </Label>
+                      <Input
+                        id="location"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                        placeholder="Ubicación del bien"
+                      />
+                    </div>
+                  )}
 
-          {/* Botón Agregar */}
-          <div className="flex justify-center mt-4">
-            <Button type="button" className="bg-green-confirm" onClick={handleClick}>
-              Agregar
-            </Button>
+                  <div className="flex justify-end">
+                    <Button
+                      onClick={handleClick}
+                      className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
+                    >
+                      Guardar
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </PopoverContent>

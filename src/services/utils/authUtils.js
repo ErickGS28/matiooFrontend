@@ -9,8 +9,8 @@ export const getAuthHeader = () => {
     if (!token) {
         throw new Error('No authentication token found');
     }
-    // Token is already formatted with Bearer prefix from authService.js
-    const formattedToken = token.trim();
+    // Asegurarse de que el token tenga el prefijo Bearer
+    const formattedToken = token.startsWith('Bearer ') ? token.trim() : `Bearer ${token.trim()}`;
     console.log('Authorization header being sent:', formattedToken);
     return {
         'Authorization': formattedToken,
@@ -32,4 +32,13 @@ export const handleResponse = async (response) => {
         throw new Error(errorMessage);
     }
     return response.json();
+};
+
+/**
+ * Logs out the user by removing the authentication token from localStorage
+ * @returns {void}
+ */
+export const logout = () => {
+    localStorage.removeItem('token');
+    console.log('User logged out, token removed from localStorage');
 };

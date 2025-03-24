@@ -62,24 +62,40 @@ export const getUserById = async (id) => {
 // Function to create a new user
 export const createUser = async (userData) => {
     try {
+        console.log("Datos enviados a la API:", userData);
+        
+        // Usar la ruta correcta según el controlador Spring Boot
         const response = await fetch(`${API_URL}/users/save`, {
             method: 'POST',
             headers: {
                 ...getAuthHeader(),
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                fullName: userData.fullName,
-                username: userData.username,
-                password: userData.password,
-                email: userData.email,
-                location: userData.location,
-                role: userData.role
-            })
+            body: JSON.stringify(userData)
         });
-        return handleResponse(response);
+        
+        // Verificar si la respuesta es vacía
+        const text = await response.text();
+        console.log("Respuesta del servidor (texto):", text);
+        
+        let responseData;
+        try {
+            // Intentar parsear como JSON solo si hay contenido
+            responseData = text ? JSON.parse(text) : {};
+            console.log("Respuesta del servidor (parseada):", responseData);
+        } catch (parseError) {
+            console.error("Error al parsear la respuesta:", parseError);
+            responseData = { message: text || "No se recibió respuesta del servidor" };
+        }
+        
+        if (!response.ok) {
+            throw new Error(`Error: ${responseData.message || `Error ${response.status}: ${response.statusText}`}`);
+        }
+        
+        return responseData;
     } catch (error) {
-        throw new Error('Error al crear el usuario');
+        console.error("Error en createUser:", error);
+        throw error;
     }
 };
 

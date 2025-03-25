@@ -37,13 +37,13 @@ export function ProfileDialog({ user }) {
   };
 
   return (
-    <Dialog >
+    <Dialog>
       <DialogTrigger asChild>
       <Button className="cursor-pointer bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-bl-[1.4em] rounded-br-[1.4em] rounded-tl-[0.5em] rounded-tr-[0.5em] hover:scale-105  px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300">
               Perfil
             </Button>
       </DialogTrigger>
-      <DialogContent className="p-20 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
+      <DialogContent className="w-[35%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
         <DialogHeader>
           <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
             Perfil

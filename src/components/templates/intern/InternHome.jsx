@@ -67,7 +67,7 @@ export default function InternHome() {
 
   return (
     <>
-      <nav className="bg-white p-4">
+      <nav className="bg-white p-4  border-b-1 border-purple-200">
         <div className="flex justify-between items-center max-w-7xl mx-auto px-4">
           <div className="flex items-center cursor-pointer" onClick={() => navigate("/internHome")}>
             <img
@@ -89,7 +89,7 @@ export default function InternHome() {
         </div>
       </nav>
 
-      <div className="flex min-h-screen w-full mb-[2em] bg-purple-100">
+      <div className="flex min-h-screen w-full pb-2 bg-purple-100 h-full  ">
         <main className="flex-1 flex flex-col">
           <div className="flex flex-col p-5 md:px-20 w-full">
             {/* Título */}

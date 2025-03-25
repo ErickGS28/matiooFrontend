@@ -175,7 +175,7 @@ export const Form = ({ setUser }) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="rounded-full py-2 px-4 border-2 border-purple-900 w-full"
-                  placeholder="ejemplo@correo.com"
+                  placeholder="user@gmail.com"
                 />
               </div>
 
@@ -186,6 +186,8 @@ export const Form = ({ setUser }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="rounded-full px-4 border-2 border-purple-900 w-full py-2"
+                  placeholder="User1234."
+
                 />
               </div>
             </section>

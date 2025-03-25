@@ -35,8 +35,8 @@ export default function ItemIntern() {
 
     return (
         <>
-            <nav className="bg-white p-4">
-                <div className="flex justify-between items-center max-w-7xl mx-auto px-4">
+            <nav className="bg-white p-4 border-b-1 border-purple-200">
+                <div className="flex justify-between items-center  mx-auto px-5">
 
                     <div className="flex items-center cursor-pointer" onClick={() => handleNavigation("/internHome")}>
                         <img
@@ -53,7 +53,7 @@ export default function ItemIntern() {
                     </div>
                 </div>
             </nav>
-            <div className="flex min-h-screen w-full mb-[2em] bg-purple-100">
+            <div className="flex min-h-screen w-full pb-2 bg-purple-100">
 
                 <main className="flex-1 flex flex-col">
                     <div className="flex flex-col p-5 md:px-20 w-full">
@@ -92,14 +92,14 @@ export default function ItemIntern() {
 
 
                         {/* Cards Container */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mt-[3em]">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mt-[3em]">
                             {cardData.map((card, index) => (
-                                <div key={index} className="bg-card-bg rounded-lg shadow-md p-4 hover:scale-105 w-[auto]">
-                                    <div className="flex justify-center bg-white rounded-2xl">
+                                <div key={index} className="bg-card-bg rounded-lg shadow-md  hover:scale-105 w-[auto]">
+                                    <div className="flex justify-center bg-white rounded-lg p-2">
                                         <img src={card.img} alt={card.name} className="mx-auto mb-4 w-[8em]" />
                                     </div>
-                                    <div className="px-3">
-                                        <h3 className="text-[1.8em] font-semibold text-mdpurple-htext">{card.name}</h3>
+                                    <div className="px-4 py-3 bg-purple-800 rounded-b-lg border-t-2 border-purple-950">
+                                        <h3 className="text-[1.8em] font-semibold text-white">{card.name}</h3>
 
                                         <div className="flex justify-between gap-4 align-middle">
                                             <p className="text-gray-800">{card.description}</p>

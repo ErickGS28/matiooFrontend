@@ -168,4 +168,20 @@
 
     }
 
+    
+  /* Estilos para el scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px; /* Ancho del scrollbar */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-purple-bg-aside); /* Usando tu variable de color */
+    border-radius: var(--radius); /* Redondeo usando la variable de radio que tienes configurada */
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-white); /* Usando otro color de tu configuración */
+    border-radius: var(--radius); /* Redondeo de la pista */
+  }
+
 }

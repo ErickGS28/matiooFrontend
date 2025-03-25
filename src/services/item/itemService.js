@@ -481,31 +481,35 @@ export const itemService = {
     },
 
     /**
-     * Asigna un item a un usuario.
-     * @param {number} id - ID del item.
-     * @param {number} userId - ID del usuario al que se asigna.
-     */
-    assignItem: async (id, userId) => {
-        console.log(`Llamando a assignItem(${id}, ${userId})`);
-        
-        try {
-            const response = await fetch(`${API_URL}/items/assign/${id}/${userId}`, {
-                method: 'PATCH',
-                headers: getAuthHeader(),
-                mode: 'cors'
-            });
-            
-            console.log("Respuesta de assignItem:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
-            return handleResponse(response);
-        } catch (error) {
-            console.error('Error en assignItem:', error);
-            throw new Error(`Error al asignar el item con ID ${id} al usuario con ID ${userId}`);
-        }
-    },
+ * Asigna un item a un usuario.
+ * @param {number} id - ID del item.
+ * @param {number} userId - ID del usuario al que se asigna.
+ */
+assignItem: async (id, userId) => {
+    console.log(`Llamando a assignItem(${id}, ${userId})`);
+
+    try {
+        const response = await fetch(`${API_URL}/items/${id}/assign`, {
+            method: 'PUT',
+            headers: {
+                ...getAuthHeader(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userId), // Send userId as raw JSON number
+            mode: 'cors'
+        });
+
+        console.log("Respuesta de assignItem:", {
+            status: response.status,
+            statusText: response.statusText
+        });
+
+        return handleResponse(response);
+    } catch (error) {
+        console.error('Error en assignItem:', error);
+        throw new Error(`Error al asignar el item con ID ${id} al usuario con ID ${userId}`);
+    }
+},
 
     /**
      * Desasigna un item (quita el usuario asignado).

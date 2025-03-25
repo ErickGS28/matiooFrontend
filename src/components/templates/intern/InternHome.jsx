@@ -1,27 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ProfileDialog } from "./ProfileDialog";
 import { AssignItemDialog } from "./AssignItemDialog";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { decodeAndDisplayToken } from "@/services/auth/authService";
+import { itemService } from "@/services/item/itemService";
+import { toast } from "react-hot-toast";
 
 export default function InternHome() {
-  const [navegar, setNavegar] = useState("");  // Declaramos el estado para 'navegar'
+  const [navegar, setNavegar] = useState("");
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filteredItems, setFilteredItems] = useState([]);
   const navigate = useNavigate();
 
-  const cardData = [
-    { name: "Monitor", img: "/defaultItem.png", description: "Monitor chido" },
-    { name: "Silla eco", img: "/defaultItem.png", description: "Silla de lo mejor" },
-    { name: "Escritorio", img: "/defaultItem.png", description: "Escritorio de Mesk" },
-    { name: "Mouse Razer", img: "/defaultItem.png", description: "Mouse del god" },
-    { name: "Silla gamer", img: "/defaultItem.png", description: "Silla gamer 100/10" },
-    { name: "Escritorio 2", img: "/defaultItem.png", description: "Escritorio de papi Yanpol" },
-    { name: "Mousepad", img: "/defaultItem.png", description: "Mouse del Stamatioo" },
-  ];
+  useEffect(() => {
+    const fetchUserItems = async () => {
+      try {
+        setLoading(true);
+        // Obtener el ID del usuario desde el token
+        const userData = decodeAndDisplayToken();
+        
+        if (!userData || !userData.id) {
+          console.error("No se pudo obtener el ID del usuario desde el token");
+          toast.error("Error al obtener información del usuario");
+          return;
+        }
 
-  const handleSave = (formData) => {
-    // Aquí iría la lógica para guardar los cambios
-    console.log('Datos guardados:', formData);
+        console.log("ID del usuario:", userData.id);
+        
+        // Obtener los items asignados al usuario
+        const userItems = await itemService.getItemsByAssignedToId(userData.id);
+        console.log("Items obtenidos:", userItems);
+        
+        setItems(userItems);
+        setFilteredItems(userItems);
+      } catch (error) {
+        console.error("Error al obtener los items del usuario:", error);
+        toast.error("Error al cargar los bienes asignados");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserItems();
+  }, []);
+
+  // Filtrar items cuando cambia el término de búsqueda
+  useEffect(() => {
+    if (items.length > 0) {
+      const filtered = items.filter(item => 
+        item.name.toLowerCase().includes(navegar.toLowerCase()) ||
+        item.description.toLowerCase().includes(navegar.toLowerCase())
+      );
+      setFilteredItems(filtered);
+    }
+  }, [navegar, items]);
+
+  const handleRemoveItem = async (itemId) => {
+    // Aquí iría la lógica para quitar un bien asignado
+    // Por ahora solo mostramos un mensaje
+    console.log('Quitar item con ID:', itemId);
+    toast.success("Funcionalidad de quitar bien en desarrollo");
   };
 
   return (
@@ -69,29 +110,55 @@ export default function InternHome() {
                 <input
                   type="search"
                   value={navegar}
-                  onChange={(e) => setNavegar(e.target.value)}  // Actualizamos el estado 'navegar'
+                  onChange={(e) => setNavegar(e.target.value)}
                   className="w-[25em] rounded-full px-8 border-2 shadow-lg shadow-purple-200 py-2 bg-gray-100 font-medium"
                   placeholder="Buscar bien..."
                 />
               </div>
             </div>
 
+            {/* Estado de carga */}
+            {loading && (
+              <div className="flex justify-center items-center mt-10">
+                <p className="text-lg text-gray-600">Cargando bienes asignados...</p>
+              </div>
+            )}
+
+            {/* Mensaje si no hay items */}
+            {!loading && filteredItems.length === 0 && (
+              <div className="flex justify-center items-center mt-10">
+                <p className="text-lg text-gray-600">No tienes bienes asignados actualmente.</p>
+              </div>
+            )}
+
             {/* Cards Container */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mt-[3em]">
-              {cardData.map((card, index) => (
-                <div key={index} className="bg-card-bg rounded-lg shadow-md p-4 hover:scale-105 w-[auto]">
+              {filteredItems.map((item) => (
+                <div key={item.id} className="bg-card-bg rounded-lg shadow-md p-4 hover:scale-105 w-[auto]">
                   <div className="flex justify-center bg-white rounded-2xl">
-                    <img src={card.img} alt={card.name} className="mx-auto mb-4 w-[8em]" />
+                    <img 
+                      src={item.imageUrl || "/defaultItem.png"} 
+                      alt={item.name} 
+                      className="mx-auto mb-4 w-[8em]" 
+                      onError={(e) => { e.target.src = "/defaultItem.png" }}
+                    />
                   </div>
                   <div className="px-3">
-                    <h3 className="text-[1.8em] font-semibold text-mdpurple-htext">{card.name}</h3>
+                    <h3 className="text-[1.8em] font-semibold text-mdpurple-htext">{item.name}</h3>
                     <div className="flex justify-between gap-4 align-middle">
-                      <p className="text-gray-800">{card.description}</p>
+                      <p className="text-gray-800">{item.description}</p>
                     </div>
-                    <div className="flex justify-end mt-2">
-                      <Button className="cursor-pointer py-1 px-3 bg-red-cancel rounded-full text-amber-50">
-                        Quitar
-                      </Button>
+                    <div className="flex flex-col gap-2 mt-2">
+                      <p className="text-sm text-gray-600">Código: {item.code}</p>
+                      <p className="text-sm text-gray-600">Estado: {item.status}</p>
+                      <div className="flex justify-end mt-2">
+                        <Button 
+                          className="cursor-pointer py-1 px-3 bg-red-cancel rounded-full text-amber-50"
+                          onClick={() => handleRemoveItem(item.id)}
+                        >
+                          Quitar
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>

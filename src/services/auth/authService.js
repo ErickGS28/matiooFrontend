@@ -137,12 +137,17 @@ export const checkTokenExpiry = (token) => {
  */
 export const getAuthHeader = () => {
     const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error('No authentication token found');
+    }
+    // Ensure the token has the 'Bearer ' prefix
+    const formattedToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
     return {
-        'Authorization': token ? token : '', // Si el token está vacío, no se pasa ninguna cabecera
+        'Authorization': formattedToken,
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
     };
 };
+
 
 /**
  * Function to handle API request with token and expiration check

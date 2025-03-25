@@ -48,7 +48,6 @@ export default function ItemIntern() {
                     </div>
 
                     <div className="flex space-x-6">
-                        <AssignItemDialog />
                         <ProfileDialog user={{ name: "Santiago", password: "123456" }} />
 
                     </div>

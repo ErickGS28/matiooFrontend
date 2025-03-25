@@ -43,7 +43,6 @@ export default function InternHome() {
               </Button>
             </Link>
 
-            <AssignItemDialog />
             <ProfileDialog user={{ name: "Santiago", password: "123456" }} />
           </div>
         </div>

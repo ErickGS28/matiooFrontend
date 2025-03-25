@@ -17,6 +17,7 @@ import NewPassword from "./components/templates/login/NewPassword";
 import ResponsibleHome from "./components/templates/responsible/responsibleHome";
 import InternHome from "./components/templates/intern/InternHome";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import ItemIntern from "./components/templates/intern/ItemIntern";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -121,6 +122,14 @@ function App() {
                 element={
                   <ProtectedRoute allowedRoles="INTERN">
                     <InternHome />
+                  </ProtectedRoute>
+                } 
+              /> 
+              <Route 
+                path="/itemIntern" 
+                element={
+                  <ProtectedRoute allowedRoles="INTERN">
+                    <ItemIntern />
                   </ProtectedRoute>
                 } 
               /> 

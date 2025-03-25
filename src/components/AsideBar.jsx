@@ -7,6 +7,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { logout } from "@/services/utils/authUtils";
+import { updateUserProfile, getUserById } from "@/services/users/userService";
+import { decodeAndDisplayToken } from "@/services/auth/authService";
+import { toast } from "react-hot-toast";
 
 export default function AsideBar({ activePage = "", onToggle }) {
   const [isExpanded, setIsExpanded] = useState(() => {
@@ -14,6 +17,15 @@ export default function AsideBar({ activePage = "", onToggle }) {
     return saved ? JSON.parse(saved) : false;
   });
   const navigate = useNavigate();
+  const [userData, setUserData] = useState({
+    id: "",
+    fullName: "",
+    username: "",
+    email: "",
+    location: ""
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("asideBarExpanded", JSON.stringify(isExpanded));
@@ -48,12 +60,128 @@ export default function AsideBar({ activePage = "", onToggle }) {
   const imageClasses = "w-[1.3em] min-w-[1.3em] flex-shrink-0";
 
   const handleLogout = () => {
-    // Eliminar el token del localStorage
     logout();
-    // Redirigir a la página de inicio de sesión
     navigate("/");
   };
-  
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setUserData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      console.log("Enviando datos para actualizar perfil:", userData);
+      const response = await updateUserProfile(userData);
+      console.log("Respuesta de actualización de perfil:", response);
+      setDialogOpen(false);
+      
+      // Recargar los datos del usuario después de actualizar
+      const updatedUserData = await getUserById(userData.id);
+      if (updatedUserData && updatedUserData.result) {
+        const newProfileData = {
+          id: updatedUserData.result.id,
+          fullName: updatedUserData.result.fullName,
+          username: updatedUserData.result.username,
+          email: updatedUserData.result.email,
+          location: updatedUserData.result.location
+        };
+        setUserData(newProfileData);
+        
+        // Usar un ID único para el toast para evitar duplicados
+        toast.success("Perfil actualizado correctamente", {
+          id: "profile-update-success",
+          duration: 3000
+        });
+      }
+    } catch (error) {
+      console.error("Error al actualizar el perfil:", error);
+      toast.error(error.message || "Error al actualizar el perfil", {
+        id: "profile-update-error",
+        duration: 3000
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Función para depurar y mostrar los datos del usuario
+  const logUserData = (data) => {
+    console.log("Datos del usuario actualizados:", {
+      id: data.id,
+      fullName: data.fullName,
+      username: data.username,
+      email: data.email,
+      location: data.location
+    });
+  };
+
+  // Load user data from token when component mounts or dialog opens
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        // Obtener el ID del usuario desde el token
+        const tokenData = decodeAndDisplayToken();
+        
+        if (tokenData && tokenData.id) {
+          // Guardar el ID en localStorage para futuras referencias
+          localStorage.setItem('userId', tokenData.id);
+          
+          // Obtener los datos completos del usuario usando getUserById
+          const response = await getUserById(tokenData.id);
+          console.log("Datos del usuario obtenidos:", response);
+          
+          if (response && response.result) {
+            const userData = response.result;
+            const profileData = {
+              id: userData.id,
+              fullName: userData.fullName,
+              username: userData.username,
+              email: userData.email,
+              location: userData.location
+            };
+            setUserData(profileData);
+            logUserData(profileData);
+          }
+        } else {
+          console.warn("No se pudo obtener el ID del usuario desde el token");
+          
+          // Intentar usar el ID guardado en localStorage como respaldo
+          const savedUserId = localStorage.getItem('userId');
+          if (savedUserId) {
+            const response = await getUserById(savedUserId);
+            if (response && response.result) {
+              const userData = response.result;
+              const profileData = {
+                id: userData.id,
+                fullName: userData.fullName,
+                username: userData.username,
+                email: userData.email,
+                location: userData.location
+              };
+              setUserData(profileData);
+              logUserData(profileData);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error al cargar los datos del usuario:", error);
+        toast.error("No se pudieron cargar los datos del perfil", {
+          id: "profile-load-error",
+          duration: 3000
+        });
+      }
+    };
+    
+    loadUserData();
+  }, [dialogOpen]); // Recargar datos cuando se abre el diálogo
+
   return (
     <>
       <div
@@ -110,8 +238,6 @@ export default function AsideBar({ activePage = "", onToggle }) {
                 <span className={textClasses}>Bienes</span>
               </div>
 
-             
-
               <div
                 className={iconClasses("itemType")}
                 onClick={() => handleNavigation("/itemType")}
@@ -123,8 +249,6 @@ export default function AsideBar({ activePage = "", onToggle }) {
                 />
                 <span className={textClasses}>Tipos de bien</span>
               </div>
-
-              
 
               <div
                 className={iconClasses("brand")}
@@ -195,12 +319,18 @@ export default function AsideBar({ activePage = "", onToggle }) {
                           Mi Perfil
                         </h3>
                         <p className="text-sm text-gray-600">
-                          usuario@example.com
+                          {userData.email || "Cargando..."}
                         </p>
                       </div>
                     </div>
 
-                    <Dialog>
+                    <Dialog open={dialogOpen} onOpenChange={(open) => {
+                      setDialogOpen(open);
+                      // Si se cierra el diálogo, resetear cualquier error
+                      if (!open) {
+                        setIsLoading(false);
+                      }
+                    }}>
                       <DialogTrigger asChild>
                         <Button
                           className="mt-2 bg-green-confirm"
@@ -215,36 +345,74 @@ export default function AsideBar({ activePage = "", onToggle }) {
                             Editar Perfil
                           </DialogTitle>
                           <DialogDescription>
-                            Correo: usuario@example.com
+                            Correo: {userData.email || "Cargando..."}
                           </DialogDescription>
                         </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="usuario" className="text-right text-[1em]">
-                              Usuario
-                            </Label>
-                            <Input
-                              id="usuario"
-                              value="Jony Boy"
-                              className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
-                            />
+                        <form onSubmit={handleProfileUpdate}>
+                          <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="fullName" className="text-right text-[1em]">
+                                Nombre Completo
+                              </Label>
+                              <Input
+                                id="fullName"
+                                value={userData.fullName || ""}
+                                onChange={handleInputChange}
+                                placeholder="Ingrese su nombre completo"
+                                className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
+                                required
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="username" className="text-right text-[1em]">
+                                Usuario
+                              </Label>
+                              <Input
+                                id="username"
+                                value={userData.username || ""}
+                                onChange={handleInputChange}
+                                placeholder="Ingrese su nombre de usuario"
+                                className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
+                                required
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="email" className="text-right text-[1em]">
+                                Correo
+                              </Label>
+                              <Input
+                                id="email"
+                                value={userData.email || ""}
+                                onChange={handleInputChange}
+                                placeholder="Ingrese su correo electrónico"
+                                className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
+                                required
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="location" className="text-right text-[1em]">
+                                Ubicación
+                              </Label>
+                              <Input
+                                id="location"
+                                value={userData.location || ""}
+                                onChange={handleInputChange}
+                                placeholder="Ingrese su ubicación"
+                                className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
+                                required
+                              />
+                            </div>
                           </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="email" className="text-right text-[1em]">
-                              Correo
-                            </Label>
-                            <Input
-                              id="email"
-                              value="usuario@example.com"
-                              className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
-                            />
-                          </div>
-                        </div>
-                        <DialogFooter>
-                          <Button type="submit" className="bg-green-confirm">
-                            Guardar cambios
-                          </Button>
-                        </DialogFooter>
+                          <DialogFooter>
+                            <Button 
+                              type="submit" 
+                              className="bg-green-confirm"
+                              disabled={isLoading}
+                            >
+                              {isLoading ? "Guardando..." : "Guardar cambios"}
+                            </Button>
+                          </DialogFooter>
+                        </form>
                       </DialogContent>
                     </Dialog>
                   </div>

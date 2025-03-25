@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
+import { Toaster } from "react-hot-toast";
 import Form from "./components/templates/login/Form";
 import Home from "./components/templates/admin/Home";
 import Responsible from "./components/templates/admin/Responsible";
@@ -26,6 +27,7 @@ function App() {
     <Router>
       <MantineProvider withGlobalStyles withNormalizeCSS>
         <div className="min-h-full">
+          <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
           <div>
             <Routes>
               {/* Public routes */}

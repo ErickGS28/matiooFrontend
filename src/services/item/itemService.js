@@ -481,37 +481,6 @@ export const itemService = {
     },
 
     /**
- * Asigna un item a un usuario.
- * @param {number} id - ID del item.
- * @param {number} userId - ID del usuario al que se asigna.
- */
-assignItem: async (id, userId) => {
-    console.log(`Llamando a assignItem(${id}, ${userId})`);
-
-    try {
-        const response = await fetch(`${API_URL}/items/${id}/assign`, {
-            method: 'PUT',
-            headers: {
-                ...getAuthHeader(),
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userId), // Send userId as raw JSON number
-            mode: 'cors'
-        });
-
-        console.log("Respuesta de assignItem:", {
-            status: response.status,
-            statusText: response.statusText
-        });
-
-        return handleResponse(response);
-    } catch (error) {
-        console.error('Error en assignItem:', error);
-        throw new Error(`Error al asignar el item con ID ${id} al usuario con ID ${userId}`);
-    }
-},
-
-    /**
      * Desasigna un item (quita el usuario asignado).
      * @param {number} id - ID del item.
      */
@@ -519,8 +488,8 @@ assignItem: async (id, userId) => {
         console.log(`Llamando a unassignItem(${id})`);
         
         try {
-            const response = await fetch(`${API_URL}/items/unassign/${id}`, {
-                method: 'PATCH',
+            const response = await fetch(`${API_URL}/items/${id}/unassign`, {
+                method: 'PUT',
                 headers: getAuthHeader(),
                 mode: 'cors'
             });
@@ -534,6 +503,63 @@ assignItem: async (id, userId) => {
         } catch (error) {
             console.error('Error en unassignItem:', error);
             throw new Error(`Error al desasignar el item con ID ${id}`);
+        }
+    },
+
+    /**
+     * Obtiene todos los items no asignados (assignedTo = null).
+     * @returns {Promise<Array>} Lista de items no asignados.
+     */
+    getUnassignedItems: async () => {
+        console.log('Llamando a getUnassignedItems()');
+        
+        try {
+            const response = await fetch(`${API_URL}/items/unassigned`, {
+                headers: getAuthHeader(),
+                mode: 'cors'
+            });
+            
+            console.log("Respuesta de getUnassignedItems:", {
+                status: response.status,
+                statusText: response.statusText
+            });
+            
+            return handleResponse(response);
+        } catch (error) {
+            console.error('Error en getUnassignedItems:', error);
+            throw new Error('Error al obtener los items no asignados');
+        }
+    },
+
+    /**
+     * Asigna un item a un usuario.
+     * @param {number} itemId - ID del item a asignar.
+     * @param {number} userId - ID del usuario al que se asignará el item.
+     * @returns {Promise<Object>} Respuesta de la operación.
+     */
+    assignItem: async (itemId, userId) => {
+        console.log(`Llamando a assignItem(itemId: ${itemId}, userId: ${userId})`);
+        
+        try {
+            const response = await fetch(`${API_URL}/items/${itemId}/assign`, {
+                method: 'PUT',
+                headers: {
+                    ...getAuthHeader(),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userId),
+                mode: 'cors'
+            });
+            
+            console.log("Respuesta de assignItem:", {
+                status: response.status,
+                statusText: response.statusText
+            });
+            
+            return handleResponse(response);
+        } catch (error) {
+            console.error('Error en assignItem:', error);
+            throw new Error(`Error al asignar el item con ID ${itemId} al usuario con ID ${userId}`);
         }
     }
 };

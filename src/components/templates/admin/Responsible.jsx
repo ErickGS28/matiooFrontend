@@ -336,7 +336,7 @@ export default function Responsible() {
     <>
       <div className="flex min-h-screen w-full">
         <AsideBar activePage="responsible" onToggle={handleToggleSidebar} />
-        <main className="flex-1 flex flex-col h-screen overflow-hidden">
+        <main className="flex-1 flex flex-col h-screen ">
           <div className="flex flex-col p-5 md:p-14 w-full">
             {/* Título y imagen */}
             <div className="flex items-center">
@@ -364,7 +364,7 @@ export default function Responsible() {
                 </div>
                 
                 {/* Status Filter Component */}
-                <div className="ml-0 sm:ml-4 mt-2 sm:mt-0">
+                <div className="ml-0 sm:ml-4 mt-2 sm:mt-0 ">
                   <SelectStatus 
                     value={statusFilter} 
                     onChange={setStatusFilter} 

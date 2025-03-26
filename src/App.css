@@ -40,3 +40,16 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Aplica el efecto solo a la fila sobre la cual pasa el mouse */
+.group:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+  overflow-x: auto;
+}
+
+/* Si deseas ocultar el contenido que se desborda, puedes usar overflow-hidden */
+.group:hover td {
+  white-space: nowrap; /* Esto asegura que el contenido de las celdas no se rompa en varias líneas */
+}
+

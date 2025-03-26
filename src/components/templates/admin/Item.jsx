@@ -121,6 +121,7 @@ export default function Item() {
                             Bienes
                         </h1>
                     </div>
+                    
 
                     <div className="my-3 mt-5 w-full flex items-center flex-wrap gap-4">
                         <div className="flex items-center">
@@ -131,12 +132,7 @@ export default function Item() {
                                 className="w-[25em] rounded-full px-8 border-2 shadow-lg shadow-purple-200 py-2 bg-gray-100 font-medium"
                                 placeholder="Buscar bien..."
                             />
-                            <div className="w-[1.8em] h-[1.8em] bg-darkpurple-icon rounded-full flex items-center justify-center ml-4">
-                                <img src="/find.png" alt="Buscar" className="w-[1.2em]" />
-                            </div>
-                            <div className="w-[2em] h-[2em] flex items-center justify-center ml-4">
-                                <img src="/filter.png" alt="Filtrar" />
-                            </div>
+                          
                         </div>
                         <div className="flex justify-end flex-grow">
                             <BtnRegistrarItem onAgregar={handleAddItem} />

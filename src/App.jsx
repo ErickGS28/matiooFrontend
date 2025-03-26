@@ -27,114 +27,122 @@ function App() {
     <Router>
       <MantineProvider withGlobalStyles withNormalizeCSS>
         <div className="min-h-full">
-          <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+          <Toaster position="bottom-right" toastOptions={{ duration: 3000 }} />
           <div>
             <Routes>
               {/* Public routes */}
               <Route path="/" element={<Form setUser={setUser} />} />
-              <Route path="/checkEmail" element={<CheckEmail user={user}/>} />
-              <Route path="/confirmCode" element={<ConfirmCode user={user}/>} />
-              <Route path="/newPassword" element={<NewPassword user={user}/>} />
-              
+              <Route path="/checkEmail" element={<CheckEmail user={user} />} />
+              <Route
+                path="/confirmCode"
+                element={<ConfirmCode user={user} />}
+              />
+              <Route
+                path="/newPassword"
+                element={<NewPassword user={user} />}
+              />
+
               {/* Admin only routes */}
-              <Route 
-                path="/home" 
+              <Route
+                path="/home"
                 element={
                   <ProtectedRoute allowedRoles="ADMIN">
                     <Home user={user} />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/responsible" 
+              <Route
+                path="/responsible"
                 element={
                   <ProtectedRoute allowedRoles="ADMIN">
                     <Responsible user={user} />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/interns" 
+              <Route
+                path="/interns"
                 element={
                   <ProtectedRoute allowedRoles="ADMIN">
                     <Interns user={user} />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/listItem" 
+              <Route
+                path="/listItem"
                 element={
                   <ProtectedRoute allowedRoles="ADMIN">
-                    <ListItem user={user}/>
+                    <ListItem user={user} />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/commonArea" 
+              <Route
+                path="/commonArea"
                 element={
                   <ProtectedRoute allowedRoles="ADMIN">
-                    <CommonArea user={user}/>
+                    <CommonArea user={user} />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/itemType" 
+              <Route
+                path="/itemType"
                 element={
                   <ProtectedRoute allowedRoles="ADMIN">
-                    <ItemType user={user}/>
+                    <ItemType user={user} />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/item" 
+              <Route
+                path="/item"
                 element={
                   <ProtectedRoute allowedRoles="ADMIN">
-                    <Item user={user}/>
+                    <Item user={user} />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/brand" 
+              <Route
+                path="/brand"
                 element={
                   <ProtectedRoute allowedRoles="ADMIN">
-                    <Brand user={user}/>
+                    <Brand user={user} />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/model" 
+              <Route
+                path="/model"
                 element={
                   <ProtectedRoute allowedRoles="ADMIN">
-                    <Model user={user}/>
+                    <Model user={user} />
                   </ProtectedRoute>
-                } 
+                }
               />
-              
+
+             
+
               {/* Role-specific routes */}
-              <Route 
-                path="/responsibleHome" 
+              <Route
+                path="/responsibleHome"
                 element={
                   <ProtectedRoute allowedRoles="RESPONSIBLE">
                     <ResponsibleHome />
                   </ProtectedRoute>
-                } 
-              /> 
-              <Route 
-                path="/internHome" 
+                }
+              />
+              <Route
+                path="/internHome"
                 element={
                   <ProtectedRoute allowedRoles="INTERN">
                     <InternHome />
                   </ProtectedRoute>
-                } 
-              /> 
-              <Route 
-                path="/itemIntern" 
+                }
+              />
+              <Route
+                path="/itemIntern"
                 element={
                   <ProtectedRoute allowedRoles="INTERN">
                     <ItemIntern />
                   </ProtectedRoute>
-                } 
-              /> 
+                }
+              />
             </Routes>
           </div>
         </div>

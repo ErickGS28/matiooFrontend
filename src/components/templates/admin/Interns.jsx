@@ -353,7 +353,7 @@ export default function Interns() {
     <>
       <div className="flex min-h-screen w-full">
         <AsideBar activePage="interns" onToggle={handleToggleSidebar} />
-        <main className="flex-1 flex flex-col h-screen overflow-hidden">
+        <main className="flex-1 flex flex-col h-screen ">
           <div className="flex flex-col p-5 md:p-14 w-full">
             {/* Título y imagen */}
             <div className="flex items-center">

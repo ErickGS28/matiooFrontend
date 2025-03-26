@@ -185,328 +185,210 @@ export function EditItemDialog({ item, onSave }) {
                      top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
       </DialogTrigger>
-      
+
+
       <DialogContent
-        className="w-[35%] min-w-[425px] max-w-[90vw]
-                   p-6 bg-white rounded-2xl
-                   shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]"
-      >
-        <DialogHeader>
-          <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
-            {item.name}
-          </DialogTitle>
-          <DialogDescription className="text-gray-500">
-            Edita los detalles del bien
-          </DialogDescription>
-        </DialogHeader>
-        
-        <div className="max-h-[80vh] overflow-y-auto pr-2">
-          <div className="grid grid-cols-1 gap-6">
-            {/* Nombre */}
-            <div>
-              <Label className="text-darkpurple-title font-medium">
-                Nombre
-              </Label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, name: e.target.value }))
-                }
-                className="mt-3 w-full rounded-[1em] border-2 border-purple-900
-                           px-4 py-2 bg-transparent text-darkpurple-title
-                           focus:outline-none focus:ring-2 focus:ring-purple-900/50"
-              />
-            </div>
+  className="w-[45%] min-w-[425px] h-[32em] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]"
+>
+  <DialogHeader>
+    <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
+      {item.name}
+    </DialogTitle>
+    <DialogDescription className="text-darkpurple-bg-thead font-semibold text-3xl">
+      Edita los detalles del bien
+    </DialogDescription>
+  </DialogHeader>
 
-            {/* Tipo de bien */}
-            <div>
-              <Label className="text-darkpurple-title font-medium">
-                Tipo de bien
-              </Label>
-              <Select
-                value={formData.itemTypeId.toString()}
-                onValueChange={(value) =>
-                  setFormData((prev) => ({ ...prev, itemTypeId: value }))
-                }
-              >
-                <SelectTrigger className="mt-3 w-full rounded-[1em]
-                                         border-2 border-purple-900 px-4 py-2
-                                         bg-transparent text-darkpurple-title"
-                >
-                  <SelectValue placeholder="Selecciona un tipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  {itemTypes.map((type) => (
-                    <SelectItem key={type.id} value={type.id.toString()}>
-                      {type.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Marca */}
-            <div>
-              <Label className="text-darkpurple-title font-medium">
-                Marca
-              </Label>
-              <Select
-                value={formData.brandId.toString()}
-                onValueChange={(value) =>
-                  setFormData((prev) => ({ ...prev, brandId: value }))
-                }
-              >
-                <SelectTrigger className="mt-3 w-full rounded-[1em]
-                                         border-2 border-purple-900 px-4 py-2
-                                         bg-transparent text-darkpurple-title"
-                >
-                  <SelectValue placeholder="Selecciona una marca" />
-                </SelectTrigger>
-                <SelectContent>
-                  {brands.map((brand) => (
-                    <SelectItem key={brand.id} value={brand.id.toString()}>
-                      {brand.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Modelo */}
-            <div>
-              <Label className="text-darkpurple-title font-medium">
-                Modelo
-              </Label>
-              <Select
-                value={formData.modelId.toString()}
-                onValueChange={(value) =>
-                  setFormData((prev) => ({ ...prev, modelId: value }))
-                }
-              >
-                <SelectTrigger className="mt-3 w-full rounded-[1em]
-                                         border-2 border-purple-900 px-4 py-2
-                                         bg-transparent text-darkpurple-title"
-                >
-                  <SelectValue placeholder="Selecciona un modelo" />
-                </SelectTrigger>
-                <SelectContent>
-                  {models.map((model) => (
-                    <SelectItem key={model.id} value={model.id.toString()}>
-                      {model.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Código */}
-            <div>
-              <Label className="text-darkpurple-title font-medium">
-                Código
-              </Label>
-              <input
-                type="text"
-                value={formData.code}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, code: e.target.value }))
-                }
-                className="mt-3 w-full rounded-[1em] border-2
-                           border-purple-900 px-4 py-2 bg-transparent
-                           text-darkpurple-title focus:outline-none
-                           focus:ring-2 focus:ring-purple-900/50"
-              />
-            </div>
-
-            {/* Número de Serie */}
-            <div>
-              <Label className="text-darkpurple-title font-medium">
-                Número de Serie
-              </Label>
-              <input
-                type="text"
-                value={formData.serialNumber}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    serialNumber: e.target.value,
-                  }))
-                }
-                className="mt-3 w-full rounded-[1em] border-2 border-purple-900
-                           px-4 py-2 bg-transparent text-darkpurple-title
-                           focus:outline-none focus:ring-2 focus:ring-purple-900/50"
-              />
-            </div>
-
-            {/* Dueño */}
-            <div>
-              <Label className="text-darkpurple-title font-medium">
-                Dueño
-              </Label>
-              <Select
-                value={formData.ownerId > 0 ? formData.ownerId.toString() : "none"}
-                onValueChange={(value) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    ownerId: value === "none" ? 0 : parseInt(value),
-                  }))
-                }
-              >
-                <SelectTrigger className="mt-3 w-full rounded-[1em]
-                                         border-2 border-purple-900 px-4 py-2
-                                         bg-transparent text-darkpurple-title"
-                >
-                  <SelectValue placeholder="Selecciona un dueño" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">Sin dueño</SelectItem>
-                  {responsibleUsers.map((user) => (
-                    <SelectItem key={user.id} value={user.id.toString()}>
-                      {user.fullName}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Asignado a */}
-            <div>
-              <Label className="text-darkpurple-title font-medium">
-                Asignado a
-              </Label>
-              <Select
-                value={formData.assignedToId > 0 ? formData.assignedToId.toString() : "none"}
-                onValueChange={(value) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    assignedToId: value === "none" ? 0 : parseInt(value),
-                  }))
-                }
-              >
-                <SelectTrigger className="mt-3 w-full rounded-[1em]
-                                         border-2 border-purple-900 px-4 py-2
-                                         bg-transparent text-darkpurple-title"
-                >
-                  <SelectValue placeholder="Selecciona un usuario" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">Sin asignar</SelectItem>
-                  {allUsers.map((user) => (
-                    <SelectItem key={user.id} value={user.id.toString()}>
-                      {user.fullName}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Check de usar área común */}
-            <div className="flex items-center space-x-2">
-              <div
-                className="flex h-4 w-4 items-center justify-center
-                           rounded-sm border border-purple-900
-                           data-[state=checked]:bg-purple-900
-                           data-[state=checked]:text-white"
-              >
-                <input
-                  type="checkbox"
-                  id="useCommonArea"
-                  checked={formData.useCommonArea}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      useCommonArea: e.target.checked,
-                    }))
-                  }
-                  className="h-4 w-4 cursor-pointer"
-                />
-              </div>
-              <Label
-                htmlFor="useCommonArea"
-                className="text-darkpurple-title font-medium cursor-pointer"
-              >
-                Usar área común
-              </Label>
-            </div>
-
-            {formData.useCommonArea ? (
-              // Selección de Área común
-              <div>
-                <Label className="text-darkpurple-title font-medium">
-                  Área común
-                </Label>
-                <Select
-                  value={formData.commonAreaId > 0
-                    ? formData.commonAreaId.toString()
-                    : "none"
-                  }
-                  onValueChange={(value) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      commonAreaId: value === "none" ? 0 : parseInt(value),
-                    }))
-                  }
-                >
-                  <SelectTrigger
-                    className="mt-3 w-full rounded-[1em] border-2
-                               border-purple-900 px-4 py-2 bg-transparent
-                               text-darkpurple-title"
-                  >
-                    <SelectValue placeholder="Selecciona un área común" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {/* Opción Sin área (por si se quiere desmarcar) */}
-                    <SelectItem value="none">Sin área</SelectItem>
-                    {commonAreas.map((area) => (
-                      <SelectItem
-                        key={area.id}
-                        value={area.id.toString()}
-                      >
-                        {area.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            ) : (
-              // Ubicación manual
-              <div>
-                <Label className="text-darkpurple-title font-medium">
-                  Ubicación
-                </Label>
-                <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      location: e.target.value,
-                    }))
-                  }
-                  className="mt-3 w-full rounded-[1em]
-                             border-2 border-purple-900 px-4 py-2
-                             bg-transparent text-darkpurple-title
-                             focus:outline-none focus:ring-2
-                             focus:ring-purple-900/50"
-                />
-              </div>
-            )}
-
-            {/* Botón para guardar */}
-            <div className="flex justify-end">
-              <Button
-                onClick={handleSave}
-                className="bg-darkpurple-title hover:bg-purple-900
-                           text-white font-semibold rounded-[1em]
-                           px-4 py-2 shadow-md shadow-purple-300/30
-                           transition-colors duration-300"
-              >
-                Guardar cambios
-              </Button>
-            </div>
-          </div>
+  <div className="h-full overflow-y-auto pr-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full h-[350px] mx-auto">
+      {/* Columna 1 */}
+      <div className="flex flex-col w-3/4 h-full mx-auto">
+        {/* Nombre */}
+        <div>
+          <Label className="text-darkpurple-title font-medium mb-2">Nombre</Label>
+          <input
+            type="text"
+            value={formData.name}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, name: e.target.value }))
+            }
+            className="mt-1 mb-4 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+          />
         </div>
-      </DialogContent>
+
+        {/* Tipo de bien */}
+        <div>
+          <Label className="text-darkpurple-title font-medium mb-3">Tipo de bien</Label>
+          <Select
+            value={formData.itemTypeId.toString()}
+            onValueChange={(value) =>
+              setFormData((prev) => ({ ...prev, itemTypeId: value }))
+            }
+          >
+            <SelectTrigger className="mt-2 mb-4 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+              <SelectValue placeholder="Selecciona un tipo" />
+            </SelectTrigger>
+            <SelectContent>
+              {itemTypes.map((type) => (
+                <SelectItem key={type.id} value={type.id.toString()}>
+                  {type.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Marca */}
+        <div>
+          <Label className="text-darkpurple-title font-medium mb-2" >Marca</Label>
+          <Select
+            value={formData.brandId.toString()}
+            onValueChange={(value) =>
+              setFormData((prev) => ({ ...prev, brandId: value }))
+            }
+          >
+            <SelectTrigger className="mt-3 mb-4 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+              <SelectValue placeholder="Selecciona una marca" />
+            </SelectTrigger>
+            <SelectContent>
+              {brands.map((brand) => (
+                <SelectItem key={brand.id} value={brand.id.toString()}>
+                  {brand.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Modelo */}
+        <div>
+          <Label className="text-darkpurple-title font-medium">Modelo</Label>
+          <Select
+            value={formData.modelId.toString()}
+            onValueChange={(value) =>
+              setFormData((prev) => ({ ...prev, modelId: value }))
+            }
+          >
+            <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+              <SelectValue placeholder="Selecciona un modelo" />
+            </SelectTrigger>
+            <SelectContent>
+              {models.map((model) => (
+                <SelectItem key={model.id} value={model.id.toString()}>
+                  {model.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Columna 2 */}
+      <div className="flex flex-col  w-3/4 h-full mx-auto">
+        {/* Código y Número de Serie en dos columnas */}
+          <div>
+            <Label className="text-darkpurple-title font-medium mb-2">Código</Label>
+            <input
+              type="text"
+              value={formData.code}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, code: e.target.value }))
+              }
+              className="mt-1 mb-4 w-full rounded-[1em] border-2 border-purple-900 px-3 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+            />
+          </div>
+
+       
+
+        <div>
+            <Label className="text-darkpurple-title font-medium mb-2">Número de Serie</Label>
+            <input
+              type="text"
+              value={formData.serialNumber}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  serialNumber: e.target.value,
+                }))
+              }
+              className="mt-3 mb-4 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+            />
+          </div>
+
+        {/* Dueño */}
+        <div>
+          <Label className="text-darkpurple-title font-medium mb-2">Dueño</Label>
+          <Select
+            value={formData.ownerId > 0 ? formData.ownerId.toString() : "none"}
+            onValueChange={(value) =>
+              setFormData((prev) => ({
+                ...prev,
+                ownerId: value === "none" ? 0 : parseInt(value),
+              }))
+            }
+          >
+            <SelectTrigger className="mt-3 mb-4 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+              <SelectValue placeholder="Selecciona un dueño" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">Sin dueño</SelectItem>
+              {responsibleUsers.map((user) => (
+                <SelectItem key={user.id} value={user.id.toString()}>
+                  {user.fullName}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Asignado a */}
+        <div>
+          <Label className="text-darkpurple-title font-medium">Asignado a</Label>
+          <Select
+            value={formData.assignedToId > 0 ? formData.assignedToId.toString() : "none"}
+            onValueChange={(value) =>
+              setFormData((prev) => ({
+                ...prev,
+                assignedToId: value === "none" ? 0 : parseInt(value),
+              }))
+            }
+          >
+            <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+              <SelectValue placeholder="Selecciona un usuario" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">Sin asignar</SelectItem>
+              {allUsers.map((user) => (
+                <SelectItem key={user.id} value={user.id.toString()}>
+                  {user.fullName}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex justify-end mt-4">
+      <Button
+        onClick={handleSave}
+        className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
+      >
+        Guardar cambios
+      </Button>
+    </div>
+      </div>
+
+      
+    </div>
+
+    {/* Botón para guardar */}
+   
+  </div>
+</DialogContent>
+
+
+    
+
+
     </Dialog>
   );
 }

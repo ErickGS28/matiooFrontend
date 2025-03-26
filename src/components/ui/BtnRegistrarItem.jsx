@@ -181,13 +181,13 @@ const handleClick = () => {
     return;
   }
 
-  let finalLocation = location; 
+  let finalLocation = location;
   if (useCommonArea && commonAreaId) {
     // Buscar el objeto que coincide con ese ID
     const areaSeleccionada = commonAreas.find(
       (area) => area.id === parseInt(commonAreaId)
     );
-    
+
     // Tomamos su nombre como la “ubicación”
     finalLocation = areaSeleccionada ? areaSeleccionada.name : "";
   }
@@ -216,7 +216,6 @@ const handleClick = () => {
   }
 };
 
-
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
@@ -231,14 +230,14 @@ const handleClick = () => {
         </div>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[450px] p-6 bg-white rounded-xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)] mx-auto"
+        className="w-[350px] h-auto p-6 bg-white rounded-xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)] mx-auto overflow-scroll left-0 transform -translate-x-1/2 top-0"
         aria-describedby="popover-description"
       >
         <div className="flex justify-center">
-          <div className="max-h-[80vh] overflow-y-auto pr-2 w-full">
+          <div className="max-h-[60vh] overflow-y-auto pr-2 w-full">
             <div className="grid grid-cols-1 gap-6">
               <div className="text-center">
-                <h3 className="text-xl font-semibold text-darkpurple-title">
+                <h3 className="text-darkpurple-title text-[1.8em] font-semibold">
                   Registrar Bien
                 </h3>
                 <p

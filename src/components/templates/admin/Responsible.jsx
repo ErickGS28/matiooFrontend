@@ -15,7 +15,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,7 @@ export default function Responsible() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const usersPerPage = 5;
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     username: "",
@@ -47,12 +47,12 @@ export default function Responsible() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      
+
       const response = await getAllUsers();
-      
+
       if (response && response.result && Array.isArray(response.result)) {
         const responsibleUsers = response.result.filter(user => user && user.role === "RESPONSIBLE");
-        
+
         setUsers(responsibleUsers);
         setFilteredUsers(responsibleUsers);
         setError(null);
@@ -97,24 +97,24 @@ export default function Responsible() {
     }
 
     let filtered = [...users];
-    
+
     // Aplicar filtro de estado
     if (statusFilter === "active") {
       filtered = filtered.filter(user => user.status === true);
     } else if (statusFilter === "inactive") {
       filtered = filtered.filter(user => user.status === false);
     }
-    
+
     // Aplicar búsqueda
     if (searchQuery.trim() !== "") {
-      filtered = filtered.filter(user => 
+      filtered = filtered.filter(user =>
         (user.fullName && user.fullName.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (user.username && user.username.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (user.email && user.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (user.location && user.location.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
-    
+
     setFilteredUsers(filtered);
   }, [users, statusFilter, searchQuery]);
 
@@ -146,7 +146,7 @@ export default function Responsible() {
 
   const handleAddResponsible = async () => {
     try {
-      if (!formData.fullName || !formData.username || !formData.password || !formData.email || 
+      if (!formData.fullName || !formData.username || !formData.password || !formData.email ||
           (formData.isCommonArea ? !formData.commonAreaId : !formData.location)) {
         toast.error("Por favor, completa todos los campos obligatorios");
         return;
@@ -164,7 +164,7 @@ export default function Responsible() {
       const response = await createUser(userData);
       fetchUsers();
       resetForm();
-      setIsDialogOpen(false);
+      setIsPopoverOpen(false);
       toast.success("Responsable agregado correctamente");
     } catch (error) {
       console.error("Error adding responsible:", error);
@@ -232,14 +232,7 @@ export default function Responsible() {
 
   // Formulario de usuario
   const UserForm = () => (
-    <div className="grid grid-cols-2 gap-6 mt-4">
-      <div className="flex items-center justify-center">
-        <img 
-          src="/responsables.png" 
-          alt="Responsable" 
-          className="w-full h-auto max-w-[200px] object-contain" 
-        />
-      </div>
+    <div className="grid gap-6 mt-4 h-[50vh] overflow-scroll p-4">
       <div>
         <div className="grid grid-cols-1 gap-4">
           <div>
@@ -290,9 +283,9 @@ export default function Responsible() {
           </div>
           <div className="flex items-center space-x-2">
             <Label htmlFor="isCommonArea" className="text-sm font-medium text-gray-700">¿Área Común?</Label>
-            <input 
-              type="checkbox" 
-              id="isCommonArea" 
+            <input
+              type="checkbox"
+              id="isCommonArea"
               checked={formData.isCommonArea}
               onChange={handleCheckboxChange}
               className="h-4 w-4 text-purple-900 rounded border-gray-300 focus:ring-purple-900"
@@ -315,8 +308,8 @@ export default function Responsible() {
               </Select>
             </div>
           ) : (
-            <div>
-              <Label htmlFor="location" className="text-sm font-medium text-gray-700">Ubicación</Label>
+            <div className="mb-2">
+              <Label htmlFor="location" className=" text-sm font-medium text-gray-700">Ubicación</Label>
               <Input
                 id="location"
                 name="location"
@@ -327,6 +320,14 @@ export default function Responsible() {
               />
             </div>
           )}
+          <div className="flex justify-end">
+            <Button
+              onClick={handleAddResponsible}
+              className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
+            >
+              Guardar
+            </Button>
+          </div>
         </div>
       </div>
     </div>
@@ -344,7 +345,7 @@ export default function Responsible() {
                 Responsables
               </h1>
               <img
-                src="/responsables.png"
+                src="/responsible.png"
                 alt="responsable"
                 className="ml-auto w-[5em] h-[5em] object-contain"
               />
@@ -362,22 +363,34 @@ export default function Responsible() {
                     placeholder="Buscar responsable..."
                   />
                 </div>
-                
+
                 {/* Status Filter Component */}
                 <div className="ml-0 sm:ml-4 mt-2 sm:mt-0 ">
-                  <SelectStatus 
-                    value={statusFilter} 
-                    onChange={setStatusFilter} 
+                  <SelectStatus
+                    value={statusFilter}
+                    onChange={setStatusFilter}
                   />
                 </div>
               </div>
               <div className="flex justify-center sm:justify-end flex-grow w-full md:w-auto">
-                <Button 
-                  onClick={() => setIsDialogOpen(true)}
-                  className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow-purple-200 shadow-lg cursor-pointer"
-                >
-                  Registrar
-                </Button>
+                <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow-purple-200 shadow-lg cursor-pointer"
+                    >
+                      Registrar
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[50%] h-[35em] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)] transform -translate-x-1/3">
+                    <div className="text-center">
+                      <h3 className="text-darkpurple-title text-[1.8em] font-semibold">Agregar Responsable</h3>
+                      <p className="text-gray-500 text-sm mt-1">
+                        Complete los campos para registrar un nuevo responsable.
+                      </p>
+                    </div>
+                    {UserForm()}
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
 
@@ -388,8 +401,8 @@ export default function Responsible() {
             ) : (
               <>
                 <div className="mt-5 w-full overflow-x-auto">
-                  <Table 
-                    data={transformedData} 
+                  <Table
+                    data={transformedData}
                     onStatusChange={handleUpdateStatus}
                     onSave={handleUpdateUser}
                     showRoleColumn={true}
@@ -399,20 +412,20 @@ export default function Responsible() {
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
-                      <PaginationPrevious 
-                        href="#" 
+                      <PaginationPrevious
+                        href="#"
                         onClick={(e) => {
                           e.preventDefault();
                           if (currentPage > 1) setCurrentPage(currentPage - 1);
-                        }} 
+                        }}
                         className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}
                       />
                     </PaginationItem>
-                    
+
                     {[...Array(totalPages)].map((_, i) => (
                       <PaginationItem key={i}>
-                        <PaginationLink 
-                          href="#" 
+                        <PaginationLink
+                          href="#"
                           onClick={(e) => {
                             e.preventDefault();
                             setCurrentPage(i + 1);
@@ -423,10 +436,10 @@ export default function Responsible() {
                         </PaginationLink>
                       </PaginationItem>
                     ))}
-                    
+
                     <PaginationItem>
-                      <PaginationNext 
-                        href="#" 
+                      <PaginationNext
+                        href="#"
                         onClick={(e) => {
                           e.preventDefault();
                           if (currentPage < totalPages) setCurrentPage(currentPage + 1);
@@ -438,38 +451,6 @@ export default function Responsible() {
                 </Pagination>
               </>
             )}
-
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogContent className="w-[50%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
-                <DialogHeader>
-                  <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">Agregar Responsable</DialogTitle>
-                  <DialogDescription>
-                    Complete los campos para registrar un nuevo responsable.
-                  </DialogDescription>
-                </DialogHeader>
-                
-                {UserForm()}
-                
-                <div className="flex justify-end gap-2 mt-4">
-                  <Button 
-                    variant="outline" 
-                    onClick={() => {
-                      resetForm();
-                      setIsDialogOpen(false);
-                    }}
-                    className="border-purple-900 text-purple-900 hover:bg-purple-100"
-                  >
-                    Cancelar
-                  </Button>
-                  <Button 
-                    onClick={handleAddResponsible}
-                    className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
-                  >
-                    Guardar
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
 
             <Toaster position="bottom-right" />
           </div>

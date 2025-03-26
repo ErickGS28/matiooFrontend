@@ -306,8 +306,8 @@ export default function AsideBar({ activePage = "", onToggle }) {
                     <span className={textClasses}>Mi Perfil</span>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="p-6 ml-[4em] bg-white rounded-2xl shadow-lg border border-purple-100">
-                  <div className="space-y-4">
+                <PopoverContent className=" p-6 bg-white rounded-2xl shadow-lg border border-purple-100 transform translate-x-1/2 right-4">
+                <div className="space-y-4">
                     <div className="flex items-center gap-3 pb-3 border-b border-purple-100">
                       <img
                         src="/asidebarIMG/profile.png"
@@ -339,7 +339,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
                           Editar Perfil
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px]">
+                      <DialogContent className="sm:max-w-[425px] p-8">
                         <DialogHeader>
                           <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
                             Editar Perfil
@@ -351,7 +351,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
                         <form onSubmit={handleProfileUpdate}>
                           <div className="grid gap-4 py-4">
                             <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="fullName" className="text-right text-[1em]">
+                              <Label htmlFor="fullName" className="text-left text-[1em]">
                                 Nombre Completo
                               </Label>
                               <Input
@@ -364,7 +364,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
                               />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="username" className="text-right text-[1em]">
+                              <Label htmlFor="username" className="text-left text-[1em]">
                                 Usuario
                               </Label>
                               <Input
@@ -377,7 +377,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
                               />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="email" className="text-right text-[1em]">
+                              <Label htmlFor="email" className="text-left text-[1em]">
                                 Correo
                               </Label>
                               <Input
@@ -390,7 +390,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
                               />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="location" className="text-right text-[1em]">
+                              <Label htmlFor="location" className="text-left text-[1em]">
                                 Ubicación
                               </Label>
                               <Input

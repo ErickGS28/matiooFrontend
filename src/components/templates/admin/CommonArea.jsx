@@ -228,7 +228,7 @@ export default function CommonArea() {
                       </button>
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent className="p-4 w-[20em] mr-[12em] bg-white border-1 border-black">
+                  <PopoverContent className="p-4 w-[20em] bg-white border-1 border-black transform -translate-x-1/2">
                     <div className="w-[90%] m-auto">
                       <div className="mt-[2em] flex items-center justify-center border-b border-purple-100">
                         <img
@@ -301,7 +301,7 @@ export default function CommonArea() {
                 {filteredAreas.map((area, index) => (
                   <div
                     key={area.id || index}
-                    className="bg-card-bg rounded-lg shadow-md p-4"
+                    className="bg-card-bg rounded-lg shadow-md p-4 hover:scale-105 w-[auto]"
                   >
                     <div className="text-center">
                       <img

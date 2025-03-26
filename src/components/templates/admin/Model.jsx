@@ -249,11 +249,11 @@ export default function Model() {
                       </button>
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent className="p-4 w-[20em] bg-white border-1 border-black">
+                  <PopoverContent className="p-4 w-[20em] bg-white border-1 border-black transform -translate-x-1/2">
                     <div className="w-[90%] m-auto">
                       <div className="mt-[2em] flex items-center justify-center border-b border-purple-100">
                         <img
-                          src="/model.png"
+                          src="/asidebarIMG/notaChida.png"
                           alt="Modelo"
                           className="w-[4em] mb-[2em]"
                         />

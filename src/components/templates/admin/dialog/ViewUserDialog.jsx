@@ -28,7 +28,7 @@ export function ViewUserDialog({ user }) {
       <DialogTrigger asChild>
         <Button className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300 cursor-pointer">Ver</Button>
       </DialogTrigger>
-      <DialogContent className="w-[45%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
+      <DialogContent className="w-[40%] min-w-[425px]  h-[70%]  max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
         <DialogHeader>
           <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
             Ver {translateRole(user.role)}
@@ -86,7 +86,7 @@ export function ViewUserDialog({ user }) {
                 </div>
               </div>
             </div>
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-end mt-8">
               <Assign />
             </div>
           </div>

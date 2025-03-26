@@ -96,7 +96,7 @@ export function EditUserDialog({ user, onSave }) {
           className="w-[1.25em] h-[1.25em] cursor-pointer absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
       </DialogTrigger>
-      <DialogContent className="w-[50%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
+      <DialogContent className="w-[30%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
         <DialogHeader>
           <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
             Editar {translateRole(user.role)}

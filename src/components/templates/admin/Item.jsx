@@ -120,6 +120,11 @@ export default function Item() {
                         <h1 className="text-darkpurple-title text-[2.5em] font-semibold">
                             Bienes
                         </h1>
+                        <img
+                src="/item.png"
+                alt="becario"
+                className="ml-auto w-[5em] h-[5em] object-contain"
+              />
                     </div>
                     
 

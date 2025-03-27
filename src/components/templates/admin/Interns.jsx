@@ -49,11 +49,9 @@ export default function Interns() {
       setLoading(true);
 
       const response = await getAllUsers();
-      console.log("Respuesta de getAllUsers:", response);
 
       if (response && response.result && Array.isArray(response.result)) {
         const internUsers = response.result.filter(user => user && user.role === "INTERN");
-        console.log("Usuarios filtrados (INTERN):", internUsers);
         setUsers(internUsers);
         setFilteredUsers(internUsers);
         setError(null);
@@ -76,7 +74,6 @@ export default function Interns() {
   const fetchCommonAreas = async () => {
     try {
       const areas = await getActiveCommonAreas();
-      console.log("Áreas comunes obtenidas:", areas);
       if (areas && areas.result) {
         setCommonAreas(areas.result);
       }
@@ -147,49 +144,62 @@ export default function Interns() {
   };
 
   const handleAddIntern = async () => {
-    try {
-      if (!formData.fullName || !formData.username || !formData.password || !formData.email ||
-          (formData.isCommonArea ? !formData.commonAreaId : !formData.location)) {
-        toast.error("Por favor, completa todos los campos obligatorios");
-        return;
-      }
-
-      // Crear el objeto userData según el formato esperado por el backend (UserDTO)
-      const userData = {
-        fullName: formData.fullName,
-        username: formData.username,
-        password: formData.password,
-        email: formData.email,
-        location: formData.isCommonArea ? formData.commonAreaId : formData.location,
-        role: "INTERN"
-      };
-
-      console.log("Enviando datos al servidor:", userData);
-
-      try {
-        const response = await createUser(userData);
-        console.log("Respuesta exitosa:", response);
-
-        fetchUsers();
-        resetForm();
-        setIsPopoverOpen(false);
-
-        toast.success("Becario agregado correctamente", {
-          position: "bottom-right",
-        });
-      } catch (error) {
-        console.error("Error detallado:", error);
-        toast.error(`Error al agregar becario: ${error.message || "Error desconocido"}`);
-      }
-    } catch (error) {
-      console.error("Error general:", error);
-      toast.error("Error al procesar el formulario");
+    // Validaciones de frontend
+    if (!formData.fullName || !formData.username || !formData.password || !formData.email ||
+      (formData.isCommonArea ? !formData.commonAreaId : !formData.location)) {
+      toast.error("Por favor, completa todos los campos obligatorios");
+      return;
     }
+
+    // Validación de longitud del nombre completo
+    if (formData.fullName.length > 100) {
+      toast.error("El nombre completo no puede exceder los 100 caracteres.");
+      return;
+    }
+
+    // Validación de longitud del nombre de usuario
+    if (formData.username.length > 50) {
+      toast.error("El nombre de usuario no puede exceder los 50 caracteres.");
+      return;
+    }
+
+    // Validación de formato de correo electrónico
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("El correo electrónico no es válido.");
+      return;
+    }
+
+    // Validación de longitud del correo electrónico
+    if (formData.email.length > 100) {
+      toast.error("El correo electrónico no puede exceder los 100 caracteres.");
+      return;
+    }
+
+    // Validación de la longitud de la contraseña
+    if (formData.password.length < 8 || formData.password.length > 255) {
+      toast.error("La contraseña debe tener entre 8 y 255 caracteres.");
+      return;
+    }
+
+    const userData = {
+      fullName: formData.fullName,
+      username: formData.username,
+      password: formData.password,
+      email: formData.email,
+      location: formData.isCommonArea ? formData.commonAreaId : formData.location,
+      role: "INTERN"
+    };
+
+    const response = await createUser(userData);
+    fetchUsers();
+    resetForm();
+    setIsPopoverOpen(false);
+    toast.success("Becario agregado correctamente");
   };
 
   const handleUpdateStatus = async (id) => {
     try {
-      console.log("Cambiando estado del usuario con ID:", id);
       await changeUserStatus(id);
       fetchUsers();
       toast.success("Estado del becario actualizado correctamente");
@@ -201,7 +211,6 @@ export default function Interns() {
 
   const handleUpdateUser = async (userData) => {
     try {
-      console.log("Actualizando usuario:", userData);
       await updateUser(userData.id, userData);
       fetchUsers();
       toast.success("Becario actualizado correctamente");
@@ -249,10 +258,9 @@ export default function Interns() {
 
   // Formulario de usuario
   const UserForm = () => (
-    <div className="grid  gap-6 mt-2">
-
+    <div className="grid gap-6 mt-4 p-4">
       <div>
-        <div className="grid  gap-4">
+        <div className="grid grid-cols-1 gap-4 ">
           <div>
             <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">Nombre Completo</Label>
             <Input
@@ -326,8 +334,8 @@ export default function Interns() {
               </Select>
             </div>
           ) : (
-            <div>
-              <Label htmlFor="location" className="text-sm font-medium text-gray-700">Ubicación</Label>
+            <div className="mb-2">
+              <Label htmlFor="location" className=" text-sm font-medium text-gray-700">Ubicación</Label>
               <Input
                 id="location"
                 name="location"
@@ -338,6 +346,16 @@ export default function Interns() {
               />
             </div>
           )}
+        </div>
+
+        {/* Botón de guardar dentro del formulario */}
+        <div className="flex justify-end mt-4">
+          <Button
+            onClick={handleAddIntern}
+            className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
+          >
+            Guardar
+          </Button>
         </div>
       </div>
     </div>
@@ -391,37 +409,23 @@ export default function Interns() {
                       Registrar
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent
-                    className="w-[50%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)] mx-auto overflow-scroll left-0 transform -translate-x-1/3 top-0"
-                    aria-describedby="popover-description"
-                  >
-                    <div className="flex justify-center">
-                      <div className="max-h-[60vh] overflow-y-auto pr-2 w-full">
-                        <div className="grid grid-cols-1 gap-6">
-                          <div className="text-center">
-                            <h3 className="text-darkpurple-title text-[1.8em] font-semibold">
-                              Agregar Becario
-                            </h3>
-                            <p
-                              id="popover-description"
-                              className="text-gray-500 text-sm mt-1"
-                            >
-                              Complete los campos para registrar un nuevo becario.
-                            </p>
-                          </div>
+                  <PopoverContent className="w-[50%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)] mx-auto left-0 transform -translate-x-1/3 top-0">
+                    <div className="flex flex-col h-full">
+                      <div className="text-center">
+                        <h3 className="text-darkpurple-title text-[1.8em] font-semibold">
+                          Agregar Becario
+                        </h3>
+                        <p
+                          id="popover-description"
+                          className="text-gray-500 text-sm mt-1"
+                        >
+                          Complete los campos para registrar un nuevo becario.
+                        </p>
+                      </div>
 
-                          {UserForm()}
-
-                          <div className="flex justify-end gap-2 ">
-                            
-                            <Button
-                              onClick={handleAddIntern}
-                              className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
-                            >
-                              Guardar
-                            </Button>
-                          </div>
-                        </div>
+                      {/* Solo el formulario tiene scroll ahora */}
+                      <div className="overflow-y-auto max-h-[50vh] mt-4">
+                        {UserForm()}
                       </div>
                     </div>
                   </PopoverContent>

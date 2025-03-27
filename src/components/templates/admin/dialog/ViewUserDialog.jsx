@@ -40,7 +40,7 @@ export function ViewUserDialog({ user }) {
             <img
               src={user.role === "INTERN" ? "/becarios.png" : user.role === "RESPONSIBLE" ? "/responsible.png" : "/admin.png"}
               alt={translateRole(user.role)}
-              className="w-full h-auto max-w-[200px] shadow-lg mb-5"
+              className="w-full h-auto max-w-[200px]  mb-5"
             />
             <div className="grid grid-cols-2 gap-16 w-full mt-3 px-5">
               {/* Columna 1 */}
@@ -55,7 +55,7 @@ export function ViewUserDialog({ user }) {
                     <p className="text-gray-600">{user.username || "No asignado"}</p>
                   </div>
                   <div className="flex justify-between">
-                    <h3 className="text-darkpurple-title font-medium">Correo electrónico</h3>
+                    <h3 className="text-darkpurple-title font-medium">Correo:</h3>
                     <p className="text-gray-600">{user.email || "No asignado"}</p>
                   </div>
                 </div>

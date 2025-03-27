@@ -145,31 +145,58 @@ export default function Responsible() {
   };
 
   const handleAddResponsible = async () => {
-    try {
-      if (!formData.fullName || !formData.username || !formData.password || !formData.email ||
-          (formData.isCommonArea ? !formData.commonAreaId : !formData.location)) {
-        toast.error("Por favor, completa todos los campos obligatorios");
-        return;
-      }
-
-      const userData = {
-        fullName: formData.fullName,
-        username: formData.username,
-        password: formData.password,
-        email: formData.email,
-        location: formData.isCommonArea ? formData.commonAreaId : formData.location,
-        role: "RESPONSIBLE"
-      };
-
-      const response = await createUser(userData);
-      fetchUsers();
-      resetForm();
-      setIsPopoverOpen(false);
-      toast.success("Responsable agregado correctamente");
-    } catch (error) {
-      console.error("Error adding responsible:", error);
-      toast.error("Error al agregar responsable");
+    // Validaciones de frontend
+    if (!formData.fullName || !formData.username || !formData.password || !formData.email ||
+      (formData.isCommonArea ? !formData.commonAreaId : !formData.location)) {
+      toast.error("Por favor, completa todos los campos obligatorios");
+      return;
     }
+
+    // Validación de longitud del nombre completo
+    if (formData.fullName.length > 100) {
+      toast.error("El nombre completo no puede exceder los 100 caracteres.");
+      return;
+    }
+
+    // Validación de longitud del nombre de usuario
+    if (formData.username.length > 50) {
+      toast.error("El nombre de usuario no puede exceder los 50 caracteres.");
+      return;
+    }
+
+    // Validación de formato de correo electrónico
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("El correo electrónico no es válido.");
+      return;
+    }
+
+    // Validación de longitud del correo electrónico
+    if (formData.email.length > 100) {
+      toast.error("El correo electrónico no puede exceder los 100 caracteres.");
+      return;
+    }
+
+    // Validación de la longitud de la contraseña
+    if (formData.password.length < 8 || formData.password.length > 255) {
+      toast.error("La contraseña debe tener entre 8 y 255 caracteres.");
+      return;
+    }
+
+    const userData = {
+      fullName: formData.fullName,
+      username: formData.username,
+      password: formData.password,
+      email: formData.email,
+      location: formData.isCommonArea ? formData.commonAreaId : formData.location,
+      role: "RESPONSIBLE"
+    };
+
+    const response = await createUser(userData);
+    fetchUsers();
+    resetForm();
+    setIsPopoverOpen(false);
+    toast.success("Responsable agregado correctamente");
   };
 
   const handleUpdateStatus = async (id) => {
@@ -230,7 +257,7 @@ export default function Responsible() {
     location: user.location
   }));
 
-  // Formulario de usuario
+  // Formulario de usuario con validaciones
   const UserForm = () => (
     <div className="grid gap-6 mt-4 h-[50vh] overflow-scroll p-4">
       <div>
@@ -381,7 +408,7 @@ export default function Responsible() {
                       Registrar
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[50%] h-[35em] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)] transform -translate-x-1/3">
+                  <PopoverContent className="w-[50%] h-[30em] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)] transform -translate-x-1/3">
                     <div className="text-center">
                       <h3 className="text-darkpurple-title text-[1.8em] font-semibold">Agregar Responsable</h3>
                       <p className="text-gray-500 text-sm mt-1">

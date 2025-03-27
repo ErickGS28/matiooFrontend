@@ -318,21 +318,24 @@ export default function Brand() {
                 {filteredBrands.map((brand, index) => (
                   <div
                     key={brand.id || index}
-                    className="bg-card-bg rounded-lg shadow-md p-4"
+                    className="bg-card-bg rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-300"
                   >
-                    <div className="px-3">
+                    <div>
+                      <div className="p-4">
                       <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
                         {brand.name}
                       </h3>
+                      </div>
+                     
 
-                      <div className="flex justify-between items-center mt-4">
+                      <div className="flex justify-between items-center mt-4 bg-blue-300 p-3 rounded-b-lg border-t-1 border-purple-500 ">
                         <EditBrandDialog
                           brand={brand}
                           onSave={handleSave}
                         />
 
-                        <div className="flex items-center space-x-2">
-                          <Label className={`text-sm ${brand.status ? 'text-green-confirm' : 'text-gray-500'}`}>
+                        <div className="flex  items-center space-x-2 mt-4">
+                          <Label className={`text-sm ${brand.status ? '' : 'text-gray-500'}`}>
                             {brand.status ? 'Activo' : 'Inactivo'}
                           </Label>
                           <Switch className="cursor-pointer"

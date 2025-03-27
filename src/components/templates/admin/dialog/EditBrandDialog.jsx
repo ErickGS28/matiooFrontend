@@ -69,21 +69,19 @@ export default function EditBrandDialog({ brand, onSave }) {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <button className="bg-cyan-200 hover:bg-purple-300 text-gray-800 font-semibold py-1 px-3 rounded-full mt-4 cursor-pointer">
+            <button className="bg-purple-950 hover:bg-purple-700 text-white font-semibold py-1 p-6 rounded-full mt-4 cursor-pointer">
               Editar
             </button>
           </DialogTrigger>
-          <DialogContent className="w-[35%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
+          <DialogContent className="w-[30%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
             <DialogHeader>
               <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">Editar marca</DialogTitle>
             </DialogHeader>
-            <div className="grid grid-cols-2 gap-6 mt-[3em] mb-[3em]">
-              <div className="flex items-center justify-center">
-                <img src={formData.img || "/imgDefault.jpg"} alt="Marca" className="w-full h-auto max-w-[200px]" />
-              </div>
+            <div className="grid  gap-6 mt-[3em] mb-[3em]">
+              
               <div>
                 <div className="grid grid-cols-1 gap-6">
-                  <div>
+                  <div className="w-3/4 flex flex-col justify-centeer mx-auto">
                     <Label className="text-darkpurple-title font-medium">Nombre</Label>
                     <input
                       type="text"

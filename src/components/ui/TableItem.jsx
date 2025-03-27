@@ -127,7 +127,8 @@ export default function TableItem({ data }) {
           {items.map((item, index) => (
             <tr
               key={index}
-              className={`hover:scale-105 ${index % 2 === 0 ? "bg-skyblue-row shadow-none" : "bg-lightpurple-row shadow-none"} rounded-l-2xl rounded-r-2xl group transform transition-transform duration-300`}
+              className={`hover:scale-105 ${index % 2 === 0 ? "bg-skyblue-row shadow-md shadow-sky-200" : "bg-lightpurple-row shadow-md shadow-purple-300"} rounded-l-2xl rounded-r-2xl group transform transition-transform duration-300`}
+
             >
               <td className="py-3 px-4 rounded-l-2xl font-semibold text-darkpurple-title">
                 {item.name}

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alert from "../../ui/Alert";
 import { API_URL } from "../../../constants";
+import Aurora from '../../../../Reactbits/Aurora/Aurora';
+
 
 export const Form = ({ setUser }) => {
   const [email, setEmail] = useState("");
@@ -126,9 +128,14 @@ export const Form = ({ setUser }) => {
   };
 
   return (
+    <>
+
+
+   
+    
     <div className="flex justify-center items-center min-h-screen bg-purple-50">
-      <div className="flex justify-center gap-6 w-[800px] shadow-2xl p-6 rounded-lg shadow-purple-300 bg-white">
-        <div className="w-1/2 rounded-2xl">
+    <div className="flex justify-center gap-6 w-[800px] shadow-2xl p-6 rounded-lg shadow-purple-300 bg-white hover:scale-105 transition-all duration-700 ease-in-out">
+    <div className="w-1/2 rounded-2xl">
           <img
             src="/login.png"
             alt=""
@@ -144,7 +151,7 @@ export const Form = ({ setUser }) => {
               className="h-1/3 w-[150px] mx-auto"
             />
             <h1 className="text-2xl font-semibold mt-2">
-              Te damos la bienvenida...
+              Te damos la bienvenida ...
             </h1>
           </section>
 
@@ -209,7 +216,7 @@ export const Form = ({ setUser }) => {
             <div className="text-end mt-6">
               <button
                 type="submit"
-                className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow shadow-purple-200 shadow-lg cursor-pointer"
+                className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow shadow-purple-200 hover:scale-105 transition-all duration-700 ease-in-outcursor-pointer"
               >
                 Continuar
               </button>
@@ -218,7 +225,9 @@ export const Form = ({ setUser }) => {
         </div>
       </div>
     </div>
+
+    </>
   );
 };
 
-export default Form;
+export default Form; 

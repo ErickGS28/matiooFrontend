@@ -259,7 +259,7 @@ export default function Responsible() {
 
   // Formulario de usuario con validaciones
   const UserForm = () => (
-    <div className="grid gap-6 mt-4 h-[50vh] overflow-scroll p-4">
+    <div className="grid gap-6 h-[50vh] overflow-scroll p-4">
       <div>
         <div className="grid grid-cols-1 gap-4">
           <div>

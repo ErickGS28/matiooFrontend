@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { ViewItemDialog } from "@/components/templates/admin/dialog/ViewItemDialog";
 import { EditItemDialog } from "@/components/templates/admin/dialog/EditItemDialog";
-import { EstadoDialog } from "@/components/templates/admin/dialog/EstadoDialog"; 
+import { EstadoDialog } from "@/components/templates/admin/dialog/EstadoDialog";
 import { itemService } from "@/services/item/itemService";
 
 export default function TableItem({ data }) {
@@ -36,7 +36,7 @@ export default function TableItem({ data }) {
       if (item && item.id) {
         // Llamar a la API para cambiar el estado
         await itemService.changeItemStatus(item.id);
-        
+
         // Actualizar el estado local
         setItemStatus((prev) => ({
           ...prev,
@@ -77,19 +77,19 @@ export default function TableItem({ data }) {
       };
 
       console.log("Objeto formateado para enviar al backend:", itemToUpdate);
-      
+
       // Llamar a la API para actualizar el item
       const response = await itemService.updateItem(itemToUpdate);
       console.log("Respuesta completa de updateItem:", response);
-      
+
       if (response && response.type === "SUCCESS") {
         console.log("Actualización exitosa, actualizando estado local");
-        
+
         // Para asegurar que los datos están actualizados, refrescar desde el backend
         const allItemsResponse = await itemService.getAllItems();
         if (allItemsResponse && allItemsResponse.type === "SUCCESS") {
           setItems(allItemsResponse.result);
-          
+
           // Actualizar también el estado de los switches
           const newStatus = {};
           allItemsResponse.result.forEach(item => {
@@ -98,8 +98,8 @@ export default function TableItem({ data }) {
           setItemStatus(newStatus);
         } else {
           // Si no podemos refrescar todos los items, al menos actualizamos el que se modificó
-          setItems(prevItems => 
-            prevItems.map(item => 
+          setItems(prevItems =>
+            prevItems.map(item =>
               item.id === itemToUpdate.id ? { ...item, ...response.result } : item
             )
           );
@@ -112,10 +112,10 @@ export default function TableItem({ data }) {
   };
 
   return (
-    <div className="mt-5 w-full overflow-x-auto">
-      <table className="w-full bg-white shadow-md rounded-lg border-separate border-spacing-y-4 min-w-[600px] text-center">
+    <div className="mt-5 w-full flex justify-center overflow-visible">
+      <table className="w-11/12 bg-white rounded-lg border-separate border-spacing-y-4 text-center shadow-none">
         <thead className="bg-darkpurple-bg-thead text-white">
-          <tr className="shadow-md shadow-purple-950">
+          <tr className="shadow-none">
             <th className="py-2 px-4">Nombre</th>
             <th className="py-2 px-4">Marca</th>
             <th className="py-2 px-4">Detalles</th>
@@ -127,11 +127,7 @@ export default function TableItem({ data }) {
           {items.map((item, index) => (
             <tr
               key={index}
-              className={
-                index % 2 === 0
-                  ? "bg-skyblue-row shadow-md shadow-sky-200 rounded-l-2xl rounded-r-2xl"
-                  : "bg-lightpurple-row shadow-md shadow-purple-300 rounded-l-2xl rounded-r-2xl"
-              }
+              className={`hover:scale-105 ${index % 2 === 0 ? "bg-skyblue-row shadow-none" : "bg-lightpurple-row shadow-none"} rounded-l-2xl rounded-r-2xl group transform transition-transform duration-300`}
             >
               <td className="py-3 px-4 rounded-l-2xl font-semibold text-darkpurple-title">
                 {item.name}

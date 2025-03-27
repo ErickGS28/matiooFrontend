@@ -191,12 +191,9 @@ export function EditItemDialog({ item, onSave }) {
   className="w-[45%] min-w-[425px] h-[32em] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]"
 >
   <DialogHeader>
-    <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
-      {item.name}
+  <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
+    Detalles del bien
     </DialogTitle>
-    <DialogDescription className="text-darkpurple-bg-thead font-semibold text-3xl">
-      Edita los detalles del bien
-    </DialogDescription>
   </DialogHeader>
 
   <div className="h-full overflow-y-auto pr-2">

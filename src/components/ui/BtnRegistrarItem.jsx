@@ -188,7 +188,7 @@ export default function BtnRegistrarItem({ onAgregar }) {
             {/* Formulario con scroll */}
             <div className="max-h-[50vh] overflow-y-auto pr-2">
               <div className="grid grid-cols-1 gap-6">
-              
+
 
                 {isLoading ? (
                   <div className="text-center py-4">
@@ -197,24 +197,24 @@ export default function BtnRegistrarItem({ onAgregar }) {
                 ) : (
                   <>
                     <div>
-                      <Label htmlFor="name" className="text-darkpurple-title font-medium">
+                      <Label htmlFor="name" className="text-sm font-medium text-gray-700">
                         Nombre
                       </Label>
                       <Input
                         id="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                        className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
                         placeholder="Nombre del bien"
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="itemType" className="text-darkpurple-title font-medium">
+                      <Label htmlFor="itemType" className="text-sm font-medium text-gray-700">
                         Tipo de bien
                       </Label>
                       <Select value={itemTypeId} onValueChange={setItemTypeId}>
-                        <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                        <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
                           <SelectValue placeholder="Selecciona un tipo" />
                         </SelectTrigger>
                         <SelectContent>
@@ -228,11 +228,11 @@ export default function BtnRegistrarItem({ onAgregar }) {
                     </div>
 
                     <div>
-                      <Label htmlFor="brand" className="text-darkpurple-title font-medium">
+                      <Label htmlFor="brand" className="text-sm font-medium text-gray-700">
                         Marca
                       </Label>
                       <Select value={brandId} onValueChange={setBrandId}>
-                        <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                        <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
                           <SelectValue placeholder="Selecciona una marca" />
                         </SelectTrigger>
                         <SelectContent>
@@ -246,11 +246,11 @@ export default function BtnRegistrarItem({ onAgregar }) {
                     </div>
 
                     <div>
-                      <Label htmlFor="model" className="text-darkpurple-title font-medium">
+                      <Label htmlFor="model" className="text-sm font-medium text-gray-700">
                         Modelo
                       </Label>
                       <Select value={modelId} onValueChange={setModelId}>
-                        <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                        <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
                           <SelectValue placeholder="Selecciona un modelo" />
                         </SelectTrigger>
                         <SelectContent>
@@ -264,37 +264,37 @@ export default function BtnRegistrarItem({ onAgregar }) {
                     </div>
 
                     <div>
-                      <Label htmlFor="code" className="text-darkpurple-title font-medium">
+                      <Label htmlFor="code" className="text-sm font-medium text-gray-700">
                         Código
                       </Label>
                       <Input
                         id="code"
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
-                        className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                        className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
                         placeholder="Código único del bien"
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="serialNumber" className="text-darkpurple-title font-medium">
+                      <Label htmlFor="serialNumber" className="text-sm font-medium text-gray-700">
                         Número de Serie
                       </Label>
                       <Input
                         id="serialNumber"
                         value={serialNumber}
                         onChange={(e) => setSerialNumber(e.target.value)}
-                        className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                        className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
                         placeholder="Número de serie del bien"
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="owner" className="text-darkpurple-title font-medium">
+                      <Label htmlFor="owner" className="text-sm font-medium text-gray-700">
                         Dueño
                       </Label>
                       <Select value={ownerId || "none"} onValueChange={setOwnerId}>
-                        <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                        <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
                           <SelectValue placeholder="Selecciona un dueño" />
                         </SelectTrigger>
                         <SelectContent>
@@ -319,11 +319,11 @@ export default function BtnRegistrarItem({ onAgregar }) {
                     </div>
 
                     <div>
-                      <Label htmlFor="assignedTo" className="text-darkpurple-title font-medium">
+                      <Label htmlFor="assignedTo" className="text-sm font-medium text-gray-700">
                         Asignado a
                       </Label>
                       <Select value={assignedToId || "none"} onValueChange={setAssignedToId}>
-                        <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                        <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
                           <SelectValue placeholder="Selecciona un usuario" />
                         </SelectTrigger>
                         <SelectContent>
@@ -348,28 +348,26 @@ export default function BtnRegistrarItem({ onAgregar }) {
                     </div>
 
                     <div className="flex items-center space-x-2">
-                      <div className="flex h-4 w-4 items-center justify-center rounded-sm border border-purple-900">
-                        <input
-                          type="checkbox"
-                          id="useCommonArea"
-                          checked={useCommonArea}
-                          onChange={(e) => setUseCommonArea(e.target.checked)}
-                          className="h-4 w-4 cursor-pointer"
-                        />
-                      </div>
                       <Label
                         htmlFor="useCommonArea"
-                        className="text-darkpurple-title font-medium cursor-pointer"
+                        className="text-sm font-medium text-gray-700 cursor-pointer"
                       >
                         Usar área común
                       </Label>
+                      <input
+                        type="checkbox"
+                        id="useCommonArea"
+                        checked={useCommonArea}
+                        onChange={(e) => setUseCommonArea(e.target.checked)}
+                        className="h-4 w-4 text-purple-900 rounded border-gray-300 focus:ring-purple-900"
+                      />
                     </div>
 
                     {useCommonArea ? (
                       <div>
                         <Label
                           htmlFor="commonArea"
-                          className="text-darkpurple-title font-medium"
+                          className="text-sm font-medium text-gray-700"
                         >
                           Área común
                         </Label>
@@ -377,7 +375,7 @@ export default function BtnRegistrarItem({ onAgregar }) {
                           value={commonAreaId}
                           onValueChange={setCommonAreaId}
                         >
-                          <SelectTrigger className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                          <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
                             <SelectValue placeholder="Selecciona un área común" />
                           </SelectTrigger>
                           <SelectContent>
@@ -396,7 +394,7 @@ export default function BtnRegistrarItem({ onAgregar }) {
                       <div>
                         <Label
                           htmlFor="location"
-                          className="text-darkpurple-title font-medium"
+                          className="text-sm font-medium text-gray-700"
                         >
                           Ubicación
                         </Label>
@@ -404,7 +402,7 @@ export default function BtnRegistrarItem({ onAgregar }) {
                           id="location"
                           value={location}
                           onChange={(e) => setLocation(e.target.value)}
-                          className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                          className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
                           placeholder="Ubicación del bien"
                         />
                       </div>

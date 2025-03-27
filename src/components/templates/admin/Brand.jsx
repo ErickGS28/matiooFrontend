@@ -249,7 +249,7 @@ export default function Brand() {
                       </button>
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent className="p-4 w-[20em] bg-white border-1 border-black transform -translate-x-1/2">
+                  <PopoverContent className="w-[20em] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)] transform -translate-x-1/2">
                     <div className="w-[90%] m-auto">
                       <div className="mt-[2em] flex items-center justify-center border-b border-purple-100">
                         <img
@@ -259,10 +259,10 @@ export default function Brand() {
                         />
                       </div>
 
-                      <div className="mt-[0.5em] grid w-full max-w-sm items-center gap-1.5">
+                      <div className="mt-[1.5em] grid w-full max-w-sm items-center gap-1.5">
                         <Label
                           htmlFor="brandName"
-                          className="text-darkpurple-title"
+                          className="text-sm font-medium text-gray-700"
                         >
                           Nombre de la marca
                         </Label>
@@ -271,16 +271,16 @@ export default function Brand() {
                           id="brandName"
                           value={newBrandName}
                           onChange={(e) => setNewBrandName(e.target.value)}
-                          className="border-black"
+                          className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
                         />
                       </div>
 
-                      <div className="mt-[1.5em] mb-[2em] flex justify-center">
+                      <div className="mt-6 flex justify-end">
                         <Button 
                           onClick={handleAddBrand} 
-                          className="bg-green-confirm"
+                          className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
                         >
-                          Agregar Marca
+                          Guardar
                         </Button>
                       </div>
                     </div>

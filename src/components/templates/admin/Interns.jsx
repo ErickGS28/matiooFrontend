@@ -258,7 +258,7 @@ export default function Interns() {
 
   // Formulario de usuario
   const UserForm = () => (
-    <div className="grid gap-6 mt-4 p-4">
+    <div className="grid gap-6 p-4">
       <div>
         <div className="grid grid-cols-1 gap-4 ">
           <div>
@@ -424,7 +424,7 @@ export default function Interns() {
                       </div>
 
                       {/* Solo el formulario tiene scroll ahora */}
-                      <div className="overflow-y-auto max-h-[50vh] mt-4">
+                      <div className="overflow-y-auto max-h-[50vh]">
                         {UserForm()}
                       </div>
                     </div>

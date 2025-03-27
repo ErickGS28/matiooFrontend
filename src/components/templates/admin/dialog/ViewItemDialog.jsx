@@ -22,11 +22,8 @@ export function ViewItemDialog({ item }) {
       <DialogContent className="w-[45%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
   <DialogHeader>
     <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
-      {item.name}
+    Detalles del bien - {item.name}
     </DialogTitle>
-    <DialogDescription className="text-darkpurple-bg-thead font-semibold text-3xl">
-      Detalles del bien
-    </DialogDescription>
   </DialogHeader>
   <div className="max-h-[80vh] overflow-y-auto pr-2">
     <div className="flex flex-col items-center">

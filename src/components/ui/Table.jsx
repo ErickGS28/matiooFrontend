@@ -55,8 +55,8 @@ export default function Table({ data, onStatusChange, onSave, showRoleColumn = f
   };
 
   return (
-    <div className="mt-5 w-full ">
-      <table className="w-full bg-white shadow-md rounded-lg border-separate border-spacing-y-4  text-center">
+    <div className="mt-5 w-full flex justify-center overflow-visible">
+      <table className="w-11/12 bg-white  rounded-lg border-separate border-spacing-y-4 text-center">
         <thead className="bg-darkpurple-bg-thead text-white">
           <tr className="shadow-md shadow-purple-950">
             <th className="py-2 px-4">Nombre</th>
@@ -70,30 +70,29 @@ export default function Table({ data, onStatusChange, onSave, showRoleColumn = f
         <tbody>
           {data.map((user, index) => (
             <tr
-  key={index}
-  className={index % 2 === 0 ? "bg-skyblue-row shadow-md shadow-sky-200 rounded-l-2xl rounded-r-2xl group" : "bg-lightpurple-row shadow-md shadow-purple-300 rounded-l-2xl rounded-r-2xl group"}
->
-  <td className="py-3 px-4 rounded-l-2xl font-semibold text-darkpurple-title">
-    {user.fullName || `${user.name} ${user.lastname}`.trim()}
-  </td>
-  <td className="py-3 px-4 font-semibold text-darkpurple-title">{user.email}</td>
-  <td className="py-3 px-4 font-semibold text-darkpurple-title">{user.location}</td>
-  <td className="py-3 px-4">
-    <ViewUserDialog user={user} />
-  </td>
-  <td className="py-3 px-4 h-[3.5rem] flex items-center justify-center">
-    <Switch
-      checked={user.status} 
-      onCheckedChange={() => handleStatusChange(user.id)} 
-      disabled={isDialogOpen} 
-      className={`${user.status ? 'bg-green-confirm' : 'bg-gray-600'} transition-colors duration-300 cursor-pointer`}
-    />
-  </td>
-  <td className="py-2 px-4 rounded-r-2xl h-[3.5rem] relative">
-    <EditUserDialog user={user} onSave={handleSaveUser} />
-  </td>
-</tr>
-
+              key={index}
+              className={`hover:scale-105 ${index % 2 === 0 ? "bg-skyblue-row shadow-md shadow-sky-200" : "bg-lightpurple-row shadow-md shadow-purple-300"} rounded-l-2xl rounded-r-2xl group transform transition-transform duration-300`}
+            >
+              <td className="py-3 px-4 rounded-l-2xl font-semibold text-darkpurple-title">
+                {user.fullName || `${user.name} ${user.lastname}`.trim()}
+              </td>
+              <td className="py-3 px-4 font-semibold text-darkpurple-title">{user.email}</td>
+              <td className="py-3 px-4 font-semibold text-darkpurple-title">{user.location}</td>
+              <td className="py-3 px-4">
+                <ViewUserDialog user={user} />
+              </td>
+              <td className="py-3 px-4 h-[3.5rem] flex items-center justify-center">
+                <Switch
+                  checked={user.status}
+                  onCheckedChange={() => handleStatusChange(user.id)}
+                  disabled={isDialogOpen}
+                  className={`${user.status ? 'bg-green-confirm' : 'bg-gray-600'} transition-colors duration-300 cursor-pointer`}
+                />
+              </td>
+              <td className="py-2 px-4 rounded-r-2xl h-[3.5rem] relative">
+                <EditUserDialog user={user} onSave={handleSaveUser} />
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>
@@ -103,9 +102,9 @@ export default function Table({ data, onStatusChange, onSave, showRoleColumn = f
         <EstadoDialogUser
           item={currentUser}
           isOpen={isDialogOpen}
-          onClose={() => setIsDialogOpen(false)} 
-          onConfirm={() => handleConfirmStatusChange(currentUser.id)} 
-          onCancel={handleCancelStatusChange} 
+          onClose={() => setIsDialogOpen(false)}
+          onConfirm={() => handleConfirmStatusChange(currentUser.id)}
+          onCancel={handleCancelStatusChange}
         />
       )}
     </div>

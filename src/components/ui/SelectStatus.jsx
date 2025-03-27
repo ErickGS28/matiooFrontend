@@ -13,7 +13,7 @@ const SelectStatus = ({ value, onChange }) => {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="px-3 py-1 rounded-md border  shadow-lg shadow-purple-200  border-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-800 bg-purple-50"
+        className="px-3 py-1 rounded-md border  shadow-lg shadow-purple-200  border-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-800 bg-purple-50"
       >
         <option value="all">Todos</option>
         <option value="active">Activos</option>

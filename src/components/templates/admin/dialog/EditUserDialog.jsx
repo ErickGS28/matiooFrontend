@@ -106,19 +106,6 @@ export function EditUserDialog({ user, onSave }) {
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col items-center space-y-6">
-          <div className="flex justify-center">
-            <img
-              src={
-                user.role === "INTERN"
-                  ? "/becarios.png"
-                  : user.role === "RESPONSIBLE"
-                  ? "/responsible.png"
-                  : "/admin.png"
-              }
-              alt={translateRole(user.role)}
-              className="w-full h-auto max-w-[200px]"
-            />
-          </div>
           <div className="w-full space-y-4">
             <div>
               <Label className="text-darkpurple-title font-medium">Nombre completo</Label>

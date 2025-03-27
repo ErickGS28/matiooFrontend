@@ -42,21 +42,17 @@ export default function AsideBar({ activePage = "", onToggle }) {
 
   const iconClasses = (iconName) => {
     const isActive = activePage === iconName;
-    return `flex items-center ${
-      isExpanded ? "justify-start gap-4 h-10" : "justify-center"
-    } cursor-pointer ${
-      isActive 
-        ? "bg-skyblue-bg-icon font-bold shadow-md" 
+    return `flex items-center ${isExpanded ? "justify-start gap-4 h-10" : "justify-center"
+      } cursor-pointer ${isActive
+        ? "bg-skyblue-bg-icon font-bold shadow-md"
         : "bg-white hover:bg-skyblue-bg-icon"
-    } ${
-      isExpanded ? "w-[90%] px-4 rounded-2xl" : "w-[2.5em] h-[2.5em] rounded-full"
-    } transition-all duration-300 ease-in-out hover:scale-105`;
+      } ${isExpanded ? "w-[90%] px-4 rounded-2xl" : "w-[2.5em] h-[2.5em] rounded-full"
+      } transition-all duration-300 ease-in-out hover:scale-105`;
   };
 
-  const textClasses = `transition-all duration-200 ease-in-out ${
-    isExpanded ? "opacity-100 delay-200" : "opacity-0 w-0 overflow-hidden"
-  }`;
-  
+  const textClasses = `transition-all duration-200 ease-in-out ${isExpanded ? "opacity-100 delay-200" : "opacity-0 w-0 overflow-hidden"
+    }`;
+
   const imageClasses = "w-[1.3em] min-w-[1.3em] flex-shrink-0";
 
   const handleLogout = () => {
@@ -75,13 +71,13 @@ export default function AsideBar({ activePage = "", onToggle }) {
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     try {
       console.log("Enviando datos para actualizar perfil:", userData);
       const response = await updateUserProfile(userData);
       console.log("Respuesta de actualización de perfil:", response);
       setDialogOpen(false);
-      
+
       // Recargar los datos del usuario después de actualizar
       const updatedUserData = await getUserById(userData.id);
       if (updatedUserData && updatedUserData.result) {
@@ -93,7 +89,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
           location: updatedUserData.result.location
         };
         setUserData(newProfileData);
-        
+
         // Usar un ID único para el toast para evitar duplicados
         toast.success("Perfil actualizado correctamente", {
           id: "profile-update-success",
@@ -128,15 +124,15 @@ export default function AsideBar({ activePage = "", onToggle }) {
       try {
         // Obtener el ID del usuario desde el token
         const tokenData = decodeAndDisplayToken();
-        
+
         if (tokenData && tokenData.id) {
           // Guardar el ID en localStorage para futuras referencias
           localStorage.setItem('userId', tokenData.id);
-          
+
           // Obtener los datos completos del usuario usando getUserById
           const response = await getUserById(tokenData.id);
           console.log("Datos del usuario obtenidos:", response);
-          
+
           if (response && response.result) {
             const userData = response.result;
             const profileData = {
@@ -151,7 +147,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
           }
         } else {
           console.warn("No se pudo obtener el ID del usuario desde el token");
-          
+
           // Intentar usar el ID guardado en localStorage como respaldo
           const savedUserId = localStorage.getItem('userId');
           if (savedUserId) {
@@ -178,16 +174,15 @@ export default function AsideBar({ activePage = "", onToggle }) {
         });
       }
     };
-    
+
     loadUserData();
   }, [dialogOpen]); // Recargar datos cuando se abre el diálogo
 
   return (
     <>
       <div
-        className={`fixed left-0 top-0 z-50 ${
-          isExpanded ? "w-[16em]" : "w-[4em]"
-        } transition-all duration-300 ease-in-out`}
+        className={`fixed left-0 top-0 z-50 ${isExpanded ? "w-[16em]" : "w-[4em]"
+          } transition-all duration-300 ease-in-out`}
       >
         <div className="flex flex-col h-screen bg-purple-bg-aside shadow-2xl">
           {/* Logo y navegación principal */}
@@ -292,11 +287,10 @@ export default function AsideBar({ activePage = "", onToggle }) {
               <Popover>
                 <PopoverTrigger asChild>
                   <div
-                    className={`flex items-center ${
-                      isExpanded
+                    className={`flex items-center ${isExpanded
                         ? "justify-start gap-4 h-10 w-[90%] px-4 rounded-2xl"
                         : "justify-center w-[2.5em] h-[2.5em] rounded-full"
-                    } cursor-pointer bg-white hover:bg-skyblue-bg-icon transition-all duration-300 ease-in-out hover:scale-105`}
+                      } cursor-pointer bg-white hover:bg-skyblue-bg-icon transition-all duration-300 ease-in-out hover:scale-105`}
                   >
                     <img
                       src="/asidebarIMG/profile.png"
@@ -306,8 +300,8 @@ export default function AsideBar({ activePage = "", onToggle }) {
                     <span className={textClasses}>Mi Perfil</span>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className=" p-6 bg-white rounded-2xl shadow-lg border border-purple-100 transform translate-x-1/2 right-4">
-                <div className="space-y-4">
+                <PopoverContent className="p-6 bg-white rounded-2xl shadow-lg border border-purple-100 transform translate-x-1/9">
+                  <div className="space-y-4">
                     <div className="flex items-center gap-3 pb-3 border-b border-purple-100">
                       <img
                         src="/asidebarIMG/profile.png"
@@ -332,12 +326,15 @@ export default function AsideBar({ activePage = "", onToggle }) {
                       }
                     }}>
                       <DialogTrigger asChild>
-                        <Button
-                          className="mt-2 bg-green-confirm"
-                          onClick={() => document.body.click()}
-                        >
-                          Editar Perfil
-                        </Button>
+                        <div className="flex justify-end">
+                          <Button
+                            className=" bg-green-confirm"
+                            onClick={() => document.body.click()}
+                          >
+                            Editar Perfil
+                          </Button>
+                        </div>
+
                       </DialogTrigger>
                       <DialogContent className="sm:max-w-[425px] p-8">
                         <DialogHeader>
@@ -404,8 +401,8 @@ export default function AsideBar({ activePage = "", onToggle }) {
                             </div>
                           </div>
                           <DialogFooter>
-                            <Button 
-                              type="submit" 
+                            <Button
+                              type="submit"
                               className="bg-green-confirm"
                               disabled={isLoading}
                             >
@@ -422,11 +419,10 @@ export default function AsideBar({ activePage = "", onToggle }) {
               <Popover>
                 <PopoverTrigger asChild>
                   <div
-                    className={`flex items-center ${
-                      isExpanded
+                    className={`flex items-center ${isExpanded
                         ? "justify-start gap-4 h-10 w-[90%] px-4 rounded-2xl"
                         : "justify-center w-[2.5em] h-[2.5em] rounded-full"
-                    } cursor-pointer bg-red-bg-icon transition-all duration-300 ease-in-out hover:scale-105`}
+                      } cursor-pointer bg-red-bg-icon transition-all duration-300 ease-in-out hover:scale-105`}
                   >
                     <img
                       src="/asidebarIMG/closeAccount.png"
@@ -438,7 +434,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
                     </span>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="p-4 ml-[4em] bg-white rounded-lg shadow-lg border border-gray-200">
+                <PopoverContent className="p-4 bg-white rounded-lg shadow-lg border border-gray-200 transform translate-x-1/9">
                   <div className="flex flex-col gap-3">
                     <p className="text-sm font-semibold text-gray-800">
                       ¿Estás seguro que deseas cerrar sesión?
@@ -460,9 +456,8 @@ export default function AsideBar({ activePage = "", onToggle }) {
 
         {/* Botón para contraer/expandir el AsideBar */}
         <div
-          className={`absolute ${
-            isExpanded ? "right-[-2.5em]" : "right-[-2.5em]"
-          } top-[1em] cursor-pointer bg-transparent`}
+          className={`absolute ${isExpanded ? "right-[-2.5em]" : "right-[-2.5em]"
+            } top-[1em] cursor-pointer bg-transparent`}
         >
           <img
             src="/asidebarIMG/barra-lateral.png"
@@ -475,9 +470,8 @@ export default function AsideBar({ activePage = "", onToggle }) {
 
       {/* Espaciador para evitar que el contenido se solape */}
       <div
-        className={`w-[4em] shrink-0 transition-all duration-300 ease-in-out ${
-          isExpanded ? "w-[16em]" : "w-[4em]"
-        }`}
+        className={`w-[4em] shrink-0 transition-all duration-300 ease-in-out ${isExpanded ? "w-[16em]" : "w-[4em]"
+          }`}
       />
     </>
   );

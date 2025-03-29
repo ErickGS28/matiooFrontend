@@ -28,6 +28,13 @@ export default function responsibleHome() {
   const [isLoading, setIsLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+
+
   // Cargar los items asignados al usuario
   useEffect(() => {
     const fetchUserItems = async () => {
@@ -35,7 +42,7 @@ export default function responsibleHome() {
         setLoading(true);
         // Obtener el ID del usuario desde el token
         const userData = decodeAndDisplayToken();
-        
+
         if (!userData || !userData.id) {
           console.error("No se pudo obtener el ID del usuario desde el token");
           toast.error("Error al obtener información del usuario");
@@ -43,11 +50,11 @@ export default function responsibleHome() {
         }
 
         console.log("ID del usuario:", userData.id);
-        
+
         // Obtener los items asignados al usuario
         const userItems = await itemService.getItemsByAssignedToId(userData.id);
         console.log("Items obtenidos:", userItems);
-        
+
         setItems(userItems);
         setFilteredItems(userItems);
       } catch (error) {
@@ -67,15 +74,15 @@ export default function responsibleHome() {
       try {
         // Obtener el ID del usuario desde el token
         const tokenData = decodeAndDisplayToken();
-        
+
         if (tokenData && tokenData.id) {
           // Guardar el ID en localStorage para futuras referencias
           localStorage.setItem('userId', tokenData.id);
-          
+
           // Obtener los datos completos del usuario usando getUserById
           const response = await getUserById(tokenData.id);
           console.log("Datos del usuario obtenidos:", response);
-          
+
           if (response && response.result) {
             const userData = response.result;
             setUserData({
@@ -91,20 +98,49 @@ export default function responsibleHome() {
         console.error("Error al cargar los datos del usuario:", error);
       }
     };
-    
+
     loadUserData();
   }, [dialogOpen]);
 
   // Filtrar items cuando cambia el término de búsqueda
   useEffect(() => {
     if (items.length > 0) {
-      const filtered = items.filter(item => 
+      const filtered = items.filter(item =>
         item.name.toLowerCase().includes(navegar.toLowerCase()) ||
         item.description.toLowerCase().includes(navegar.toLowerCase())
       );
       setFilteredItems(filtered);
     }
   }, [navegar, items]);
+
+  const handleRemoveItem = async (itemId) => {
+    try {
+      // Confirmar con el usuario antes de desasignar
+      if (window.confirm("¿Estás seguro de que deseas quitar este bien?")) {
+        console.log('Desasignando item con ID:', itemId);
+
+        // Llamar al método unassignItem del itemService
+        const response = await itemService.unassignItem(itemId);
+        console.log('Respuesta de desasignación:', response);
+
+        // Mostrar mensaje de éxito
+        toast.success("Bien desasignado correctamente", {
+          id: "unassign-success",
+          duration: 3000
+        });
+
+        // Actualizar la lista de items (eliminar el item desasignado)
+        setItems(prevItems => prevItems.filter(item => item.id !== itemId));
+        setFilteredItems(prevItems => prevItems.filter(item => item.id !== itemId));
+      }
+    } catch (error) {
+      console.error("Error al desasignar el item:", error);
+      toast.error("Error al quitar el bien", {
+        id: "unassign-error",
+        duration: 3000
+      });
+    }
+  };
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -117,13 +153,13 @@ export default function responsibleHome() {
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     try {
       console.log("Enviando datos para actualizar perfil:", userData);
       const response = await updateUserProfile(userData);
       console.log("Respuesta de actualización de perfil:", response);
       setDialogOpen(false);
-      
+
       // Recargar los datos del usuario después de actualizar
       const updatedUserData = await getUserById(userData.id);
       if (updatedUserData && updatedUserData.result) {
@@ -135,7 +171,7 @@ export default function responsibleHome() {
           location: updatedUserData.result.location
         };
         setUserData(newProfileData);
-        
+
         // Usar un ID único para el toast para evitar duplicados
         toast.success("Perfil actualizado correctamente", {
           id: "profile-update-success",
@@ -155,9 +191,9 @@ export default function responsibleHome() {
 
   return (
     <>
-      <nav className="bg-white p-4  border-b-1 border-purple-200">
-        <div className="flex justify-between items-center max-w-7xl mx-auto px-4">
-          <div className="flex items-center cursor-pointer" onClick={() => navigate("/responsibleHome")}>
+      <nav className="bg-white p-4 ">
+        <div className="flex justify-between items-center mx-auto px-5">
+          <div className="flex items-center cursor-pointer" onClick={() => navigate("/internHome")}>
             <img
               src="/logomatioo.png"
               alt="Logo"
@@ -169,11 +205,11 @@ export default function responsibleHome() {
             {/* Botón Mi Perfil con Popover */}
             <Popover>
               <PopoverTrigger asChild>
-                <div className="flex items-center justify-start gap-4 h-10 px-4 rounded-2xl cursor-pointer bg-white hover:bg-skyblue-bg-icon transition-all duration-300 ease-in-out hover:scale-105">
-                  <img 
-                    src="/asidebarIMG/profile.png" 
-                    alt="Perfil" 
-                    className="w-[1.3em] min-w-[1.3em] flex-shrink-0" 
+                <div className="flex items-center justify-start gap-4 h-10 px-4 rounded-2xl cursor-pointer bg-white hover:bg-skyblue-bg-icon transition-all duration-300 ease-in-out hover:scale-105 rounded-bl-[1.4em] rounded-br-[1.4em] rounded-tl-[0.5em] rounded-tr-[0.5em] border-1 border-gray-500">
+                  <img
+                    src="/asidebarIMG/profile.png"
+                    alt="Perfil"
+                    className="w-[1.3em] min-w-[1.3em] flex-shrink-0"
                   />
                   <span className="transition-all duration-200 ease-in-out opacity-100 delay-200">Mi Perfil</span>
                 </div>
@@ -205,7 +241,7 @@ export default function responsibleHome() {
                   }}>
                     <DialogTrigger asChild>
                       <Button
-                        className="mt-2 bg-green-confirm"
+                        className="mt-2 bg-green-confirm cursor-pointer"
                         onClick={() => document.body.click()}
                       >
                         Editar Perfil
@@ -287,25 +323,42 @@ export default function responsibleHome() {
             </Popover>
 
             {/* Botón Cerrar sesión */}
-            <div 
-              className="flex items-center justify-start gap-4 h-10 px-4 rounded-2xl cursor-pointer bg-red-bg-icon transition-all duration-300 ease-in-out hover:scale-105"
-              onClick={() => {
-                logout();
-                navigate("/");
-              }}
-            >
-              <img 
-                src="/asidebarIMG/closeAccount.png" 
-                alt="Cerrar sesión" 
-                className="w-[1.3em] min-w-[1.3em] flex-shrink-0" 
-              />
-              <span className="transition-all duration-200 ease-in-out opacity-100 delay-200 text-white">Cerrar sesión</span>
-            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  className="flex items-center justify-center gap-4 h-10 px-4 rounded-2xl cursor-pointer bg-red-bg-icon transition-all duration-300 ease-in-out hover:scale-105 rounded-bl-[1.4em] rounded-br-[1.4em] rounded-tl-[0.5em] rounded-tr-[0.5em]"
+                >
+                  <img
+                    src="/asidebarIMG/closeAccount.png"
+                    alt="Cerrar sesión"
+                    className="w-[1.3em] min-w-[1.3em] flex-shrink-0"
+                  />
+                  <span className="text-white">
+                    Cerrar sesión
+                  </span>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="p-4 ml-[4em] bg-white rounded-lg shadow-lg border border-gray-200">
+                <div className="flex flex-col gap-3">
+                  <p className="text-sm font-semibold text-gray-800">
+                    ¿Estás seguro que deseas cerrar sesión?
+                  </p>
+                  <div className="flex justify-end">
+                    <button
+                      className="px-3 py-1.5 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
+                      onClick={handleLogout}
+                    >
+                      Confirmar
+                    </button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </nav>
 
-      <div className="flex min-h-screen w-full pb-2 bg-purple-100 h-full  ">
+      <div className="flex min-h-screen w-full pb-2 bg-linear-to-b/srgb from-white to-purple-400 h-full  ">
         <main className="flex-1 flex flex-col">
           <div className="flex flex-col p-5 md:px-20 w-full">
             {/* Título */}
@@ -343,32 +396,38 @@ export default function responsibleHome() {
             {/* Mensaje si no hay items */}
             {!loading && filteredItems.length === 0 && (
               <div className="flex justify-center items-center mt-10">
-                <p className="text-lg text-gray-600">No tienes bienes asignados.</p>
+                <p className="text-lg text-gray-600">No tienes bienes asignados actualmente.</p>
               </div>
             )}
 
             {/* Cards Container */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mt-[3em]">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mt-[3em] bg-amber-100">
               {filteredItems.map((item) => (
-                <div key={item.id} className="bg-card-bg rounded-lg shadow-md hover:scale-105">
-                  <div className="flex justify-center bg-white rounded-lg p-2">
-                    <img 
-                      src={item.imageUrl || "/defaultItem.png"} 
-                      alt={item.name} 
+                <div key={item.id} className="bg-card-bg rounded-lg shadow-md p-4 hover:scale-105 w-[auto]">
+                  <div className="flex justify-center bg-white rounded-2xl">
+                    <img
+                      src={item.imageUrl || "/defaultItem.png"}
+                      alt={item.name}
                       className="mx-auto mb-4 w-[8em]"
                       onError={(e) => { e.target.src = "/defaultItem.png" }}
                     />
                   </div>
-                  <div className="px-4 py-3 bg-purple-800 rounded-b-lg border-t-2 border-purple-950">
-                    <h3 className="text-[1.8em] font-semibold text-white">{item.name}</h3>
-
+                  <div className="px-3">
+                    <h3 className="text-[1.8em] font-semibold text-mdpurple-htext">{item.name}</h3>
                     <div className="flex justify-between gap-4 align-middle">
-                      <p className="text-white">{item.description}</p>
+                      <p className="text-gray-800">{item.description}</p>
                     </div>
-
                     <div className="flex flex-col gap-2 mt-2">
-                      <p className="text-sm text-gray-200">Código: {item.code}</p>
-                      <p className="text-sm text-gray-200">Estado: {item.status}</p>
+                      <p className="text-sm text-gray-600">Código: {item.code}</p>
+                      <p className="text-sm text-gray-600">Estado: {item.status}</p>
+                      <div className="flex justify-end mt-2">
+                        <Button
+                          className="cursor-pointer py-1 px-3 bg-red-cancel rounded-full text-amber-50"
+                          onClick={() => handleRemoveItem(item.id)}
+                        >
+                          Quitar
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>

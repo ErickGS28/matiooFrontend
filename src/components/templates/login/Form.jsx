@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import Alert from "../../ui/Alert";
 import { API_URL } from "../../../constants";
 import Aurora from '../../../../Reactbits/Aurora/Aurora';
-
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 export const Form = ({ setUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState(false);
@@ -48,7 +49,6 @@ export const Form = ({ setUser }) => {
         return;
       }
 
-      // Get the token directly from the response text
       const token = await response.text();
       if (!token) {
         setError(true);
@@ -57,28 +57,21 @@ export const Form = ({ setUser }) => {
         return;
       }
 
-      // Log token details and format it
       const formattedToken = token.trim();
       const tokenWithBearer = formattedToken.startsWith('Bearer ') ? formattedToken : `Bearer ${formattedToken}`;
       
-      // Store the token in localStorage
       localStorage.setItem('token', tokenWithBearer);
       
-      // Decode and display token information
       const tokenPayload = decodeToken(tokenWithBearer);
       if (tokenPayload) {
         console.log('Role from token:', tokenPayload.role);
         console.log('User ID from token:', tokenPayload.sub);
         console.log('Email from token:', tokenPayload.email);
         
-        // Set user information
         setUser([tokenPayload.email, tokenPayload.role]);
-        
-        // Show success message
         setError(false);
         setSuccess(true);
         
-        // Redirect based on role
         setTimeout(() => {
           switch(tokenPayload.role) {
             case "ADMIN":
@@ -93,7 +86,7 @@ export const Form = ({ setUser }) => {
             default:
               navigate("/home");
           }
-        }, 2000); // 2 segundos de demora
+        }, 2000);
       }
     } catch (error) {
       console.error('Error details:', error);
@@ -103,13 +96,9 @@ export const Form = ({ setUser }) => {
     }
   };
 
-  // Function to decode token
   const decodeToken = (token) => {
     try {
-      // Remove 'Bearer ' prefix if present
       const tokenWithoutBearer = token.startsWith('Bearer ') ? token.slice(7) : token;
-      
-      // Decode the token
       const base64Url = tokenWithoutBearer.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
@@ -129,105 +118,106 @@ export const Form = ({ setUser }) => {
 
   return (
     <>
-
-
-   
-    
-    <div className="flex justify-center items-center min-h-screen bg-purple-50">
-    <div className="flex justify-center gap-6 w-[800px] shadow-2xl p-6 rounded-lg shadow-purple-300 bg-white hover:scale-105 transition-all duration-700 ease-in-out">
-    <div className="w-1/2 rounded-2xl">
-          <img
-            src="/login.png"
-            alt=""
-            className="h-lg object-cover rounded-2xl"
-          />
-        </div>
-
-        <div className="w-1/2">
-          <section className="text-center">
+      <div className="flex justify-center items-center min-h-screen bg-purple-50">
+        <div className="flex justify-center gap-6 w-[800px] shadow-2xl p-6 rounded-lg shadow-purple-300 bg-white hover:scale-105 transition-all duration-700 ease-in-out">
+          <div className="w-1/2 rounded-2xl">
             <img
-              src="/logomatioo.png"
+              src="/login.png"
               alt=""
-              className="h-1/3 w-[150px] mx-auto"
+              className="h-lg object-cover rounded-2xl"
             />
-            <h1 className="text-2xl font-semibold mt-2">
-              Te damos la bienvenida ...
-            </h1>
-          </section>
+          </div>
 
-          {error && (
-            <Alert
-              message={errorMessage || "Error al iniciar sesión."}
-              bgColor="bg-red-fail"
-              textColor="text-white"
-              imageSrc="/alertFail.png"
-            />
-          )}
-
-          {success && (
-            <Alert
-              message="Iniciando sesión..."
-              bgColor="bg-skyblue-success"
-              textColor="text-black"
-              showSpinner={true}
-            />
-          )}
-
-          <form onSubmit={handleSubmit}>
-            <section className="mt-8">
-              <div className="my-3 mt-2">
-                <p className="mb-2 mx-2 font-medium">Correo electrónico</p>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="rounded-full py-2 px-4 border-2 border-purple-900 w-full"
-                  placeholder="user@gmail.com"
-                />
-              </div>
-
-              <div className="my-2">
-                <p className="mb-2 mx-2 font-medium">Contraseña</p>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="rounded-full px-4 border-2 border-purple-900 w-full py-2"
-                  placeholder="User1234."
-
-                />
-              </div>
+          <div className="w-1/2">
+            <section className="text-center">
+              <img
+                src="/logomatioo.png"
+                alt=""
+                className="h-1/3 w-[150px] mx-auto"
+              />
+              <h1 className="text-2xl font-semibold mt-2">
+                Te damos la bienvenida ...
+              </h1>
             </section>
 
-            <div className="flex mt-[2em] justify-start">
-              <img
-                src="/forgetPassword.png"
-                alt=""
-                className="w-[2em] mx-[1em]"
+            {error && (
+              <Alert
+                message={errorMessage || "Error al iniciar sesión."}
+                bgColor="bg-red-fail"
+                textColor="text-white"
+                imageSrc="/alertFail.png"
               />
-              <span
-                onClick={handleCheckEmailClick}
-                className="underline font-semibold text-mdpurple-htext cursor-pointer"
-              >
-                ¿Olvidaste tu contraseña?
-              </span>
-            </div>
+            )}
 
-            <div className="text-end mt-6">
-              <button
-                type="submit"
-                className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow shadow-purple-200 hover:scale-105 transition-all duration-700 ease-in-outcursor-pointer"
-              >
-                Continuar
-              </button>
-            </div>
-          </form>
+            {success && (
+              <Alert
+                message="Iniciando sesión..."
+                bgColor="bg-skyblue-success"
+                textColor="text-black"
+                showSpinner={true}
+              />
+            )}
+
+            <form onSubmit={handleSubmit}>
+              <section className="mt-8">
+                <div className="my-3 mt-2">
+                  <p className="mb-2 mx-2 font-medium">Correo electrónico</p>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="rounded-full py-2 px-4 border-2 border-purple-900 w-full"
+                    placeholder="user@gmail.com"
+                  />
+                </div>
+
+                <div className="my-2 relative">
+                  <p className="mb-2 mx-2 font-medium">Contraseña</p>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="rounded-full px-4 border-2 border-purple-900 w-full py-2"
+                    placeholder="User1234."
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-0 top-0 mt-9 mr-3 text-gray-600 hover:text-gray-800 py-1.5"
+                  >
+                    {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                  </button>
+                </div>
+              </section>
+
+              <div className="flex mt-[2em] justify-start">
+                <img
+                  src="/forgetPassword.png"
+                  alt=""
+                  className="w-[2em] mx-[1em]"
+                />
+                <span
+                  onClick={handleCheckEmailClick}
+                  className="underline font-semibold text-mdpurple-htext cursor-pointer"
+                >
+                  ¿Olvidaste tu contraseña?
+                </span>
+              </div>
+
+              <div className="text-end mt-6">
+                <button
+                  type="submit"
+                  className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow shadow-purple-200 hover:scale-105 transition-all duration-700 ease-in-out cursor-pointer"
+                >
+                  Continuar
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-
     </>
   );
 };
 
-export default Form; 
+export default Form;

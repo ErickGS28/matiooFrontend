@@ -11,10 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import SelectStatus from "../../../components/ui/SelectStatus";
-import { 
-  getAllItemTypes, 
-  getActiveItemTypes, 
-  getInactiveItemTypes, 
+import {
+  getAllItemTypes,
+  getActiveItemTypes,
+  getInactiveItemTypes,
   createItemType,
   changeItemTypeStatus
 } from "../../../services/item_type/itemTypeService";
@@ -48,10 +48,10 @@ export default function ItemType() {
             response = await getAllItemTypes();
             break;
         }
-        
+
         // Extract the data from the response
         const data = response && response.result ? response.result : response;
-        
+
         if (Array.isArray(data)) {
           setItemTypes(data);
           setFilteredTypes(data);
@@ -60,7 +60,7 @@ export default function ItemType() {
           setItemTypes([]);
           setFilteredTypes([]);
         }
-        
+
         setError(null);
       } catch (err) {
         console.error("Error fetching item types:", err);
@@ -81,16 +81,16 @@ export default function ItemType() {
       setFilteredTypes([]);
       return;
     }
-    
+
     if (!searchQuery.trim()) {
       setFilteredTypes(itemTypes);
       return;
     }
-    
-    const filtered = itemTypes.filter(type => 
+
+    const filtered = itemTypes.filter(type =>
       type.name && type.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    
+
     setFilteredTypes(filtered);
   }, [searchQuery, itemTypes]);
 
@@ -98,11 +98,11 @@ export default function ItemType() {
   const handleStatusChange = async (id, newStatus) => {
     try {
       await changeItemTypeStatus(id);
-      
+
       // Update the local state
       setItemTypes(prev => {
         if (!Array.isArray(prev)) return [];
-        
+
         return prev.map(type => {
           if (type.id === id) {
             return { ...type, status: newStatus };
@@ -110,10 +110,10 @@ export default function ItemType() {
           return type;
         });
       });
-      
+
       setFilteredTypes(prev => {
         if (!Array.isArray(prev)) return [];
-        
+
         return prev.map(type => {
           if (type.id === id) {
             return { ...type, status: newStatus };
@@ -121,7 +121,7 @@ export default function ItemType() {
           return type;
         });
       });
-      
+
       toast.success(`Tipo de bien ${newStatus ? 'activado' : 'desactivado'} correctamente`);
     } catch (error) {
       console.error("Error changing item type status:", error);
@@ -134,7 +134,7 @@ export default function ItemType() {
     // Update the local state
     setItemTypes(prev => {
       if (!Array.isArray(prev)) return [];
-      
+
       return prev.map(type => {
         if (type.id === updatedType.id) {
           return { ...type, name: updatedType.name };
@@ -142,10 +142,10 @@ export default function ItemType() {
         return type;
       });
     });
-    
+
     setFilteredTypes(prev => {
       if (!Array.isArray(prev)) return [];
-      
+
       return prev.map(type => {
         if (type.id === updatedType.id) {
           return { ...type, name: updatedType.name };
@@ -153,7 +153,7 @@ export default function ItemType() {
         return type;
       });
     });
-    
+
     toast.success("Tipo de bien actualizado correctamente");
   };
 
@@ -167,28 +167,28 @@ export default function ItemType() {
     try {
       const newType = await createItemType(newTypeName);
       console.log("New item type created:", newType);
-      
+
       // Extract the new type from the result property if it exists
-      const newTypeData = newType && newType.result 
-        ? newType.result 
+      const newTypeData = newType && newType.result
+        ? newType.result
         : newType;
-      
+
       // If we're viewing active types (default for new types), add it to the list
       if (statusFilter === "active" || statusFilter === "all") {
         setItemTypes(prev => {
           if (!Array.isArray(prev)) return [newTypeData];
           return [...prev, newTypeData];
         });
-        
+
         setFilteredTypes(prev => {
           if (!Array.isArray(prev)) return [newTypeData];
           return [...prev, newTypeData];
         });
       }
-      
+
       setNewTypeName("");
       toast.success("Tipo de bien creado correctamente");
-      
+
       // Close the popover
       setIsAddPopoverOpen(false);
     } catch (error) {
@@ -227,12 +227,12 @@ export default function ItemType() {
                     placeholder="Buscar tipo de bien..."
                   />
                 </div>
-                
+
                 {/* Status Filter Component */}
                 <div className="ml-0 sm:ml-4 mt-2 sm:mt-0">
-                  <SelectStatus 
-                    value={statusFilter} 
-                    onChange={setStatusFilter} 
+                  <SelectStatus
+                    value={statusFilter}
+                    onChange={setStatusFilter}
                   />
                 </div>
               </div>
@@ -276,8 +276,8 @@ export default function ItemType() {
                       </div>
 
                       <div className="mt-6 flex justify-end">
-                        <Button 
-                          onClick={handleAddType} 
+                        <Button
+                          onClick={handleAddType}
                           className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
                         >
                           Guardar
@@ -295,7 +295,7 @@ export default function ItemType() {
                 <p className="text-lg">Cargando tipos de bien...</p>
               </div>
             )}
-            
+
             {error && (
               <div className="flex justify-center items-center mt-10">
                 <p className="text-lg text-red-500">{error}</p>
@@ -314,49 +314,56 @@ export default function ItemType() {
 
             {/* Cards Container */}
             {!loading && !error && filteredTypes && filteredTypes.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-[3em]">
-                {filteredTypes.map((type, index) => (
-                  <div
-                    key={type.id || index}
-                    className="bg-card-bg rounded-lg shadow-md p-4"
-                  >
-                    <div className="text-center">
-                      <img
-                        src={type.img || "/defaultItemType.png"}
-                        alt={type.name}
-                        className="mx-auto mb-4 w-[10em]"
-                      />
-                    </div>
-                    <div className="px-3">
-                      <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
-                        {type.name}
-                      </h3>
-
-                      <div className="flex justify-between items-center mt-4">
-                        <EditItemTypeDialog
-                          itemType={type}
-                          onSave={handleSave}
-                        />
-
-                        <div className="flex items-center space-x-2">
-                          <Label className={`text-sm ${type.status ? 'text-green-confirm' : 'text-gray-500'}`}>
-                            {type.status ? 'Activo' : 'Inactivo'}
-                          </Label>
-                          <Switch className="cursor-pointer"
-                            checked={type.status} 
-                            onCheckedChange={(checked) => handleStatusChange(type.id, checked)}
+              <div className="bg-stone-200 p-4 rounded-lg mt-[3em] min-h-[calc(90vh-250px)]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {filteredTypes.map((type, index) => (
+                    <div
+                      key={type.id || index}
+                      className="bg-card-bg rounded-lg shadow-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-300 transform transition-transform duration-300"
+                    >
+                      <div>
+                        <div className="px-4">
+                          <img
+                            src={type.img || "/defaultItemType.png"}
+                            alt={type.name}
+                            className="mx-auto mb-4 w-[10em]"
                           />
+                          <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
+                            {type.name}
+                          </h3>
+                        </div>
+
+                        <div className="flex justify-between items-center mt-4 bg-indigo-300 p-3 rounded-b-lg border-t-1 border-indigo-400">
+                          <EditItemTypeDialog itemType={type} onSave={handleSave} />
+
+                          <div className="flex items-center space-x-2">
+                            <Label className={`text-sm ${type.status ? '' : 'text-gray-500'}`}>
+                              {type.status ? 'Activo' : 'Inactivo'}
+                            </Label>
+                            <Switch
+                              className="cursor-pointer"
+                              checked={type.status}
+                              onCheckedChange={(checked) => handleStatusChange(type.id, checked)}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
           </div>
         </main>
       </div>
-      <Toaster position="bottom-right" />
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            background: "rgba(209, 255, 255, 1)" // Azul claro
+          },
+        }}
+      />
     </>
   );
 }

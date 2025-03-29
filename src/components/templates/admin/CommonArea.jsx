@@ -11,10 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import SelectStatus from "../../../components/ui/SelectStatus";
-import { 
-  getAllCommonAreas, 
-  getActiveCommonAreas, 
-  getInactiveCommonAreas, 
+import {
+  getAllCommonAreas,
+  getActiveCommonAreas,
+  getInactiveCommonAreas,
   createCommonArea,
   changeCommonAreaStatus
 } from "../../../services/common_area/commonAreaService";
@@ -36,7 +36,7 @@ export default function CommonArea() {
       try {
         setLoading(true);
         let response;
-        
+
         if (statusFilter === "active") {
           response = await getActiveCommonAreas();
         } else if (statusFilter === "inactive") {
@@ -44,16 +44,16 @@ export default function CommonArea() {
         } else {
           response = await getAllCommonAreas();
         }
-        
+
         console.log("API Response:", response);
-        
+
         // Extract data from the result property of the response
-        const data = response && response.result 
-          ? response.result 
+        const data = response && response.result
+          ? response.result
           : (Array.isArray(response) ? response : []);
-        
+
         console.log("Processed data:", data);
-        
+
         setCommonAreas(data);
         setFilteredAreas(data);
         setError(null);
@@ -79,11 +79,11 @@ export default function CommonArea() {
       setFilteredAreas([]);
       return;
     }
-    
+
     if (searchQuery.trim() === "") {
       setFilteredAreas(commonAreas);
     } else {
-      const filtered = commonAreas.filter(area => 
+      const filtered = commonAreas.filter(area =>
         area && area.name && area.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredAreas(filtered);
@@ -94,30 +94,30 @@ export default function CommonArea() {
   const handleStatusChange = async (id, newStatus) => {
     try {
       await changeCommonAreaStatus(id);
-      
+
       // Update the local state to reflect the change
       setCommonAreas(prev => {
         if (!Array.isArray(prev)) return [];
-        return prev.map(area => 
+        return prev.map(area =>
           area.id === id ? { ...area, status: newStatus } : area
         );
       });
-      
+
       // If we're filtering by status, we need to refresh the list
       if (statusFilter !== "all") {
-        const response = await (statusFilter === "active" 
-          ? getActiveCommonAreas() 
+        const response = await (statusFilter === "active"
+          ? getActiveCommonAreas()
           : getInactiveCommonAreas());
-          
+
         // Extract data from the result property of the response
-        const updatedAreas = response && response.result 
-          ? response.result 
+        const updatedAreas = response && response.result
+          ? response.result
           : (Array.isArray(response) ? response : []);
-                           
+
         setCommonAreas(updatedAreas);
         setFilteredAreas(updatedAreas);
       }
-      
+
       toast.success(`Estado actualizado correctamente`);
     } catch (error) {
       console.error("Error changing status:", error);
@@ -129,7 +129,7 @@ export default function CommonArea() {
   const handleSave = (updatedArea) => {
     setCommonAreas(prev => {
       if (!Array.isArray(prev)) return [updatedArea];
-      return prev.map(area => 
+      return prev.map(area =>
         area.id === updatedArea.id ? updatedArea : area
       );
     });
@@ -146,28 +146,28 @@ export default function CommonArea() {
     try {
       const newArea = await createCommonArea(newAreaName);
       console.log("New area created:", newArea);
-      
+
       // Extract the new area from the result property if it exists
-      const newAreaData = newArea && newArea.result 
-        ? newArea.result 
+      const newAreaData = newArea && newArea.result
+        ? newArea.result
         : newArea;
-      
+
       // If we're viewing active areas (default for new areas), add it to the list
       if (statusFilter === "active" || statusFilter === "all") {
         setCommonAreas(prev => {
           if (!Array.isArray(prev)) return [newAreaData];
           return [...prev, newAreaData];
         });
-        
+
         setFilteredAreas(prev => {
           if (!Array.isArray(prev)) return [newAreaData];
           return [...prev, newAreaData];
         });
       }
-      
+
       setNewAreaName("");
       toast.success("Área común creada correctamente");
-      
+
       // Close the popover
       setIsAddPopoverOpen(false);
     } catch (error) {
@@ -206,12 +206,12 @@ export default function CommonArea() {
                     placeholder="Buscar área común..."
                   />
                 </div>
-                
+
                 {/* Status Filter Component */}
                 <div className="ml-0 sm:ml-4 mt-2 sm:mt-0">
-                  <SelectStatus 
-                    value={statusFilter} 
-                    onChange={setStatusFilter} 
+                  <SelectStatus
+                    value={statusFilter}
+                    onChange={setStatusFilter}
                   />
                 </div>
               </div>
@@ -256,8 +256,8 @@ export default function CommonArea() {
                       </div>
 
                       <div className="mt-6 flex justify-end">
-                        <Button 
-                          onClick={handleAddArea} 
+                        <Button
+                          onClick={handleAddArea}
                           className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
                         >
                           Guardar
@@ -286,10 +286,10 @@ export default function CommonArea() {
             {!loading && !error && (!filteredAreas || filteredAreas.length === 0) && (
               <div className="text-center mt-10">
                 <p className="text-gray-500 text-lg">
-                  {searchQuery 
-                    ? "No se encontraron áreas comunes que coincidan con la búsqueda." 
-                    : statusFilter === "active" 
-                      ? "No hay áreas comunes activas." 
+                  {searchQuery
+                    ? "No se encontraron áreas comunes que coincidan con la búsqueda."
+                    : statusFilter === "active"
+                      ? "No hay áreas comunes activas."
                       : "No hay áreas comunes inactivas."}
                 </p>
               </div>
@@ -297,50 +297,61 @@ export default function CommonArea() {
 
             {/* Cards Container */}
             {!loading && !error && filteredAreas && filteredAreas.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-[3em]">
-                {filteredAreas.map((area, index) => (
-                  <div
-                    key={area.id || index}
-                    className="bg-card-bg rounded-lg shadow-md p-4 hover:scale-105 w-[auto]"
-                  >
-                    <div className="text-center">
-                      <img
-                        src={area.img || "/defaultCommonArea.png"}
-                        alt={area.name}
-                        className="mx-auto mb-4 w-[10em]"
-                      />
-                    </div>
-                    <div className="px-3">
-                      <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
-                        {area.name}
-                      </h3>
-
-                      <div className="flex justify-between items-center mt-4">
-                        <EditCommonAreaDialog
-                          user={area}
-                          onSave={handleSave}
-                          onStatusChange={handleStatusChange}
-                        />
-
-                        <div className="flex items-center space-x-2">
-                          <Label className={`text-sm ${area.status ? 'text-green-confirm' : 'text-gray-500'}`}>
-                            {area.status ? 'Activo' : 'Inactivo'}
-                          </Label>
-                          <Switch 
-                            checked={area.status} 
-                            onCheckedChange={(checked) => handleStatusChange(area.id, checked)}
+              <div className="bg-neutral-200 p-4 rounded-lg mt-[3em] min-h-[calc(90vh-250px)]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {filteredAreas.map((area, index) => (
+                    <div
+                      key={area.id || index}
+                      className="bg-card-bg rounded-lg shadow-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-300 transform transition-transform duration-300"
+                    >
+                      <div>
+                        <div className=" px-4">
+                          <img
+                            src={area.img || "/defaultCommonArea.png"}
+                            alt={area.name}
+                            className="mx-auto mb-4 w-[10em]"
                           />
+                          <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
+                            {area.name}
+                          </h3>
+                        </div>
+
+                        <div className="flex justify-between items-center mt-4 bg-indigo-300 p-3 rounded-b-lg border-t-1 border-indigo-400">
+                          <EditCommonAreaDialog
+                            user={area}
+                            onSave={handleSave}
+                            onStatusChange={handleStatusChange}
+                          />
+
+                          <div className="flex items-center space-x-2">
+                            <Label className={`text-sm ${area.status ? '' : 'text-gray-500'}`}>
+                              {area.status ? 'Activo' : 'Inactivo'}
+                            </Label>
+                            <Switch
+                              className="cursor-pointer"
+                              checked={area.status}
+                              onCheckedChange={(checked) => handleStatusChange(area.id, checked)}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
+
           </div>
         </main>
       </div>
-      <Toaster position="bottom-right" />
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            background: "rgba(209, 255, 255, 1)" // Azul claro
+          },
+        }}
+      />
     </>
   );
 }

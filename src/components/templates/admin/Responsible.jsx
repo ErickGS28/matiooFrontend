@@ -5,7 +5,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import { getAllUsers, createUser, updateUser, changeUserStatus } from "@/services/users/userService";
 import { getActiveCommonAreas } from "@/services/common_area/commonAreaService";
 import SelectStatus from "../../../components/ui/SelectStatus";
-
 import {
   Pagination,
   PaginationContent,
@@ -20,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 export default function Responsible() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -33,6 +33,7 @@ export default function Responsible() {
   const [statusFilter, setStatusFilter] = useState("all");
   const usersPerPage = 5;
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     username: "",
@@ -47,12 +48,9 @@ export default function Responsible() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-
       const response = await getAllUsers();
-
       if (response && response.result && Array.isArray(response.result)) {
         const responsibleUsers = response.result.filter(user => user && user.role === "RESPONSIBLE");
-
         setUsers(responsibleUsers);
         setFilteredUsers(responsibleUsers);
         setError(null);
@@ -89,23 +87,18 @@ export default function Responsible() {
     fetchCommonAreas();
   }, []);
 
-  // Filtrar usuarios por estado
+  // Filtrar usuarios por estado y búsqueda
   useEffect(() => {
     if (!Array.isArray(users)) {
       setFilteredUsers([]);
       return;
     }
-
     let filtered = [...users];
-
-    // Aplicar filtro de estado
     if (statusFilter === "active") {
       filtered = filtered.filter(user => user.status === true);
     } else if (statusFilter === "inactive") {
       filtered = filtered.filter(user => user.status === false);
     }
-
-    // Aplicar búsqueda
     if (searchQuery.trim() !== "") {
       filtered = filtered.filter(user =>
         (user.fullName && user.fullName.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -114,7 +107,6 @@ export default function Responsible() {
         (user.location && user.location.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
-
     setFilteredUsers(filtered);
   }, [users, statusFilter, searchQuery]);
 
@@ -131,7 +123,6 @@ export default function Responsible() {
     setFormData({
       ...formData,
       isCommonArea: checked,
-      // Resetear location o commonAreaId dependiendo del checkbox
       location: checked ? "" : formData.location,
       commonAreaId: !checked ? "" : formData.commonAreaId
     });
@@ -145,39 +136,28 @@ export default function Responsible() {
   };
 
   const handleAddResponsible = async () => {
-    // Validaciones de frontend
     if (!formData.fullName || !formData.username || !formData.password || !formData.email ||
       (formData.isCommonArea ? !formData.commonAreaId : !formData.location)) {
       toast.error("Por favor, completa todos los campos obligatorios");
       return;
     }
-
-    // Validación de longitud del nombre completo
     if (formData.fullName.length > 100) {
       toast.error("El nombre completo no puede exceder los 100 caracteres.");
       return;
     }
-
-    // Validación de longitud del nombre de usuario
     if (formData.username.length > 50) {
       toast.error("El nombre de usuario no puede exceder los 50 caracteres.");
       return;
     }
-
-    // Validación de formato de correo electrónico
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(formData.email)) {
       toast.error("El correo electrónico no es válido.");
       return;
     }
-
-    // Validación de longitud del correo electrónico
     if (formData.email.length > 100) {
       toast.error("El correo electrónico no puede exceder los 100 caracteres.");
       return;
     }
-
-    // Validación de la longitud de la contraseña
     if (formData.password.length < 8 || formData.password.length > 255) {
       toast.error("La contraseña debe tener entre 8 y 255 caracteres.");
       return;
@@ -232,6 +212,7 @@ export default function Responsible() {
       commonAreaId: "",
       role: "RESPONSIBLE"
     });
+    setShowPassword(false);
   };
 
   const handleToggleSidebar = (expanded) => {
@@ -244,7 +225,6 @@ export default function Responsible() {
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
-  // Transformar datos para la tabla
   const transformedData = currentUsers.map(user => ({
     id: user.id,
     name: user.fullName ? user.fullName.split(' ')[0] : '',
@@ -257,13 +237,15 @@ export default function Responsible() {
     location: user.location
   }));
 
-  // Formulario de usuario con validaciones
+  // Formulario de usuario con validaciones y funcionalidad showPassword
   const UserForm = () => (
     <div className="grid gap-6 h-[50vh] overflow-scroll p-4">
       <div>
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">Nombre Completo</Label>
+            <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">
+              Nombre Completo
+            </Label>
             <Input
               id="fullName"
               name="fullName"
@@ -274,7 +256,9 @@ export default function Responsible() {
             />
           </div>
           <div>
-            <Label htmlFor="username" className="text-sm font-medium text-gray-700">Nombre de Usuario</Label>
+            <Label htmlFor="username" className="text-sm font-medium text-gray-700">
+              Nombre de Usuario
+            </Label>
             <Input
               id="username"
               name="username"
@@ -285,19 +269,32 @@ export default function Responsible() {
             />
           </div>
           <div>
-            <Label htmlFor="password" className="text-sm font-medium text-gray-700">Contraseña</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
-              placeholder="Contraseña"
-            />
+            <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+              Contraseña
+            </Label>
+            <div className="relative">
+              <Input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                value={formData.password}
+                onChange={handleInputChange}
+                className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500 pr-10"
+                placeholder="Contraseña"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+              >
+                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+              </button>
+            </div>
           </div>
           <div>
-            <Label htmlFor="email" className="text-sm font-medium text-gray-700">Correo Electrónico</Label>
+            <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+              Correo Electrónico
+            </Label>
             <Input
               id="email"
               name="email"
@@ -309,7 +306,9 @@ export default function Responsible() {
             />
           </div>
           <div className="flex items-center space-x-2">
-            <Label htmlFor="isCommonArea" className="text-sm font-medium text-gray-700">¿Área Común?</Label>
+            <Label htmlFor="isCommonArea" className="text-sm font-medium text-gray-700">
+              ¿Área Común?
+            </Label>
             <input
               type="checkbox"
               id="isCommonArea"
@@ -320,7 +319,9 @@ export default function Responsible() {
           </div>
           {formData.isCommonArea ? (
             <div>
-              <Label htmlFor="commonAreaId" className="text-sm font-medium text-gray-700">Área Común</Label>
+              <Label htmlFor="commonAreaId" className="text-sm font-medium text-gray-700">
+                Área Común
+              </Label>
               <Select value={formData.commonAreaId} onValueChange={handleSelectChange}>
                 <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
                   <SelectValue placeholder="Selecciona un área común" />
@@ -336,7 +337,9 @@ export default function Responsible() {
             </div>
           ) : (
             <div className="mb-2">
-              <Label htmlFor="location" className=" text-sm font-medium text-gray-700">Ubicación</Label>
+              <Label htmlFor="location" className="text-sm font-medium text-gray-700">
+                Ubicación
+              </Label>
               <Input
                 id="location"
                 name="location"
@@ -366,7 +369,6 @@ export default function Responsible() {
         <AsideBar activePage="responsible" onToggle={handleToggleSidebar} />
         <main className="flex-1 flex flex-col h-screen ">
           <div className="flex flex-col p-5 md:p-14 w-full">
-            {/* Título y imagen */}
             <div className="flex items-center">
               <h1 className="text-darkpurple-title text-[2.5em] font-semibold">
                 Responsables
@@ -377,8 +379,6 @@ export default function Responsible() {
                 className="ml-auto w-[5em] h-[5em] object-contain"
               />
             </div>
-
-            {/* Barra de búsqueda y filtros */}
             <div className="my-3 mt-5 w-full flex flex-col md:flex-row items-center flex-wrap gap-4">
               <div className="flex flex-col sm:flex-row items-center w-full md:w-auto">
                 <div className="relative w-full sm:w-[25em] mb-3 sm:mb-0">
@@ -390,8 +390,6 @@ export default function Responsible() {
                     placeholder="Buscar responsable..."
                   />
                 </div>
-
-                {/* Status Filter Component */}
                 <div className="ml-0 sm:ml-4 mt-2 sm:mt-0 ">
                   <SelectStatus
                     value={statusFilter}
@@ -410,7 +408,9 @@ export default function Responsible() {
                   </PopoverTrigger>
                   <PopoverContent className="w-[50%] h-[30em] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)] transform -translate-x-1/3">
                     <div className="text-center">
-                      <h3 className="text-darkpurple-title text-[1.8em] font-semibold">Agregar Responsable</h3>
+                      <h3 className="text-darkpurple-title text-[1.8em] font-semibold">
+                        Agregar Responsable
+                      </h3>
                       <p className="text-gray-500 text-sm mt-1">
                         Complete los campos para registrar un nuevo responsable.
                       </p>
@@ -420,7 +420,6 @@ export default function Responsible() {
                 </Popover>
               </div>
             </div>
-
             {loading ? (
               <div className="text-center py-4">Cargando...</div>
             ) : error ? (
@@ -435,7 +434,6 @@ export default function Responsible() {
                     showRoleColumn={true}
                   />
                 </div>
-
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
@@ -448,7 +446,6 @@ export default function Responsible() {
                         className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}
                       />
                     </PaginationItem>
-
                     {[...Array(totalPages)].map((_, i) => (
                       <PaginationItem key={i}>
                         <PaginationLink
@@ -463,7 +460,6 @@ export default function Responsible() {
                         </PaginationLink>
                       </PaginationItem>
                     ))}
-
                     <PaginationItem>
                       <PaginationNext
                         href="#"
@@ -478,8 +474,14 @@ export default function Responsible() {
                 </Pagination>
               </>
             )}
-
-            <Toaster position="bottom-right" />
+            <Toaster
+              position="bottom-right"
+              toastOptions={{
+                style: {
+                  background: "rgba(209, 255, 255, 1)" // Azul claro
+                },
+              }}
+            />
           </div>
         </main>
       </div>

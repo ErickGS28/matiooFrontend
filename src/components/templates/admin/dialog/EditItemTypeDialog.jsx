@@ -69,7 +69,7 @@ export default function EditItemTypeDialog({ itemType, onSave }) {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <button className="bg-cyan-200 hover:bg-purple-300 text-gray-800 font-semibold py-1 px-3 rounded-full mt-4 cursor-pointer">
+            <button className="bg-purple-950 hover:bg-purple-700 text-white font-semibold py-1 p-6 rounded-full mt-4 cursor-pointer">
               Editar
             </button>
           </DialogTrigger>

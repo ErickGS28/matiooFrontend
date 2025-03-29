@@ -11,10 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import SelectStatus from "../../../components/ui/SelectStatus";
-import { 
-  getAllBrands, 
-  getActiveBrands, 
-  getInactiveBrands, 
+import {
+  getAllBrands,
+  getActiveBrands,
+  getInactiveBrands,
   createBrand,
   changeBrandStatus
 } from "../../../services/brand/brandService";
@@ -48,10 +48,10 @@ export default function Brand() {
             response = await getAllBrands();
             break;
         }
-        
+
         // Extract the data from the response
         const data = response && response.result ? response.result : response;
-        
+
         if (Array.isArray(data)) {
           setBrands(data);
           setFilteredBrands(data);
@@ -60,7 +60,7 @@ export default function Brand() {
           setBrands([]);
           setFilteredBrands([]);
         }
-        
+
         setError(null);
       } catch (err) {
         console.error("Error fetching brands:", err);
@@ -81,16 +81,16 @@ export default function Brand() {
       setFilteredBrands([]);
       return;
     }
-    
+
     if (!searchQuery.trim()) {
       setFilteredBrands(brands);
       return;
     }
-    
-    const filtered = brands.filter(brand => 
+
+    const filtered = brands.filter(brand =>
       brand.name && brand.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    
+
     setFilteredBrands(filtered);
   }, [searchQuery, brands]);
 
@@ -98,11 +98,11 @@ export default function Brand() {
   const handleStatusChange = async (id, newStatus) => {
     try {
       await changeBrandStatus(id);
-      
+
       // Update the local state
       setBrands(prev => {
         if (!Array.isArray(prev)) return [];
-        
+
         return prev.map(brand => {
           if (brand.id === id) {
             return { ...brand, status: newStatus };
@@ -110,10 +110,10 @@ export default function Brand() {
           return brand;
         });
       });
-      
+
       setFilteredBrands(prev => {
         if (!Array.isArray(prev)) return [];
-        
+
         return prev.map(brand => {
           if (brand.id === id) {
             return { ...brand, status: newStatus };
@@ -121,7 +121,7 @@ export default function Brand() {
           return brand;
         });
       });
-      
+
       toast.success(`Marca ${newStatus ? 'activada' : 'desactivada'} correctamente`);
     } catch (error) {
       console.error("Error changing brand status:", error);
@@ -134,7 +134,7 @@ export default function Brand() {
     // Update the local state
     setBrands(prev => {
       if (!Array.isArray(prev)) return [];
-      
+
       return prev.map(brand => {
         if (brand.id === updatedBrand.id) {
           return { ...brand, name: updatedBrand.name };
@@ -142,10 +142,10 @@ export default function Brand() {
         return brand;
       });
     });
-    
+
     setFilteredBrands(prev => {
       if (!Array.isArray(prev)) return [];
-      
+
       return prev.map(brand => {
         if (brand.id === updatedBrand.id) {
           return { ...brand, name: updatedBrand.name };
@@ -153,7 +153,7 @@ export default function Brand() {
         return brand;
       });
     });
-    
+
     toast.success("Marca actualizada correctamente");
   };
 
@@ -167,28 +167,28 @@ export default function Brand() {
     try {
       const newBrand = await createBrand(newBrandName);
       console.log("New brand created:", newBrand);
-      
+
       // Extract the new brand from the result property if it exists
-      const newBrandData = newBrand && newBrand.result 
-        ? newBrand.result 
+      const newBrandData = newBrand && newBrand.result
+        ? newBrand.result
         : newBrand;
-      
+
       // If we're viewing active brands (default for new brands), add it to the list
       if (statusFilter === "active" || statusFilter === "all") {
         setBrands(prev => {
           if (!Array.isArray(prev)) return [newBrandData];
           return [...prev, newBrandData];
         });
-        
+
         setFilteredBrands(prev => {
           if (!Array.isArray(prev)) return [newBrandData];
           return [...prev, newBrandData];
         });
       }
-      
+
       setNewBrandName("");
       toast.success("Marca creada correctamente");
-      
+
       // Close the popover
       setIsAddPopoverOpen(false);
     } catch (error) {
@@ -227,12 +227,12 @@ export default function Brand() {
                     placeholder="Buscar marca..."
                   />
                 </div>
-                
+
                 {/* Status Filter Component */}
                 <div className="ml-0 sm:ml-4 mt-2 sm:mt-0">
-                  <SelectStatus 
-                    value={statusFilter} 
-                    onChange={setStatusFilter} 
+                  <SelectStatus
+                    value={statusFilter}
+                    onChange={setStatusFilter}
                   />
                 </div>
               </div>
@@ -276,8 +276,8 @@ export default function Brand() {
                       </div>
 
                       <div className="mt-6 flex justify-end">
-                        <Button 
-                          onClick={handleAddBrand} 
+                        <Button
+                          onClick={handleAddBrand}
                           className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
                         >
                           Guardar
@@ -295,7 +295,7 @@ export default function Brand() {
                 <p className="text-lg">Cargando marcas...</p>
               </div>
             )}
-            
+
             {error && (
               <div className="flex justify-center items-center mt-10">
                 <p className="text-lg text-red-500">{error}</p>
@@ -314,45 +314,56 @@ export default function Brand() {
 
             {/* Cards Container */}
             {!loading && !error && filteredBrands && filteredBrands.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-[3em]">
-                {filteredBrands.map((brand, index) => (
-                  <div
-                    key={brand.id || index}
-                    className="bg-card-bg rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-300"
-                  >
-                    <div>
-                      <div className="p-4">
-                      <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
-                        {brand.name}
-                      </h3>
-                      </div>
-                     
+              <div className="bg-slate-200 p-4 rounded-lg mt-[3em] min-h-[calc(90vh-250px)]">
 
-                      <div className="flex justify-between items-center mt-4 bg-blue-300 p-3 rounded-b-lg border-t-1 border-purple-500 ">
-                        <EditBrandDialog
-                          brand={brand}
-                          onSave={handleSave}
-                        />
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {filteredBrands.map((brand, index) => (
+                    <div
+                      key={brand.id || index}
+                      className="bg-card-bg rounded-lg shadow-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-300 transform transition-transform duration-300"
+                    >
+                      <div>
+                        <div className="p-4">
+                          <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
+                            {brand.name}
+                          </h3>
+                        </div>
 
-                        <div className="flex  items-center space-x-2 mt-4">
-                          <Label className={`text-sm ${brand.status ? '' : 'text-gray-500'}`}>
-                            {brand.status ? 'Activo' : 'Inactivo'}
-                          </Label>
-                          <Switch className="cursor-pointer"
-                            checked={brand.status} 
-                            onCheckedChange={(checked) => handleStatusChange(brand.id, checked)}
+                        <div className="flex justify-between items-center mt-4 bg-indigo-300 p-3 rounded-b-lg border-t-1 border-indigo-400">
+                          <EditBrandDialog
+                            brand={brand}
+                            onSave={handleSave}
                           />
+
+                          <div className="flex items-center space-x-2 mt-4">
+                            <Label className={`text-sm ${brand.status ? '' : 'text-gray-500'}`}>
+                              {brand.status ? 'Activo' : 'Inactivo'}
+                            </Label>
+                            <Switch
+                              className="cursor-pointer"
+                              checked={brand.status}
+                              onCheckedChange={(checked) => handleStatusChange(brand.id, checked)}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
+
           </div>
         </main>
       </div>
-      <Toaster position="bottom-right" />
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            background: "rgba(209, 255, 255, 1)" // Azul claro
+          },
+        }}
+      />
     </>
   );
 }

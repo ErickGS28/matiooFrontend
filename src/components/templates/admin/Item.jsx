@@ -28,14 +28,14 @@ export default function Item() {
             console.log("Iniciando fetchItems()");
             setLoading(true);
             setError(null);
-            
+
             // Verificar que itemService esté disponible
             console.log("itemService:", itemService);
             console.log("itemService.getAllItems:", itemService.getAllItems);
-            
+
             const response = await itemService.getAllItems();
             console.log("Respuesta completa de getAllItems:", response);
-            
+
             // La respuesta ya viene procesada como JSON y los items están en response.result
             if (response && response.type === "SUCCESS" && Array.isArray(response.result)) {
                 console.log("Items obtenidos:", response.result);
@@ -94,7 +94,7 @@ export default function Item() {
             console.log("Creando nuevo item:", newItem);
             const response = await itemService.createItem(newItem);
             console.log("Respuesta de createItem:", response);
-            
+
             // Verificar si la creación fue exitosa
             if (response && response.type === "SUCCESS") {
                 console.log("Item creado exitosamente");
@@ -121,12 +121,12 @@ export default function Item() {
                             Bienes
                         </h1>
                         <img
-                src="/item.png"
-                alt="becario"
-                className="ml-auto w-[5em] h-[5em] object-contain"
-              />
+                            src="/item.png"
+                            alt="becario"
+                            className="ml-auto w-[5em] h-[5em] object-contain"
+                        />
                     </div>
-                    
+
 
                     <div className="my-3 mt-5 w-full flex items-center flex-wrap gap-4">
                         <div className="flex items-center">
@@ -137,7 +137,7 @@ export default function Item() {
                                 className="w-[25em] rounded-full px-8 border-2 shadow-lg shadow-purple-200 py-2 bg-gray-100 font-medium"
                                 placeholder="Buscar bien..."
                             />
-                          
+
                         </div>
                         <div className="flex justify-end flex-grow">
                             <BtnRegistrarItem onAgregar={handleAddItem} />
@@ -167,15 +167,15 @@ export default function Item() {
                                 <Pagination>
                                     <PaginationContent>
                                         <PaginationItem>
-                                            <PaginationPrevious 
+                                            <PaginationPrevious
                                                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                                                 className={currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
                                             />
                                         </PaginationItem>
-                                        
+
                                         {[...Array(totalPages)].map((_, i) => (
                                             <PaginationItem key={i}>
-                                                <PaginationLink 
+                                                <PaginationLink
                                                     onClick={() => setCurrentPage(i + 1)}
                                                     isActive={currentPage === i + 1}
                                                     className="cursor-pointer"
@@ -184,9 +184,9 @@ export default function Item() {
                                                 </PaginationLink>
                                             </PaginationItem>
                                         ))}
-                                        
+
                                         <PaginationItem>
-                                            <PaginationNext 
+                                            <PaginationNext
                                                 onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                                                 className={currentPage === totalPages ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
                                             />

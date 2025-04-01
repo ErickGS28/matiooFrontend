@@ -33,14 +33,10 @@ export default function responsibleHome() {
     navigate("/");
   };
 
-
-
-  // Cargar los items asignados al usuario
   useEffect(() => {
     const fetchUserItems = async () => {
       try {
         setLoading(true);
-        // Obtener el ID del usuario desde el token
         const userData = decodeAndDisplayToken();
 
         if (!userData || !userData.id) {
@@ -51,7 +47,6 @@ export default function responsibleHome() {
 
         console.log("ID del usuario:", userData.id);
 
-        // Obtener los items asignados al usuario
         const userItems = await itemService.getItemsByAssignedToId(userData.id);
         console.log("Items obtenidos:", userItems);
 
@@ -68,18 +63,14 @@ export default function responsibleHome() {
     fetchUserItems();
   }, []);
 
-  // Cargar datos del usuario para el perfil
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        // Obtener el ID del usuario desde el token
         const tokenData = decodeAndDisplayToken();
 
         if (tokenData && tokenData.id) {
-          // Guardar el ID en localStorage para futuras referencias
           localStorage.setItem('userId', tokenData.id);
 
-          // Obtener los datos completos del usuario usando getUserById
           const response = await getUserById(tokenData.id);
           console.log("Datos del usuario obtenidos:", response);
 
@@ -102,7 +93,6 @@ export default function responsibleHome() {
     loadUserData();
   }, [dialogOpen]);
 
-  // Filtrar items cuando cambia el término de búsqueda
   useEffect(() => {
     if (items.length > 0) {
       const filtered = items.filter(item =>
@@ -115,21 +105,17 @@ export default function responsibleHome() {
 
   const handleRemoveItem = async (itemId) => {
     try {
-      // Confirmar con el usuario antes de desasignar
       if (window.confirm("¿Estás seguro de que deseas quitar este bien?")) {
         console.log('Desasignando item con ID:', itemId);
 
-        // Llamar al método unassignItem del itemService
         const response = await itemService.unassignItem(itemId);
         console.log('Respuesta de desasignación:', response);
 
-        // Mostrar mensaje de éxito
         toast.success("Bien desasignado correctamente", {
           id: "unassign-success",
           duration: 3000
         });
 
-        // Actualizar la lista de items (eliminar el item desasignado)
         setItems(prevItems => prevItems.filter(item => item.id !== itemId));
         setFilteredItems(prevItems => prevItems.filter(item => item.id !== itemId));
       }
@@ -160,7 +146,6 @@ export default function responsibleHome() {
       console.log("Respuesta de actualización de perfil:", response);
       setDialogOpen(false);
 
-      // Recargar los datos del usuario después de actualizar
       const updatedUserData = await getUserById(userData.id);
       if (updatedUserData && updatedUserData.result) {
         const newProfileData = {
@@ -172,7 +157,6 @@ export default function responsibleHome() {
         };
         setUserData(newProfileData);
 
-        // Usar un ID único para el toast para evitar duplicados
         toast.success("Perfil actualizado correctamente", {
           id: "profile-update-success",
           duration: 3000
@@ -202,7 +186,6 @@ export default function responsibleHome() {
           </div>
 
           <div className="flex space-x-6">
-            {/* Botón Mi Perfil con Popover */}
             <Popover>
               <PopoverTrigger asChild>
                 <div className="flex items-center justify-start gap-4 h-10 px-4 rounded-2xl cursor-pointer bg-white hover:bg-skyblue-bg-icon transition-all duration-300 ease-in-out hover:scale-105 rounded-bl-[1.4em] rounded-br-[1.4em] rounded-tl-[0.5em] rounded-tr-[0.5em] border-1 border-gray-500">
@@ -234,7 +217,6 @@ export default function responsibleHome() {
 
                   <Dialog open={dialogOpen} onOpenChange={(open) => {
                     setDialogOpen(open);
-                    // Si se cierra el diálogo, resetear cualquier error
                     if (!open) {
                       setIsLoading(false);
                     }
@@ -322,7 +304,6 @@ export default function responsibleHome() {
               </PopoverContent>
             </Popover>
 
-            {/* Botón Cerrar sesión */}
             <Popover>
               <PopoverTrigger asChild>
                 <button
@@ -358,10 +339,9 @@ export default function responsibleHome() {
         </div>
       </nav>
 
-      <div className="flex min-h-screen w-full pb-2 bg-linear-to-b/srgb from-white to-purple-400 h-full  ">
+      <div className="flex min-h-screen w-full pb-2 bg-linear-to-b/srgb from-white to-purple-400 h-full">
         <main className="flex-1 flex flex-col">
           <div className="flex flex-col p-5 md:px-20 w-full">
-            {/* Título */}
             <div className="flex items-center">
               <h1 className="text-darkpurple-title text-[2.5em] font-semibold">
                 Bienes que ocupas
@@ -373,7 +353,6 @@ export default function responsibleHome() {
               />
             </div>
 
-            {/* Barra de búsqueda y botón */}
             <div className="my-3 mt-5 w-full flex items-center flex-wrap gap-4">
               <div className="flex items-center">
                 <input
@@ -386,22 +365,19 @@ export default function responsibleHome() {
               </div>
             </div>
 
-            {/* Estado de carga */}
             {loading && (
               <div className="flex justify-center items-center mt-10">
                 <p className="text-lg text-gray-600">Cargando bienes asignados...</p>
               </div>
             )}
 
-            {/* Mensaje si no hay items */}
             {!loading && filteredItems.length === 0 && (
               <div className="flex justify-center items-center mt-10">
                 <p className="text-lg text-gray-600">No tienes bienes asignados actualmente.</p>
               </div>
             )}
 
-            {/* Cards Container */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mt-[3em] ">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mt-[3em]">
               {filteredItems.map((item) => (
                 <div key={item.id} className="bg-card-bg rounded-lg shadow-md p-4 hover:scale-105 w-[auto]">
                   <div className="flex justify-center bg-white rounded-2xl">

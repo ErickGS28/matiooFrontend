@@ -23,6 +23,8 @@ import { getActiveItemTypes } from "@/services/item_type/itemTypeService";
 import { getActiveModels } from "@/services/model/modelService";
 
 export function EditItemDialog({ item, onSave }) {
+  console.log("EditItemDialog - Item recibido:", item);
+  
   // Estado inicial: si un campo no existe, se pone 0 (sin selección).
   const [formData, setFormData] = React.useState({
     id: item.id || 0,
@@ -30,15 +32,17 @@ export function EditItemDialog({ item, onSave }) {
     itemTypeId: item.itemType ? item.itemType.id : 0,
     brandId: item.brand ? item.brand.id : 0,
     modelId: item.model ? item.model.id : 0,
-    ownerId: item.owner ? item.owner.id : 0,         // si no hay owner => 0
+    ownerId: item.ownerId || (item.owner ? item.owner.id : 0),  // Usar ownerId si está disponible
     serialNumber: item.serialNumber || "",
     code: item.code || "",
     location: item.location || "",
-    assignedToId: item.assignedTo ? item.assignedTo.id : 0, // si no hay assigned => 0
+    assignedToId: item.assignedToId || (item.assignedTo ? item.assignedTo.id : 0), // Usar assignedToId si está disponible
     status: item.status !== undefined ? item.status : true,
     useCommonArea: false,
     commonAreaId: 0,
   });
+  
+  console.log("EditItemDialog - Estado inicial formData:", formData);
   
   const [responsibleUsers, setResponsibleUsers] = React.useState([]);
   const [allUsers, setAllUsers] = React.useState([]);

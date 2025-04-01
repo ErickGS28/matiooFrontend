@@ -9,10 +9,15 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { getUserById } from "@/services/users/userService";
 
 export function ViewItemDialog({ item }) {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  console.log("ViewItemDialog - Item recibido:", item);
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <div className="w-full h-full flex items-center justify-center cursor-pointer">
                  <Button className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300 cursor-pointer">Ver</Button>
@@ -43,7 +48,9 @@ export function ViewItemDialog({ item }) {
             </div>
             <div className="flex justify-between">
               <h3 className="text-darkpurple-title font-medium">Dueño</h3>
-              <p className="text-gray-600">{item.owner ? `${item.owner.name} ${item.owner.surname}` : "No asignado"}</p>
+              <p className="text-gray-600">
+                {item.owner ? (item.owner.fullName || `${item.owner.name || ''} ${item.owner.surname || ''}`) : "No asignado"}
+              </p>
             </div>
             <div className="flex justify-between">
               <h3 className="text-darkpurple-title font-medium">Tipo de bien</h3>
@@ -60,7 +67,9 @@ export function ViewItemDialog({ item }) {
           <div className="grid grid-cols-1 gap-2 w-full mb-2">
             <div className="flex justify-between">
               <h3 className="text-darkpurple-title font-medium">Asignado a</h3>
-              <p className="text-gray-600">{item.assignedTo ? `${item.assignedTo.name} ${item.assignedTo.surname}` : "No asignado"}</p>
+              <p className="text-gray-600">
+                {item.assignedTo ? (item.assignedTo.fullName || `${item.assignedTo.name || ''} ${item.assignedTo.surname || ''}`) : "No asignado"}
+              </p>
             </div>
             <div className="flex justify-between">
               <h3 className="text-darkpurple-title font-medium">Modelo</h3>

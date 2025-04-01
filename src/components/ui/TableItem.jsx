@@ -5,7 +5,7 @@ import { EditItemDialog } from "@/components/templates/admin/dialog/EditItemDial
 import { EstadoDialog } from "@/components/templates/admin/dialog/EstadoDialog";
 import { itemService } from "@/services/item/itemService";
 
-export default function TableItem({ data }) {
+export default function TableItem({ data, onUpdateItem }) {
   const [items, setItems] = useState(data);
   const [itemStatus, setItemStatus] = useState({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -84,23 +84,18 @@ export default function TableItem({ data }) {
 
       if (response && response.type === "SUCCESS") {
         console.log("Actualización exitosa, actualizando estado local");
-
-        // Para asegurar que los datos están actualizados, refrescar desde el backend
-        const allItemsResponse = await itemService.getAllItems();
-        if (allItemsResponse && allItemsResponse.type === "SUCCESS") {
-          setItems(allItemsResponse.result);
-
-          // Actualizar también el estado de los switches
-          const newStatus = {};
-          allItemsResponse.result.forEach(item => {
-            newStatus[item.code] = item.status || false;
-          });
-          setItemStatus(newStatus);
+        
+        // Actualizar el estado local
+        const updatedItemData = response.result || itemToUpdate;
+        
+        // Actualizar el estado en el componente padre (Item.jsx) si existe el callback
+        if (onUpdateItem && typeof onUpdateItem === 'function') {
+          onUpdateItem(updatedItemData);
         } else {
-          // Si no podemos refrescar todos los items, al menos actualizamos el que se modificó
+          // Si no hay callback, actualizar el estado local como antes
           setItems(prevItems =>
             prevItems.map(item =>
-              item.id === itemToUpdate.id ? { ...item, ...response.result } : item
+              item.id === itemToUpdate.id ? { ...item, ...updatedItemData } : item
             )
           );
         }
@@ -137,15 +132,24 @@ export default function TableItem({ data }) {
                 {item.brand && item.brand.name ? item.brand.name : 'Sin marca'}
               </td>
               <td className="py-3 px-4">
+                {console.log("TableItem - Item completo:", item)}
+                {console.log("TableItem - ownerId:", item.ownerId)}
+                {console.log("TableItem - assignedToId:", item.assignedToId)}
                 <ViewItemDialog
                   item={{
+                    id: item.id,
                     itemType: item.itemType,
                     name: item.name,
                     brand: item.brand,
                     model: item.model,
                     code: item.code,
                     location: item.location || "No asignada",
-                    serialNumber: item.serialNumber
+                    serialNumber: item.serialNumber,
+                    ownerId: item.ownerId,
+                    assignedToId: item.assignedToId,
+                    status: item.status,
+                    owner: item.owner,
+                    assignedTo: item.assignedTo
                   }}
                 />
               </td>
@@ -158,6 +162,7 @@ export default function TableItem({ data }) {
                 />
               </td>
               <td className="py-2 px-4 rounded-r-2xl h-[3.5rem] relative">
+                {console.log("TableItem - Item para EditItemDialog:", item)}
                 <EditItemDialog
                   item={{
                     id: item.id,
@@ -166,10 +171,13 @@ export default function TableItem({ data }) {
                     model: item.model,
                     code: item.code,
                     location: item.location || "No asignada",
-                    intern: item.assignedTo || "No asignado",
-                    responsible: item.responsible || "No asignado",
                     itemType: item.itemType,
                     serialNumber: item.serialNumber,
+                    ownerId: item.ownerId,
+                    assignedToId: item.assignedToId,
+                    owner: item.owner,
+                    assignedTo: item.assignedTo,
+                    status: item.status
                   }}
                   onSave={handleSave}
                 />

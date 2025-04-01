@@ -110,6 +110,32 @@ export default function Item() {
         }
     };
 
+    // Manejar la actualización de un bien
+    const handleUpdateItem = async (updatedItem) => {
+        try {
+            console.log("Actualizando item en Item.jsx:", updatedItem);
+            
+            // Actualizar los arrays de items manteniendo la paginación actual
+            const updateItemInArray = (array) => {
+                return array.map(item => {
+                    if (item.id === updatedItem.id) {
+                        return { ...item, ...updatedItem };
+                    }
+                    return item;
+                });
+            };
+            
+            // Actualizar ambos arrays: items y filteredItems
+            setItems(prev => updateItemInArray(prev));
+            setFilteredItems(prev => updateItemInArray(prev));
+            
+            // No cambiamos la página actual para mantener la posición en la paginación
+        } catch (error) {
+            console.error("Error al actualizar el item en el estado:", error);
+            setError(`Error al actualizar el bien: ${error.message}`);
+        }
+    };
+
     return (
         <div className="flex min-h-screen w-full">
             <AsideBar activePage="item" />
@@ -160,7 +186,7 @@ export default function Item() {
                     ) : (
                         <>
                             {/* Tabla */}
-                            <TableItem data={currentItems} />
+                            <TableItem data={currentItems} onUpdateItem={handleUpdateItem} />
 
                             {/* Paginación */}
                             {totalPages > 1 && (

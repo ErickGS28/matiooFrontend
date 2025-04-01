@@ -22,7 +22,24 @@ export const itemService = {
                 ok: response.ok
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items recibidos:", result.result.length);
+                
+                // Mostrar un ejemplo del item recibido
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        owner: sampleItem.owner,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getAllItems:', error);
             throw new Error('Error al obtener la lista de items');
@@ -48,9 +65,22 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos del item recibido:", {
+                    id: result.result.id,
+                    name: result.result.name,
+                    ownerId: result.result.ownerId,
+                    owner: result.result.owner,
+                    assignedToId: result.result.assignedToId,
+                    assignedTo: result.result.assignedTo
+                });
+            }
+            
+            return result;
         } catch (error) {
-            console.error('Error en getItemById:', error);
+            console.error(`Error en getItemById(${id}):`, error);
             throw new Error(`Error al obtener el item con ID ${id}`);
         }
     },
@@ -74,7 +104,25 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items recibidos:", result.result.length);
+                // Revisar si los items tienen la información de usuario
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        ownerId: sampleItem.ownerId,
+                        owner: sampleItem.owner,
+                        assignedToId: sampleItem.assignedToId,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getItemsByModelId:', error);
             throw new Error(`Error al obtener items con modelId ${modelId}`);
@@ -100,7 +148,25 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items recibidos:", result.result.length);
+                // Revisar si los items tienen la información de usuario
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        ownerId: sampleItem.ownerId,
+                        owner: sampleItem.owner,
+                        assignedToId: sampleItem.assignedToId,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getItemsByModelName:', error);
             throw new Error(`Error al obtener items con modelName ${modelName}`);
@@ -126,7 +192,25 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items recibidos:", result.result.length);
+                // Revisar si los items tienen la información de usuario
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        ownerId: sampleItem.ownerId,
+                        owner: sampleItem.owner,
+                        assignedToId: sampleItem.assignedToId,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getItemsByBrandId:', error);
             throw new Error(`Error al obtener items con brandId ${brandId}`);
@@ -152,7 +236,25 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items recibidos:", result.result.length);
+                // Revisar si los items tienen la información de usuario
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        ownerId: sampleItem.ownerId,
+                        owner: sampleItem.owner,
+                        assignedToId: sampleItem.assignedToId,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getItemsByBrandName:', error);
             throw new Error(`Error al obtener items con brandName ${brandName}`);
@@ -178,7 +280,25 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items recibidos:", result.result.length);
+                // Revisar si los items tienen la información de usuario
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        ownerId: sampleItem.ownerId,
+                        owner: sampleItem.owner,
+                        assignedToId: sampleItem.assignedToId,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getItemsByItemTypeId:', error);
             throw new Error(`Error al obtener items con itemTypeId ${itemTypeId}`);
@@ -204,7 +324,25 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items recibidos:", result.result.length);
+                // Revisar si los items tienen la información de usuario
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        ownerId: sampleItem.ownerId,
+                        owner: sampleItem.owner,
+                        assignedToId: sampleItem.assignedToId,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getItemsByItemTypeName:', error);
             throw new Error(`Error al obtener items con itemTypeName ${itemTypeName}`);
@@ -230,7 +368,20 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos del item recibido:", {
+                    id: result.result.id,
+                    name: result.result.name,
+                    ownerId: result.result.ownerId,
+                    owner: result.result.owner,
+                    assignedToId: result.result.assignedToId,
+                    assignedTo: result.result.assignedTo
+                });
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getItemBySerialNumber:', error);
             throw new Error(`Error al obtener item con serialNumber ${serialNumber}`);
@@ -256,7 +407,20 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos del item recibido:", {
+                    id: result.result.id,
+                    name: result.result.name,
+                    ownerId: result.result.ownerId,
+                    owner: result.result.owner,
+                    assignedToId: result.result.assignedToId,
+                    assignedTo: result.result.assignedTo
+                });
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getItemByCode:', error);
             throw new Error(`Error al obtener item con code ${code}`);
@@ -282,7 +446,25 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items recibidos:", result.result.length);
+                // Revisar si los items tienen la información de usuario
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        ownerId: sampleItem.ownerId,
+                        owner: sampleItem.owner,
+                        assignedToId: sampleItem.assignedToId,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getItemsByAssignedToId:', error);
             throw new Error(`Error al obtener items con assignedToId ${assignedToId}`);
@@ -308,7 +490,25 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items recibidos:", result.result.length);
+                // Revisar si los items tienen la información de usuario
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        ownerId: sampleItem.ownerId,
+                        owner: sampleItem.owner,
+                        assignedToId: sampleItem.assignedToId,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getItemsByAssignedToFullName:', error);
             throw new Error(`Error al obtener items con assignedToFullName ${assignedToFullName}`);
@@ -334,7 +534,20 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos del item recibido:", {
+                    id: result.result.id,
+                    name: result.result.name,
+                    ownerId: result.result.ownerId,
+                    owner: result.result.owner,
+                    assignedToId: result.result.assignedToId,
+                    assignedTo: result.result.assignedTo
+                });
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getItemByLocation:', error);
             throw new Error(`Error al obtener item con location ${location}`);
@@ -366,7 +579,20 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos del item creado:", {
+                    id: result.result.id,
+                    name: result.result.name,
+                    ownerId: result.result.ownerId,
+                    owner: result.result.owner,
+                    assignedToId: result.result.assignedToId,
+                    assignedTo: result.result.assignedTo
+                });
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en createItem:', error);
             throw new Error('Error al crear el item');
@@ -397,7 +623,20 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos del item actualizado:", {
+                    id: result.result.id,
+                    name: result.result.name,
+                    ownerId: result.result.ownerId,
+                    owner: result.result.owner,
+                    assignedToId: result.result.assignedToId,
+                    assignedTo: result.result.assignedTo
+                });
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en updateItem:', error);
             throw new Error('Error al actualizar el item');
@@ -412,7 +651,7 @@ export const itemService = {
         console.log(`Llamando a changeItemStatus(${id})`);
         
         try {
-                const response = await fetch(`${API_URL}/items/change-status/${id}`, {
+            const response = await fetch(`${API_URL}/items/change-status/${id}`, {
                 method: 'PUT',
                 headers: getAuthHeader(),
                 mode: 'cors'
@@ -423,7 +662,20 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos del item con estado cambiado:", {
+                    id: result.result.id,
+                    name: result.result.name,
+                    ownerId: result.result.ownerId,
+                    owner: result.result.owner,
+                    assignedToId: result.result.assignedToId,
+                    assignedTo: result.result.assignedTo
+                });
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en changeItemStatus:', error);
             throw new Error(`Error al cambiar el estado del item con ID ${id}`);
@@ -448,7 +700,25 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items activos recibidos:", result.result.length);
+                // Revisar si los items tienen la información de usuario
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item activo recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        ownerId: sampleItem.ownerId,
+                        owner: sampleItem.owner,
+                        assignedToId: sampleItem.assignedToId,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getActiveItems:', error);
             throw new Error('Error al obtener la lista de items activos');
@@ -473,7 +743,25 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items inactivos recibidos:", result.result.length);
+                // Revisar si los items tienen la información de usuario
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item inactivo recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        ownerId: sampleItem.ownerId,
+                        owner: sampleItem.owner,
+                        assignedToId: sampleItem.assignedToId,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getInactiveItems:', error);
             throw new Error('Error al obtener la lista de items inactivos');
@@ -499,7 +787,20 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos del item desasignado:", {
+                    id: result.result.id,
+                    name: result.result.name,
+                    ownerId: result.result.ownerId,
+                    owner: result.result.owner,
+                    assignedToId: result.result.assignedToId,
+                    assignedTo: result.result.assignedTo
+                });
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en unassignItem:', error);
             throw new Error(`Error al desasignar el item con ID ${id}`);
@@ -524,7 +825,25 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos de items no asignados recibidos:", result.result.length);
+                // Revisar si los items tienen la información de usuario
+                const sampleItem = result.result[0];
+                if (sampleItem) {
+                    console.log("Ejemplo de item no asignado recibido:", {
+                        id: sampleItem.id,
+                        name: sampleItem.name,
+                        ownerId: sampleItem.ownerId,
+                        owner: sampleItem.owner,
+                        assignedToId: sampleItem.assignedToId,
+                        assignedTo: sampleItem.assignedTo
+                    });
+                }
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en getUnassignedItems:', error);
             throw new Error('Error al obtener los items no asignados');
@@ -556,7 +875,20 @@ export const itemService = {
                 statusText: response.statusText
             });
             
-            return handleResponse(response);
+            const result = await handleResponse(response);
+            
+            if (result && result.result) {
+                console.log("Datos del item asignado:", {
+                    id: result.result.id,
+                    name: result.result.name,
+                    ownerId: result.result.ownerId,
+                    owner: result.result.owner,
+                    assignedToId: result.result.assignedToId,
+                    assignedTo: result.result.assignedTo
+                });
+            }
+            
+            return result;
         } catch (error) {
             console.error('Error en assignItem:', error);
             throw new Error(`Error al asignar el item con ID ${itemId} al usuario con ID ${userId}`);

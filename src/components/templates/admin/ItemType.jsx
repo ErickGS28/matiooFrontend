@@ -16,7 +16,7 @@ import {
   getActiveItemTypes,
   getInactiveItemTypes,
   createItemType,
-  changeItemTypeStatus
+  changeItemTypeStatus,
 } from "../../../services/item_type/itemTypeService";
 import { toast, Toaster } from "react-hot-toast";
 
@@ -64,7 +64,9 @@ export default function ItemType() {
         setError(null);
       } catch (err) {
         console.error("Error fetching item types:", err);
-        setError("Error al cargar los tipos de bien. Por favor, intente de nuevo.");
+        setError(
+          "Error al cargar los tipos de bien. Por favor, intente de nuevo."
+        );
         setItemTypes([]);
         setFilteredTypes([]);
       } finally {
@@ -87,8 +89,9 @@ export default function ItemType() {
       return;
     }
 
-    const filtered = itemTypes.filter(type =>
-      type.name && type.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = itemTypes.filter(
+      (type) =>
+        type.name && type.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     setFilteredTypes(filtered);
@@ -100,10 +103,10 @@ export default function ItemType() {
       await changeItemTypeStatus(id);
 
       // Update the local state
-      setItemTypes(prev => {
+      setItemTypes((prev) => {
         if (!Array.isArray(prev)) return [];
 
-        return prev.map(type => {
+        return prev.map((type) => {
           if (type.id === id) {
             return { ...type, status: newStatus };
           }
@@ -111,10 +114,10 @@ export default function ItemType() {
         });
       });
 
-      setFilteredTypes(prev => {
+      setFilteredTypes((prev) => {
         if (!Array.isArray(prev)) return [];
 
-        return prev.map(type => {
+        return prev.map((type) => {
           if (type.id === id) {
             return { ...type, status: newStatus };
           }
@@ -122,7 +125,9 @@ export default function ItemType() {
         });
       });
 
-      toast.success(`Tipo de bien ${newStatus ? 'activado' : 'desactivado'} correctamente`);
+      toast.success(
+        `Tipo de bien ${newStatus ? "activado" : "desactivado"} correctamente`
+      );
     } catch (error) {
       console.error("Error changing item type status:", error);
       toast.error("Error al cambiar el estado del tipo de bien");
@@ -132,10 +137,10 @@ export default function ItemType() {
   // Handle save (after edit)
   const handleSave = (updatedType) => {
     // Update the local state
-    setItemTypes(prev => {
+    setItemTypes((prev) => {
       if (!Array.isArray(prev)) return [];
 
-      return prev.map(type => {
+      return prev.map((type) => {
         if (type.id === updatedType.id) {
           return { ...type, name: updatedType.name };
         }
@@ -143,10 +148,10 @@ export default function ItemType() {
       });
     });
 
-    setFilteredTypes(prev => {
+    setFilteredTypes((prev) => {
       if (!Array.isArray(prev)) return [];
 
-      return prev.map(type => {
+      return prev.map((type) => {
         if (type.id === updatedType.id) {
           return { ...type, name: updatedType.name };
         }
@@ -169,18 +174,16 @@ export default function ItemType() {
       console.log("New item type created:", newType);
 
       // Extract the new type from the result property if it exists
-      const newTypeData = newType && newType.result
-        ? newType.result
-        : newType;
+      const newTypeData = newType && newType.result ? newType.result : newType;
 
       // If we're viewing active types (default for new types), add it to the list
       if (statusFilter === "active" || statusFilter === "all") {
-        setItemTypes(prev => {
+        setItemTypes((prev) => {
           if (!Array.isArray(prev)) return [newTypeData];
           return [...prev, newTypeData];
         });
 
-        setFilteredTypes(prev => {
+        setFilteredTypes((prev) => {
           if (!Array.isArray(prev)) return [newTypeData];
           return [...prev, newTypeData];
         });
@@ -237,7 +240,10 @@ export default function ItemType() {
                 </div>
               </div>
               <div className="flex justify-center sm:justify-end flex-grow w-full md:w-auto">
-                <Popover open={isAddPopoverOpen} onOpenChange={setIsAddPopoverOpen}>
+                <Popover
+                  open={isAddPopoverOpen}
+                  onOpenChange={setIsAddPopoverOpen}
+                >
                   <PopoverTrigger asChild>
                     <div>
                       <button
@@ -272,6 +278,7 @@ export default function ItemType() {
                           value={newTypeName}
                           onChange={(e) => setNewTypeName(e.target.value)}
                           className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                          maxLength={20}
                         />
                       </div>
 
@@ -303,56 +310,72 @@ export default function ItemType() {
             )}
 
             {/* Empty State */}
-            {!loading && !error && (!filteredTypes || filteredTypes.length === 0) && (
-              <div className="flex flex-col justify-center items-center mt-10">
-                <p className="text-lg">No hay tipos de bien disponibles.</p>
-                <p className="text-md text-gray-500">
-                  {searchQuery ? "Intente con otra búsqueda." : "Agregue uno nuevo con el botón +"}
-                </p>
-              </div>
-            )}
+            {!loading &&
+              !error &&
+              (!filteredTypes || filteredTypes.length === 0) && (
+                <div className="flex flex-col justify-center items-center mt-10">
+                  <p className="text-lg">No hay tipos de bien disponibles.</p>
+                  <p className="text-md text-gray-500">
+                    {searchQuery
+                      ? "Intente con otra búsqueda."
+                      : "Agregue uno nuevo con el botón +"}
+                  </p>
+                </div>
+              )}
 
             {/* Cards Container */}
-            {!loading && !error && filteredTypes && filteredTypes.length > 0 && (
-              <div className="bg-slate-200 p-4 rounded-lg mt-[3em] min-h-[calc(100vh-250px)]">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  {filteredTypes.map((type, index) => (
-                    <div
-                      key={type.id || index}
-                      className="bg-card-bg rounded-lg shadow-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-300 transform transition-transform duration-300"
-                    >
-                      <div>
-                        <div className="px-4">
-                          <img
-                            src={type.img || "/defaultItemType.png"}
-                            alt={type.name}
-                            className="mx-auto mb-4 w-[10em]"
-                          />
-                          <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
-                            {type.name}
-                          </h3>
-                        </div>
-
-                        <div className="flex justify-between items-center mt-4 bg-indigo-300 p-3 rounded-b-lg border-t-1 border-indigo-400">
-                          <EditItemTypeDialog itemType={type} onSave={handleSave} />
-
-                          <div className="flex items-center space-x-2">
-                            <Label className={`text-sm ${type.status ? '' : 'text-gray-500'}`}>
-                              {type.status ? 'Activo' : 'Inactivo'}
-                            </Label>
-                            <Switch
-                              className="cursor-pointer"
-                              checked={type.status}
-                              onCheckedChange={(checked) => handleStatusChange(type.id, checked)}
+            {!loading &&
+              !error &&
+              filteredTypes &&
+              filteredTypes.length > 0 && (
+                <div className="bg-slate-200 p-4 rounded-lg mt-[3em] min-h-[calc(100vh-250px)]">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {filteredTypes.map((type, index) => (
+                      <div
+                        key={type.id || index}
+                        className="bg-card-bg rounded-lg shadow-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-300 transform transition-transform duration-300"
+                      >
+                        <div>
+                          <div className="px-4">
+                            <img
+                              src={type.img || "/defaultItemType.png"}
+                              alt={type.name}
+                              className="mx-auto mb-4 w-[10em]"
                             />
+                            <h3 className="text-[1.8em] font-semibold text-darkpurple-title truncate">
+                              {type.name}
+                            </h3>
+                          </div>
+
+                          <div className="flex justify-between items-center mt-4 bg-indigo-300 p-3 rounded-b-lg border-t-1 border-indigo-400">
+                            <EditItemTypeDialog
+                              itemType={type}
+                              onSave={handleSave}
+                            />
+
+                            <div className="flex items-center space-x-2">
+                              <Label
+                                className={`text-sm ${
+                                  type.status ? "" : "text-gray-500"
+                                }`}
+                              >
+                                {type.status ? "Activo" : "Inactivo"}
+                              </Label>
+                              <Switch
+                                className="cursor-pointer"
+                                checked={type.status}
+                                onCheckedChange={(checked) =>
+                                  handleStatusChange(type.id, checked)
+                                }
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </main>
       </div>
@@ -360,7 +383,7 @@ export default function ItemType() {
         position="bottom-right"
         toastOptions={{
           style: {
-            background: "rgba(209, 255, 255, 1)" // Azul claro
+            background: "rgba(209, 255, 255, 1)", // Azul claro
           },
         }}
       />

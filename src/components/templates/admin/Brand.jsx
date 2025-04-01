@@ -16,7 +16,7 @@ import {
   getActiveBrands,
   getInactiveBrands,
   createBrand,
-  changeBrandStatus
+  changeBrandStatus,
 } from "../../../services/brand/brandService";
 import { toast, Toaster } from "react-hot-toast";
 
@@ -87,8 +87,10 @@ export default function Brand() {
       return;
     }
 
-    const filtered = brands.filter(brand =>
-      brand.name && brand.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = brands.filter(
+      (brand) =>
+        brand.name &&
+        brand.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     setFilteredBrands(filtered);
@@ -100,10 +102,10 @@ export default function Brand() {
       await changeBrandStatus(id);
 
       // Update the local state
-      setBrands(prev => {
+      setBrands((prev) => {
         if (!Array.isArray(prev)) return [];
 
-        return prev.map(brand => {
+        return prev.map((brand) => {
           if (brand.id === id) {
             return { ...brand, status: newStatus };
           }
@@ -111,10 +113,10 @@ export default function Brand() {
         });
       });
 
-      setFilteredBrands(prev => {
+      setFilteredBrands((prev) => {
         if (!Array.isArray(prev)) return [];
 
-        return prev.map(brand => {
+        return prev.map((brand) => {
           if (brand.id === id) {
             return { ...brand, status: newStatus };
           }
@@ -122,7 +124,9 @@ export default function Brand() {
         });
       });
 
-      toast.success(`Marca ${newStatus ? 'activada' : 'desactivada'} correctamente`);
+      toast.success(
+        `Marca ${newStatus ? "activada" : "desactivada"} correctamente`
+      );
     } catch (error) {
       console.error("Error changing brand status:", error);
       toast.error("Error al cambiar el estado de la marca");
@@ -132,10 +136,10 @@ export default function Brand() {
   // Handle save (after edit)
   const handleSave = (updatedBrand) => {
     // Update the local state
-    setBrands(prev => {
+    setBrands((prev) => {
       if (!Array.isArray(prev)) return [];
 
-      return prev.map(brand => {
+      return prev.map((brand) => {
         if (brand.id === updatedBrand.id) {
           return { ...brand, name: updatedBrand.name };
         }
@@ -143,10 +147,10 @@ export default function Brand() {
       });
     });
 
-    setFilteredBrands(prev => {
+    setFilteredBrands((prev) => {
       if (!Array.isArray(prev)) return [];
 
-      return prev.map(brand => {
+      return prev.map((brand) => {
         if (brand.id === updatedBrand.id) {
           return { ...brand, name: updatedBrand.name };
         }
@@ -169,18 +173,17 @@ export default function Brand() {
       console.log("New brand created:", newBrand);
 
       // Extract the new brand from the result property if it exists
-      const newBrandData = newBrand && newBrand.result
-        ? newBrand.result
-        : newBrand;
+      const newBrandData =
+        newBrand && newBrand.result ? newBrand.result : newBrand;
 
       // If we're viewing active brands (default for new brands), add it to the list
       if (statusFilter === "active" || statusFilter === "all") {
-        setBrands(prev => {
+        setBrands((prev) => {
           if (!Array.isArray(prev)) return [newBrandData];
           return [...prev, newBrandData];
         });
 
-        setFilteredBrands(prev => {
+        setFilteredBrands((prev) => {
           if (!Array.isArray(prev)) return [newBrandData];
           return [...prev, newBrandData];
         });
@@ -237,7 +240,10 @@ export default function Brand() {
                 </div>
               </div>
               <div className="flex justify-center sm:justify-end flex-grow w-full md:w-auto">
-                <Popover open={isAddPopoverOpen} onOpenChange={setIsAddPopoverOpen}>
+                <Popover
+                  open={isAddPopoverOpen}
+                  onOpenChange={setIsAddPopoverOpen}
+                >
                   <PopoverTrigger asChild>
                     <div>
                       <button
@@ -272,6 +278,7 @@ export default function Brand() {
                           value={newBrandName}
                           onChange={(e) => setNewBrandName(e.target.value)}
                           className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                          maxLength={20}
                         />
                       </div>
 
@@ -303,56 +310,67 @@ export default function Brand() {
             )}
 
             {/* Empty State */}
-            {!loading && !error && (!filteredBrands || filteredBrands.length === 0) && (
-              <div className="flex flex-col justify-center items-center mt-10">
-                <p className="text-lg">No hay marcas disponibles.</p>
-                <p className="text-md text-gray-500">
-                  {searchQuery ? "Intente con otra búsqueda." : "Agregue una nueva con el botón +"}
-                </p>
-              </div>
-            )}
+            {!loading &&
+              !error &&
+              (!filteredBrands || filteredBrands.length === 0) && (
+                <div className="flex flex-col justify-center items-center mt-10">
+                  <p className="text-lg">No hay marcas disponibles.</p>
+                  <p className="text-md text-gray-500">
+                    {searchQuery
+                      ? "Intente con otra búsqueda."
+                      : "Agregue una nueva con el botón +"}
+                  </p>
+                </div>
+              )}
 
             {/* Cards Container */}
-            {!loading && !error && filteredBrands && filteredBrands.length > 0 && (
-              <div className="bg-slate-200 p-4 rounded-lg mt-[3em] min-h-[calc(90vh-250px)]">
+            {!loading &&
+              !error &&
+              filteredBrands &&
+              filteredBrands.length > 0 && (
+                <div className="bg-slate-200 p-4 rounded-lg mt-[3em] min-h-[calc(90vh-250px)]">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {filteredBrands.map((brand, index) => (
+                      <div
+                        key={brand.id || index}
+                        className="bg-card-bg rounded-lg shadow-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-300 transform transition-transform duration-300"
+                      >
+                        <div>
+                          <div className="p-4">
+                            <h3 className="text-[1.8em] font-semibold text-darkpurple-title truncate">
+                              {brand.name}
+                            </h3>
+                          </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  {filteredBrands.map((brand, index) => (
-                    <div
-                      key={brand.id || index}
-                      className="bg-card-bg rounded-lg shadow-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-300 transform transition-transform duration-300"
-                    >
-                      <div>
-                        <div className="p-4">
-                          <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
-                            {brand.name}
-                          </h3>
-                        </div>
-
-                        <div className="flex justify-between items-center mt-4 bg-indigo-300 p-3 rounded-b-lg border-t-1 border-indigo-400">
-                          <EditBrandDialog
-                            brand={brand}
-                            onSave={handleSave}
-                          />
-
-                          <div className="flex items-center space-x-2 mt-4">
-                            <Label className={`text-sm ${brand.status ? '' : 'text-gray-500'}`}>
-                              {brand.status ? 'Activo' : 'Inactivo'}
-                            </Label>
-                            <Switch
-                              className="cursor-pointer"
-                              checked={brand.status}
-                              onCheckedChange={(checked) => handleStatusChange(brand.id, checked)}
+                          <div className="flex justify-between items-center mt-4 bg-indigo-300 p-3 rounded-b-lg border-t-1 border-indigo-400">
+                            <EditBrandDialog
+                              brand={brand}
+                              onSave={handleSave}
                             />
+
+                            <div className="flex items-center space-x-2 mt-4">
+                              <Label
+                                className={`text-sm ${
+                                  brand.status ? "" : "text-gray-500"
+                                }`}
+                              >
+                                {brand.status ? "Activo" : "Inactivo"}
+                              </Label>
+                              <Switch
+                                className="cursor-pointer"
+                                checked={brand.status}
+                                onCheckedChange={(checked) =>
+                                  handleStatusChange(brand.id, checked)
+                                }
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-
+              )}
           </div>
         </main>
       </div>
@@ -360,7 +378,7 @@ export default function Brand() {
         position="bottom-right"
         toastOptions={{
           style: {
-            background: "rgba(209, 255, 255, 1)" // Azul claro
+            background: "rgba(209, 255, 255, 1)", // Azul claro
           },
         }}
       />

@@ -346,15 +346,19 @@ export default function responsibleHome() {
               <h1 className="text-darkpurple-title text-[2.5em] font-semibold">
                 Bienes que ocupas
               </h1>
+
+            
               <img
                 src="/itemIntern.png"
                 alt="becario"
                 className="ml-auto w-[7em] h-[7em] object-contain"
               />
+
+             
             </div>
 
             <div className="my-3 mt-5 w-full flex items-center flex-wrap gap-4">
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
                 <input
                   type="search"
                   value={navegar}
@@ -362,6 +366,9 @@ export default function responsibleHome() {
                   className="w-[25em] rounded-full px-8 border-2 shadow-lg shadow-purple-200 py-2 bg-gray-100 font-medium"
                   placeholder="Buscar bien..."
                 />
+                  <button className="ml-2  text-white  bg-indigo-500 rounded-full px-3 py-2 hover:bg-indigo-700 transition duration-300 ease-in-out">
+                 Descargar PDF
+              </button> 
               </div>
             </div>
 

@@ -10,9 +10,7 @@ export default function Home() {
       </aside>
       <main className="flex-1 bg-white relative">
         {/* SplashCursor solo en el contenido central */}
-        <div className="absolute top-0 left-0 w-full h-full z-50 pointer-events-none">
-          <SplashCursor />
-        </div>
+       
 
         <div className="flex flex-col items-center justify-center text-center p-6 min-h-screen">
           <img src="/matioo.png" alt="" className="w-[32em]" />

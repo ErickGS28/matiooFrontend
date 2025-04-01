@@ -164,3 +164,75 @@ export const changeUserStatus = async (id) => {
         throw new Error('Error al cambiar el estado del usuario');
     }
 };
+
+
+// 🔐 Recuperar contraseña
+
+export const sendRecoveryCode = async (email) => {
+    try {
+      const response = await fetch(`${API_URL}/users/send-recovery-code/${email}`, {
+        method: 'POST',
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text(); // 👈 evitar error JSON si es texto
+        throw new Error(errorText || `Error ${response.status}`);
+      }
+  
+      const result = await response.json();
+      console.log("Respuesta del backend:", result);
+      return result;
+    } catch (error) {
+      console.error("Error en sendRecoveryCode:", error);
+      throw new Error('Error al enviar el código de recuperación');
+    }
+  };
+  
+
+export const verifyRecoveryCode = async (email, code) => {
+    try {
+        const response = await fetch(`${API_URL}/users/verify-recovery-code`, {
+            method: 'POST',
+            headers: {
+                ...getAuthHeader(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, code })
+        });
+        return handleResponse(response);
+    } catch (error) {
+        throw new Error('Error al verificar el código de recuperación');
+    }
+};
+
+export const resetPassword = async (email, newPassword) => {
+    try {
+        const response = await fetch(`${API_URL}/users/reset-password`, {
+            method: 'PUT',
+            headers: {
+                ...getAuthHeader(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, newPassword })
+        });
+        return handleResponse(response);
+    } catch (error) {
+        throw new Error('Error al resetear la contraseña');
+    }
+};
+
+export const changePassword = async (oldPassword, newPassword) => {
+    try {
+        const response = await fetch(`${API_URL}/users/change-password`, {
+            method: 'PUT',
+            headers: {
+                ...getAuthHeader(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ oldPassword, newPassword })
+        });
+        return handleResponse(response);
+    } catch (error) {
+        throw new Error('Error al cambiar la contraseña');
+    }
+};

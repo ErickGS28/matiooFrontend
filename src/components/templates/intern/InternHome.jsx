@@ -408,7 +408,7 @@ export default function InternHome() {
             )}
 
             {/* Cards Container */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mt-[3em] bg-amber-100">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mt-[3em] ">
               {filteredItems.map((item) => (
                 <div key={item.id} className="bg-card-bg rounded-lg shadow-md p-4 hover:scale-105 w-[auto]">
                   <div className="flex justify-center bg-white rounded-2xl">

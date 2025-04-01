@@ -156,6 +156,53 @@ export const updateItemModel = async (id, name) => {
 };
 
 /**
+ * Actualiza un modelo de ítem con imagen.
+ * @param {Object} dto - Objeto con los datos del modelo (id y name).
+ * @param {File} imageFile - Archivo de imagen (opcional).
+ */
+export const updateItemModelWithImage = async (dto, imageFile) => {
+  try {
+    const formData = new FormData();
+
+    // Creamos un Blob con type 'application/json'
+    const dtoBlob = new Blob([JSON.stringify(dto)], { type: 'application/json' });
+    formData.append('dto', dtoBlob, 'dto.json');
+
+    // Verificamos que la imagen tenga type. Si no, se lo asignamos.
+    if (imageFile) {
+      const fileType = imageFile.type || 'image/png';
+      const fileWithType = new File([imageFile], imageFile.name, { type: fileType });
+      formData.append('image', fileWithType);
+    }
+
+    // Eliminamos Content-Type de los headers de autenticación
+    const authHeaders = getAuthHeader();
+    delete authHeaders['Content-Type'];
+
+    const response = await fetch(`${API_URL}/item-models/update-with-image`, {
+      method: 'PUT',
+      headers: authHeaders,
+      mode: 'cors',
+      body: formData
+    });
+
+    return handleResponse(response);
+  } catch (error) {
+    console.error('Error en updateItemModelWithImage:', error);
+    throw new Error('Error al actualizar el modelo de ítem con imagen');
+  }
+};
+
+/**
+ * Obtiene la URL de la imagen de un modelo por su ID.
+ * @param {number} id - ID del modelo.
+ * @returns {string} URL de la imagen.
+ */
+export const getItemModelImageUrl = (id) => {
+  return `${API_URL}/item-models/image/${id}`;
+};
+
+/**
  * Cambia el estado de un modelo de ítem.
  * @param {number} id - ID del modelo.
  */

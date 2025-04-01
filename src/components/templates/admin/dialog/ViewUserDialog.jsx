@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Assign } from "./Assing";
+import { AssignItemsDialog } from "./AssignItemsDialog";
 
 export function ViewUserDialog({ user }) {
   // Función para traducir los roles a un formato más amigable
@@ -86,8 +87,15 @@ export function ViewUserDialog({ user }) {
                 </div>
               </div>
             </div>
-            <div className="flex justify-end mt-8">
-              <Assign />
+            <div className="flex justify-end mt-8 space-x-2">
+              <Assign 
+                userId={user.id} 
+                userName={`${user.name} ${user.lastname}`} 
+              />
+              <AssignItemsDialog 
+                userId={user.id} 
+                userName={`${user.name} ${user.lastname}`}
+              />
             </div>
           </div>
         </div>

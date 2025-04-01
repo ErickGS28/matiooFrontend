@@ -87,6 +87,41 @@ export const createModel = async (name) => {
     }
 };
 
+// Function to create a new model with image
+export const createModelWithImage = async (dto, imageFile) => {
+    try {
+        console.log(`Creating new model with image...`);
+
+        const formData = new FormData();
+
+        // Create a Blob with type 'application/json'
+        const dtoBlob = new Blob([JSON.stringify(dto)], { type: 'application/json' });
+        formData.append('dto', dtoBlob, 'dto.json');
+
+        // Add the image file if provided
+        if (imageFile) {
+            const fileType = imageFile.type || 'image/png';
+            const fileWithType = new File([imageFile], imageFile.name, { type: fileType });
+            formData.append('image', fileWithType);
+        }
+
+        // Remove Content-Type from auth headers
+        const authHeaders = getAuthHeader();
+        delete authHeaders['Content-Type'];
+
+        const response = await fetch(`${API_URL}/item-models/save-with-image`, {
+            method: 'POST',
+            headers: authHeaders,
+            body: formData
+        });
+
+        return handleResponse(response);
+    } catch (error) {
+        console.error('Error in createModelWithImage:', error);
+        throw error;
+    }
+};
+
 // Function to update a model
 export const updateModel = async (id, name) => {
     try {
@@ -105,6 +140,71 @@ export const updateModel = async (id, name) => {
     } catch (error) {
         console.error('Error in updateModel:', error);
         throw error;
+    }
+};
+
+// Function to update a model with image
+export const updateModelWithImage = async (dto, imageFile) => {
+    try {
+        console.log(`Updating model with ID ${dto.id} with image...`);
+
+        const formData = new FormData();
+
+        // Create a Blob with type 'application/json'
+        const dtoBlob = new Blob([JSON.stringify(dto)], { type: 'application/json' });
+        formData.append('dto', dtoBlob, 'dto.json');
+
+        // Add the image file if provided
+        if (imageFile) {
+            const fileType = imageFile.type || 'image/png';
+            const fileWithType = new File([imageFile], imageFile.name, { type: fileType });
+            formData.append('image', fileWithType);
+        }
+
+        // Remove Content-Type from auth headers
+        const authHeaders = getAuthHeader();
+        delete authHeaders['Content-Type'];
+
+        const response = await fetch(`${API_URL}/item-models/update-with-image`, {
+            method: 'PUT',
+            headers: authHeaders,
+            body: formData
+        });
+
+        return handleResponse(response);
+    } catch (error) {
+        console.error('Error in updateModelWithImage:', error);
+        throw error;
+    }
+};
+
+// Function to get model image URL
+export const getModelImageUrl = (id) => {
+    const token = localStorage.getItem('token');
+    return `${API_URL}/item-models/image/${id}?token=${token}`;
+};
+
+// Function to fetch model image with authentication
+export const fetchModelImage = async (id) => {
+    try {
+        const response = await fetch(`${API_URL}/item-models/image/${id}`, {
+            method: 'GET',
+            headers: getAuthHeader(),
+            mode: 'cors'
+        });
+        
+        // Si la respuesta no es exitosa, simplemente devolvemos la imagen por defecto
+        // en lugar de lanzar un error
+        if (!response.ok) {
+            console.log(`No se encontró imagen para el modelo ${id}, usando imagen por defecto`);
+            return "/defaultModel.png";
+        }
+        
+        const blob = await response.blob();
+        return URL.createObjectURL(blob);
+    } catch (error) {
+        console.error("Error fetching model image:", error);
+        return "/defaultModel.png"; // Return default image path on error
     }
 };
 

@@ -11,24 +11,31 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import SelectStatus from "../../../components/ui/SelectStatus";
+import { API_URL } from "../../../constants";
 import {
   getAllModels,
   getActiveModels,
   getInactiveModels,
   createModel,
-  changeModelStatus
+  createModelWithImage,
+  changeModelStatus,
+  getModelImageUrl,
+  fetchModelImage
 } from "../../../services/model/modelService";
 import { toast, Toaster } from "react-hot-toast";
 
-export default function Model() {
+const Model = () => {
   const [models, setModels] = useState([]);
   const [filteredModels, setFilteredModels] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [newModelName, setNewModelName] = useState("");
+  const [newModelImage, setNewModelImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAddPopoverOpen, setIsAddPopoverOpen] = useState(false);
+  const [modelImages, setModelImages] = useState({});
 
   // Fetch models based on status filter
   useEffect(() => {
@@ -53,8 +60,36 @@ export default function Model() {
         const data = response && response.result ? response.result : response;
 
         if (Array.isArray(data)) {
+          console.log("Models data:", data); // Debug to see the model structure
           setModels(data);
           setFilteredModels(data);
+          
+          // Fetch images for all models
+          const imagePromises = data.map(async (model) => {
+            if (model.id) {
+              try {
+                // Solo intentamos cargar la imagen si el modelo tiene la propiedad photo
+                if (model.photo) {
+                  const imageUrl = await fetchModelImage(model.id);
+                  return { id: model.id, imageUrl };
+                } else {
+                  return { id: model.id, imageUrl: "/defaultModel.png" };
+                }
+              } catch (error) {
+                console.error(`Error fetching image for model ${model.id}:`, error);
+                return { id: model.id, imageUrl: "/defaultModel.png" };
+              }
+            }
+            return { id: model.id, imageUrl: "/defaultModel.png" };
+          });
+          
+          const images = await Promise.all(imagePromises);
+          const imagesMap = {};
+          images.forEach(item => {
+            imagesMap[item.id] = item.imageUrl;
+          });
+          
+          setModelImages(imagesMap);
         } else {
           console.error("Expected array but got:", data);
           setModels([]);
@@ -130,14 +165,14 @@ export default function Model() {
   };
 
   // Handle save (after edit)
-  const handleSave = (updatedModel) => {
+  const handleSave = async (updatedModel) => {
     // Update the local state
     setModels(prev => {
       if (!Array.isArray(prev)) return [];
 
       return prev.map(model => {
         if (model.id === updatedModel.id) {
-          return { ...model, name: updatedModel.name };
+          return { ...updatedModel };
         }
         return model;
       });
@@ -148,13 +183,49 @@ export default function Model() {
 
       return prev.map(model => {
         if (model.id === updatedModel.id) {
-          return { ...model, name: updatedModel.name };
+          return { ...updatedModel };
         }
         return model;
       });
     });
+    
+    // Update the image for the edited model
+    try {
+      const imageUrl = await fetchModelImage(updatedModel.id);
+      setModelImages(prev => ({
+        ...prev,
+        [updatedModel.id]: imageUrl
+      }));
+    } catch (error) {
+      console.error(`Error fetching updated image for model ${updatedModel.id}:`, error);
+    }
 
     toast.success("Modelo actualizado correctamente");
+  };
+
+  // Handle file change for new model image
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validar tamaño de archivo (1MB = 1048576 bytes)
+      const maxSize = 1048576; // 1MB
+      if (file.size > maxSize) {
+        toast.error("La imagen es demasiado grande. El tamaño máximo permitido es 1MB.");
+        e.target.value = ''; // Limpiar el input
+        setNewModelImage(null);
+        setImagePreview(null);
+        return;
+      }
+
+      setNewModelImage(file);
+      
+      // Create a preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // Handle add new model
@@ -165,7 +236,16 @@ export default function Model() {
     }
 
     try {
-      const newModel = await createModel(newModelName);
+      let newModel;
+      
+      if (newModelImage) {
+        // Create model with image
+        newModel = await createModelWithImage({ name: newModelName }, newModelImage);
+      } else {
+        // Create model without image
+        newModel = await createModel(newModelName);
+      }
+      
       console.log("New model created:", newModel);
 
       // Extract the new model from the result property if it exists
@@ -184,9 +264,26 @@ export default function Model() {
           if (!Array.isArray(prev)) return [newModelData];
           return [...prev, newModelData];
         });
+        
+        // Fetch the image for the new model
+        if (newModelData.id) {
+          try {
+            const imageUrl = await fetchModelImage(newModelData.id);
+            setModelImages(prev => ({
+              ...prev,
+              [newModelData.id]: imageUrl
+            }));
+          } catch (error) {
+            console.error(`Error fetching image for new model ${newModelData.id}:`, error);
+          }
+        }
       }
 
+      // Reset form
       setNewModelName("");
+      setNewModelImage(null);
+      setImagePreview(null);
+      
       toast.success("Modelo creado correctamente");
 
       // Close the popover
@@ -275,6 +372,31 @@ export default function Model() {
                         />
                       </div>
 
+                      <div className="mt-4 grid w-full max-w-sm items-center gap-1.5">
+                        <Label
+                          htmlFor="modelImage"
+                          className="text-sm font-medium text-gray-700"
+                        >
+                          Imagen (opcional)
+                        </Label>
+                        <Input
+                          type="file"
+                          id="modelImage"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                        />
+                        {imagePreview && (
+                          <div className="mt-2">
+                            <img 
+                              src={imagePreview} 
+                              alt="Vista previa" 
+                              className="w-full max-h-40 object-contain rounded-md"
+                            />
+                          </div>
+                        )}
+                      </div>
+
                       <div className="mt-6 flex justify-end">
                         <Button
                           onClick={handleAddModel}
@@ -324,9 +446,13 @@ export default function Model() {
                       <div>
                         <div className="p-4">
                           <img
-                            src={model.img || "/defaultModel.png"}
+                            src={modelImages[model.id] || "/defaultModel.png"}
                             alt={model.name}
-                            className="mx-auto mb-4 w-[10em]"
+                            className="mx-auto mb-4 w-[10em] h-[10em] object-contain"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = "/defaultModel.png";
+                            }}
                           />
                           <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
                             {model.name}
@@ -367,4 +493,6 @@ export default function Model() {
       />
     </>
   );
-}
+};
+
+export default Model;

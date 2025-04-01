@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { updateModel } from "../../../../services/model/modelService"
+import { updateModel, updateModelWithImage, getModelImageUrl, fetchModelImage } from "../../../../services/model/modelService"
+import { toast } from "react-hot-toast"
 
 export default function EditModelDialog({ model, onSave }) {
     // Initialize formData with default values
@@ -16,8 +17,12 @@ export default function EditModelDialog({ model, onSave }) {
         id: model?.id || 0,
         name: model?.name || '',
         status: model?.status || false,
+        photo: model?.photo || null
     });
     
+    const [newImage, setNewImage] = React.useState(null);
+    const [imagePreview, setImagePreview] = React.useState(null);
+    const [modelImage, setModelImage] = React.useState(null);
     const [isOpen, setIsOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
 
@@ -29,17 +34,67 @@ export default function EditModelDialog({ model, onSave }) {
             id: model?.id || 0,
             name: model?.name || '',
             status: model?.status || false,
+            photo: model?.photo || null
         };
         
         // Compare current formData with new data from props
         if (JSON.stringify(newModelData) !== JSON.stringify({
             id: formData.id,
             name: formData.name,
-            status: formData.status
+            status: formData.status,
+            photo: formData.photo
         })) {
             setFormData(newModelData);
+            setImagePreview(null); // Reset image preview when model changes
+            setNewImage(null);
         }
-    }, [model?.id, model?.name, model?.status]);
+    }, [model?.id, model?.name, model?.status, model?.photo]);
+
+    // Fetch model image when dialog opens
+    React.useEffect(() => {
+        const getModelImage = async () => {
+            if (isOpen && formData.id) {
+                try {
+                    // Solo intentamos cargar la imagen si el modelo tiene la propiedad photo
+                    if (formData.photo) {
+                        const imageUrl = await fetchModelImage(formData.id);
+                        setModelImage(imageUrl);
+                    } else {
+                        setModelImage("/defaultModel.png");
+                    }
+                } catch (error) {
+                    console.error("Error fetching model image:", error);
+                    setModelImage("/defaultModel.png");
+                }
+            }
+        };
+        
+        getModelImage();
+    }, [isOpen, formData.id, formData.photo]);
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validar tamaño de archivo (1MB = 1048576 bytes)
+            const maxSize = 1048576; // 1MB
+            if (file.size > maxSize) {
+                toast.error("La imagen es demasiado grande. El tamaño máximo permitido es 1MB.");
+                e.target.value = ''; // Limpiar el input
+                setNewImage(null);
+                setImagePreview(null);
+                return;
+            }
+            
+            setNewImage(file);
+            
+            // Create a preview URL
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleSave = async () => {
       try {
@@ -49,15 +104,30 @@ export default function EditModelDialog({ model, onSave }) {
           return;
         }
         
-        await updateModel(formData.id, formData.name);
-        
-        if (onSave && typeof onSave === 'function') {
-          onSave(formData);
+        let response;
+        if (newImage) {
+          // Update with new image
+          response = await updateModelWithImage(
+            { id: formData.id, name: formData.name },
+            newImage
+          );
+        } else {
+          // Update without changing image
+          response = await updateModel(formData.id, formData.name);
         }
         
+        // Get the updated model from the response
+        const updatedModel = response && response.result ? response.result : response;
+        
+        if (onSave && typeof onSave === 'function') {
+          onSave(updatedModel);
+        }
+        
+        toast.success("Modelo actualizado correctamente");
         setIsOpen(false);
       } catch (error) {
         console.error("Error updating model:", error);
+        toast.error("Error al actualizar el modelo");
       } finally {
         setLoading(false);
       }
@@ -84,6 +154,32 @@ export default function EditModelDialog({ model, onSave }) {
                   className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
                 />
               </div>
+              
+              <div>
+                <Label className="text-darkpurple-title font-medium">Imagen actual</Label>
+                <div className="mt-3 flex justify-center">
+                  <img 
+                    src={imagePreview || modelImage || "/defaultModel.png"}
+                    alt={formData.name}
+                    className="w-[10em] h-[10em] object-contain rounded-md border-2 border-purple-200"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/defaultModel.png";
+                    }}
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <Label className="text-darkpurple-title font-medium">Cambiar imagen (opcional)</Label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                />
+              </div>
+              
               <div className="flex justify-end mt-[2em]">
                 <Button 
                   onClick={handleSave} 

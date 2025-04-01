@@ -175,7 +175,7 @@ export const sendRecoveryCode = async (email) => {
       });
   
       if (!response.ok) {
-        const errorText = await response.text(); // 👈 evitar error JSON si es texto
+        const errorText = await response.text(); // evitar error JSON si es texto
         throw new Error(errorText || `Error ${response.status}`);
       }
   
@@ -189,37 +189,58 @@ export const sendRecoveryCode = async (email) => {
   };
   
 
-export const verifyRecoveryCode = async (email, code) => {
+
+  export const verifyRecoveryCode = async (email, code) => {
     try {
         const response = await fetch(`${API_URL}/users/verify-recovery-code`, {
             method: 'POST',
             headers: {
-                ...getAuthHeader(),
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, code })
+            body: JSON.stringify({
+                email,
+                recoveryCode: code // nombre exacto
+            })
         });
-        return handleResponse(response);
+
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text || `Error ${response.status}`);
+        }
+
+        return await response.json();
     } catch (error) {
+        console.error("Error en verifyRecoveryCode:", error);
         throw new Error('Error al verificar el código de recuperación');
     }
 };
+
+
 
 export const resetPassword = async (email, newPassword) => {
     try {
         const response = await fetch(`${API_URL}/users/reset-password`, {
             method: 'PUT',
             headers: {
-                ...getAuthHeader(),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ email, newPassword })
         });
-        return handleResponse(response);
+
+        const text = await response.text(); // Para capturar errores no-JSON
+
+        if (!response.ok) {
+            throw new Error(text || `Error ${response.status}`);
+        }
+
+        // Intentar parsear si hay contenido
+        return text ? JSON.parse(text) : {};
     } catch (error) {
+        console.error("Error en resetPassword:", error);
         throw new Error('Error al resetear la contraseña');
     }
 };
+
 
 export const changePassword = async (oldPassword, newPassword) => {
     try {

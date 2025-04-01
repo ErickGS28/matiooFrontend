@@ -16,7 +16,7 @@ import {
   getActiveModels,
   getInactiveModels,
   createModel,
-  changeModelStatus
+  changeModelStatus,
 } from "../../../services/model/modelService";
 import { toast, Toaster } from "react-hot-toast";
 
@@ -87,8 +87,10 @@ export default function Model() {
       return;
     }
 
-    const filtered = models.filter(model =>
-      model.name && model.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const filtered = models.filter(
+      (model) =>
+        model.name &&
+        model.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     setFilteredModels(filtered);
@@ -100,10 +102,10 @@ export default function Model() {
       await changeModelStatus(id);
 
       // Update the local state
-      setModels(prev => {
+      setModels((prev) => {
         if (!Array.isArray(prev)) return [];
 
-        return prev.map(model => {
+        return prev.map((model) => {
           if (model.id === id) {
             return { ...model, status: newStatus };
           }
@@ -111,10 +113,10 @@ export default function Model() {
         });
       });
 
-      setFilteredModels(prev => {
+      setFilteredModels((prev) => {
         if (!Array.isArray(prev)) return [];
 
-        return prev.map(model => {
+        return prev.map((model) => {
           if (model.id === id) {
             return { ...model, status: newStatus };
           }
@@ -122,7 +124,9 @@ export default function Model() {
         });
       });
 
-      toast.success(`Modelo ${newStatus ? 'activado' : 'desactivado'} correctamente`);
+      toast.success(
+        `Modelo ${newStatus ? "activado" : "desactivado"} correctamente`
+      );
     } catch (error) {
       console.error("Error changing model status:", error);
       toast.error("Error al cambiar el estado del modelo");
@@ -132,10 +136,10 @@ export default function Model() {
   // Handle save (after edit)
   const handleSave = (updatedModel) => {
     // Update the local state
-    setModels(prev => {
+    setModels((prev) => {
       if (!Array.isArray(prev)) return [];
 
-      return prev.map(model => {
+      return prev.map((model) => {
         if (model.id === updatedModel.id) {
           return { ...model, name: updatedModel.name };
         }
@@ -143,10 +147,10 @@ export default function Model() {
       });
     });
 
-    setFilteredModels(prev => {
+    setFilteredModels((prev) => {
       if (!Array.isArray(prev)) return [];
 
-      return prev.map(model => {
+      return prev.map((model) => {
         if (model.id === updatedModel.id) {
           return { ...model, name: updatedModel.name };
         }
@@ -169,18 +173,17 @@ export default function Model() {
       console.log("New model created:", newModel);
 
       // Extract the new model from the result property if it exists
-      const newModelData = newModel && newModel.result
-        ? newModel.result
-        : newModel;
+      const newModelData =
+        newModel && newModel.result ? newModel.result : newModel;
 
       // If we're viewing active models (default for new models), add it to the list
       if (statusFilter === "active" || statusFilter === "all") {
-        setModels(prev => {
+        setModels((prev) => {
           if (!Array.isArray(prev)) return [newModelData];
           return [...prev, newModelData];
         });
 
-        setFilteredModels(prev => {
+        setFilteredModels((prev) => {
           if (!Array.isArray(prev)) return [newModelData];
           return [...prev, newModelData];
         });
@@ -237,7 +240,10 @@ export default function Model() {
                 </div>
               </div>
               <div className="flex justify-center sm:justify-end flex-grow w-full md:w-auto">
-                <Popover open={isAddPopoverOpen} onOpenChange={setIsAddPopoverOpen}>
+                <Popover
+                  open={isAddPopoverOpen}
+                  onOpenChange={setIsAddPopoverOpen}
+                >
                   <PopoverTrigger asChild>
                     <div>
                       <button
@@ -272,6 +278,7 @@ export default function Model() {
                           value={newModelName}
                           onChange={(e) => setNewModelName(e.target.value)}
                           className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                          maxLength={20}
                         />
                       </div>
 
@@ -303,57 +310,72 @@ export default function Model() {
             )}
 
             {/* Empty State */}
-            {!loading && !error && (!filteredModels || filteredModels.length === 0) && (
-              <div className="flex flex-col justify-center items-center mt-10">
-                <p className="text-lg">No hay modelos disponibles.</p>
-                <p className="text-md text-gray-500">
-                  {searchQuery ? "Intente con otra búsqueda." : "Agregue uno nuevo con el botón +"}
-                </p>
-              </div>
-            )}
+            {!loading &&
+              !error &&
+              (!filteredModels || filteredModels.length === 0) && (
+                <div className="flex flex-col justify-center items-center mt-10">
+                  <p className="text-lg">No hay modelos disponibles.</p>
+                  <p className="text-md text-gray-500">
+                    {searchQuery
+                      ? "Intente con otra búsqueda."
+                      : "Agregue uno nuevo con el botón +"}
+                  </p>
+                </div>
+              )}
 
             {/* Cards Container */}
-            {!loading && !error && filteredModels && filteredModels.length > 0 && (
-              <div className="bg-slate-200 p-4 rounded-lg mt-[3em] min-h-[calc(90vh-250px)]">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  {filteredModels.map((model, index) => (
-                    <div
-                      key={model.id || index}
-                      className="bg-card-bg rounded-lg shadow-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-300 transform transition-transform duration-300"
-                    >
-                      <div>
-                        <div className="p-4">
-                          <img
-                            src={model.img || "/defaultModel.png"}
-                            alt={model.name}
-                            className="mx-auto mb-4 w-[10em]"
-                          />
-                          <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
-                            {model.name}
-                          </h3>
-                        </div>
-
-                        <div className="flex justify-between items-center mt-4 bg-indigo-300 p-3 rounded-b-lg border-t-1 border-indigo-400">
-                          <EditModelDialog model={model} onSave={handleSave} />
-
-                          <div className="flex items-center space-x-2">
-                            <Label className={`text-sm ${model.status ? '' : 'text-gray-500'}`}>
-                              {model.status ? 'Activo' : 'Inactivo'}
-                            </Label>
-                            <Switch
-                              className="cursor-pointer"
-                              checked={model.status}
-                              onCheckedChange={(checked) => handleStatusChange(model.id, checked)}
+            {!loading &&
+              !error &&
+              filteredModels &&
+              filteredModels.length > 0 && (
+                <div className="bg-slate-200 p-4 rounded-lg mt-[3em] min-h-[calc(90vh-250px)]">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {filteredModels.map((model, index) => (
+                      <div
+                        key={model.id || index}
+                        className="bg-card-bg rounded-lg shadow-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-300 transform transition-transform duration-300"
+                      >
+                        <div>
+                          <div className="p-4">
+                            <img
+                              src={model.img || "/defaultModel.png"}
+                              alt={model.name}
+                              className="mx-auto mb-4 w-[10em]"
                             />
+                            <h3 className="text-[1.8em] font-semibold text-darkpurple-title truncate">
+                              {model.name}
+                            </h3>
+                          </div>
+
+                          <div className="flex justify-between items-center mt-4 bg-indigo-300 p-3 rounded-b-lg border-t-1 border-indigo-400">
+                            <EditModelDialog
+                              model={model}
+                              onSave={handleSave}
+                            />
+
+                            <div className="flex items-center space-x-2">
+                              <Label
+                                className={`text-sm ${
+                                  model.status ? "" : "text-gray-500"
+                                }`}
+                              >
+                                {model.status ? "Activo" : "Inactivo"}
+                              </Label>
+                              <Switch
+                                className="cursor-pointer"
+                                checked={model.status}
+                                onCheckedChange={(checked) =>
+                                  handleStatusChange(model.id, checked)
+                                }
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-
+              )}
           </div>
         </main>
       </div>
@@ -361,7 +383,7 @@ export default function Model() {
         position="bottom-right"
         toastOptions={{
           style: {
-            background: "rgba(209, 255, 255, 1)" // Azul claro
+            background: "rgba(209, 255, 255, 1)", // Azul claro
           },
         }}
       />

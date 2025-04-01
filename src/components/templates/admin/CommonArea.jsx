@@ -16,7 +16,7 @@ import {
   getActiveCommonAreas,
   getInactiveCommonAreas,
   createCommonArea,
-  changeCommonAreaStatus
+  changeCommonAreaStatus,
 } from "../../../services/common_area/commonAreaService";
 import { toast, Toaster } from "react-hot-toast";
 
@@ -48,9 +48,12 @@ export default function CommonArea() {
         console.log("API Response:", response);
 
         // Extract data from the result property of the response
-        const data = response && response.result
-          ? response.result
-          : (Array.isArray(response) ? response : []);
+        const data =
+          response && response.result
+            ? response.result
+            : Array.isArray(response)
+            ? response
+            : [];
 
         console.log("Processed data:", data);
 
@@ -83,8 +86,11 @@ export default function CommonArea() {
     if (searchQuery.trim() === "") {
       setFilteredAreas(commonAreas);
     } else {
-      const filtered = commonAreas.filter(area =>
-        area && area.name && area.name.toLowerCase().includes(searchQuery.toLowerCase())
+      const filtered = commonAreas.filter(
+        (area) =>
+          area &&
+          area.name &&
+          area.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredAreas(filtered);
     }
@@ -96,9 +102,9 @@ export default function CommonArea() {
       await changeCommonAreaStatus(id);
 
       // Update the local state to reflect the change
-      setCommonAreas(prev => {
+      setCommonAreas((prev) => {
         if (!Array.isArray(prev)) return [];
-        return prev.map(area =>
+        return prev.map((area) =>
           area.id === id ? { ...area, status: newStatus } : area
         );
       });
@@ -110,9 +116,12 @@ export default function CommonArea() {
           : getInactiveCommonAreas());
 
         // Extract data from the result property of the response
-        const updatedAreas = response && response.result
-          ? response.result
-          : (Array.isArray(response) ? response : []);
+        const updatedAreas =
+          response && response.result
+            ? response.result
+            : Array.isArray(response)
+            ? response
+            : [];
 
         setCommonAreas(updatedAreas);
         setFilteredAreas(updatedAreas);
@@ -127,9 +136,9 @@ export default function CommonArea() {
 
   // Handle save after edit
   const handleSave = (updatedArea) => {
-    setCommonAreas(prev => {
+    setCommonAreas((prev) => {
       if (!Array.isArray(prev)) return [updatedArea];
-      return prev.map(area =>
+      return prev.map((area) =>
         area.id === updatedArea.id ? updatedArea : area
       );
     });
@@ -148,18 +157,16 @@ export default function CommonArea() {
       console.log("New area created:", newArea);
 
       // Extract the new area from the result property if it exists
-      const newAreaData = newArea && newArea.result
-        ? newArea.result
-        : newArea;
+      const newAreaData = newArea && newArea.result ? newArea.result : newArea;
 
       // If we're viewing active areas (default for new areas), add it to the list
       if (statusFilter === "active" || statusFilter === "all") {
-        setCommonAreas(prev => {
+        setCommonAreas((prev) => {
           if (!Array.isArray(prev)) return [newAreaData];
           return [...prev, newAreaData];
         });
 
-        setFilteredAreas(prev => {
+        setFilteredAreas((prev) => {
           if (!Array.isArray(prev)) return [newAreaData];
           return [...prev, newAreaData];
         });
@@ -216,7 +223,10 @@ export default function CommonArea() {
                 </div>
               </div>
               <div className="flex justify-center sm:justify-end flex-grow w-full md:w-auto">
-                <Popover open={isAddPopoverOpen} onOpenChange={setIsAddPopoverOpen}>
+                <Popover
+                  open={isAddPopoverOpen}
+                  onOpenChange={setIsAddPopoverOpen}
+                >
                   <PopoverTrigger asChild>
                     <div>
                       <button
@@ -252,6 +262,7 @@ export default function CommonArea() {
                           onChange={(e) => setNewAreaName(e.target.value)}
                           placeholder="Ej: Sala de juntas"
                           className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                          maxLength={20}
                         />
                       </div>
 
@@ -277,70 +288,83 @@ export default function CommonArea() {
             )}
 
             {error && !loading && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-6" role="alert">
+              <div
+                className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-6"
+                role="alert"
+              >
                 <p>{error}</p>
               </div>
             )}
 
             {/* Empty State */}
-            {!loading && !error && (!filteredAreas || filteredAreas.length === 0) && (
-              <div className="text-center mt-10">
-                <p className="text-gray-500 text-lg">
-                  {searchQuery
-                    ? "No se encontraron áreas comunes que coincidan con la búsqueda."
-                    : statusFilter === "active"
+            {!loading &&
+              !error &&
+              (!filteredAreas || filteredAreas.length === 0) && (
+                <div className="text-center mt-10">
+                  <p className="text-gray-500 text-lg">
+                    {searchQuery
+                      ? "No se encontraron áreas comunes que coincidan con la búsqueda."
+                      : statusFilter === "active"
                       ? "No hay áreas comunes activas."
                       : "No hay áreas comunes inactivas."}
-                </p>
-              </div>
-            )}
+                  </p>
+                </div>
+              )}
 
             {/* Cards Container */}
-            {!loading && !error && filteredAreas && filteredAreas.length > 0 && (
-              <div className="bg-slate-200 p-4 rounded-lg mt-[3em] min-h-[calc(90vh-250px)]">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  {filteredAreas.map((area, index) => (
-                    <div
-                      key={area.id || index}
-                      className="bg-card-bg rounded-lg shadow-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-300 transform transition-transform duration-300"
-                    >
-                      <div>
-                        <div className=" px-4">
-                          <img
-                            src={area.img || "/defaultCommonArea.png"}
-                            alt={area.name}
-                            className="mx-auto mb-4 w-[10em]"
-                          />
-                          <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
-                            {area.name}
-                          </h3>
-                        </div>
-
-                        <div className="flex justify-between items-center mt-4 bg-indigo-300 p-3 rounded-b-lg border-t-1 border-indigo-400">
-                          <EditCommonAreaDialog
-                            user={area}
-                            onSave={handleSave}
-                            onStatusChange={handleStatusChange}
-                          />
-
-                          <div className="flex items-center space-x-2">
-                            <Label className={`text-sm ${area.status ? '' : 'text-gray-500'}`}>
-                              {area.status ? 'Activo' : 'Inactivo'}
-                            </Label>
-                            <Switch
-                              className="cursor-pointer"
-                              checked={area.status}
-                              onCheckedChange={(checked) => handleStatusChange(area.id, checked)}
+            {!loading &&
+              !error &&
+              filteredAreas &&
+              filteredAreas.length > 0 && (
+                <div className="bg-slate-200 p-4 rounded-lg mt-[3em] min-h-[calc(90vh-250px)]">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {filteredAreas.map((area, index) => (
+                      <div
+                        key={area.id || index}
+                        className="bg-card-bg rounded-lg shadow-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-300 transform transition-transform duration-300"
+                      >
+                        <div>
+                          <div className="px-4">
+                            <img
+                              src={area.img || "/defaultCommonArea.png"}
+                              alt={area.name}
+                              className="mx-auto mb-4 w-[10em]"
                             />
+                            <h3 className="text-[1.8em] font-semibold text-darkpurple-title truncate">
+                              {area.name}
+                            </h3>
+                          </div>
+
+                          <div className="flex justify-between items-center mt-4 bg-indigo-300 p-3 rounded-b-lg border-t-1 border-indigo-400">
+                            <EditCommonAreaDialog
+                              user={area}
+                              onSave={handleSave}
+                              onStatusChange={handleStatusChange}
+                            />
+
+                            <div className="flex items-center space-x-2">
+                              <Label
+                                className={`text-sm ${
+                                  area.status ? "" : "text-gray-500"
+                                }`}
+                              >
+                                {area.status ? "Activo" : "Inactivo"}
+                              </Label>
+                              <Switch
+                                className="cursor-pointer"
+                                checked={area.status}
+                                onCheckedChange={(checked) =>
+                                  handleStatusChange(area.id, checked)
+                                }
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-
+              )}
           </div>
         </main>
       </div>
@@ -348,7 +372,7 @@ export default function CommonArea() {
         position="bottom-right"
         toastOptions={{
           style: {
-            background: "rgba(209, 255, 255, 1)" // Azul claro
+            background: "rgba(209, 255, 255, 1)", // Azul claro
           },
         }}
       />

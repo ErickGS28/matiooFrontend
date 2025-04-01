@@ -454,7 +454,7 @@ const Model = () => {
                               e.target.src = "/defaultModel.png";
                             }}
                           />
-                          <h3 className="text-[1.8em] font-semibold text-darkpurple-title">
+                          <h3 className="text-[1.8em] font-semibold text-darkpurple-title truncate">
                             {model.name}
                           </h3>
                         </div>

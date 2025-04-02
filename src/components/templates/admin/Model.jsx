@@ -369,6 +369,7 @@ const Model = () => {
                           value={newModelName}
                           onChange={(e) => setNewModelName(e.target.value)}
                           className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                          maxLength={20}
                         />
                       </div>
 
@@ -384,7 +385,7 @@ const Model = () => {
                           id="modelImage"
                           accept="image/*"
                           onChange={handleFileChange}
-                          className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                          className="cursor-pointer w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
                         />
                         {imagePreview && (
                           <div className="mt-2">

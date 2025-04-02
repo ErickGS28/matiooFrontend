@@ -250,6 +250,7 @@ export default function Interns() {
               onChange={handleInputChange}
               className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
               placeholder="Nombre Completo"
+              maxLength={100}
             />
           </div>
           <div>
@@ -261,6 +262,7 @@ export default function Interns() {
               onChange={handleInputChange}
               className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
               placeholder="Nombre de Usuario"
+              maxLength={50}
             />
           </div>
           <div>
@@ -274,6 +276,7 @@ export default function Interns() {
                 onChange={handleInputChange}
                 className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500 pr-10"
                 placeholder="Contraseña"
+                maxLength={255}
               />
               <button
                 type="button"
@@ -294,6 +297,7 @@ export default function Interns() {
               onChange={handleInputChange}
               className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
               placeholder="Correo Electrónico"
+              maxLength={100}
             />
           </div>
           <div className="flex items-center space-x-2">
@@ -353,7 +357,7 @@ export default function Interns() {
       <div className="flex min-h-screen w-full">
         <AsideBar activePage="interns" onToggle={handleToggleSidebar} />
         <main className="flex-1 flex flex-col h-screen ">
-          <div className="flex flex-col p-5 md:p-14 w-full">
+          <div className="flex flex-col p-5 md:p-20 w-full">
             <div className="flex items-center">
               <h1 className="text-darkpurple-title text-[2.5em] font-semibold">
                 Becarios

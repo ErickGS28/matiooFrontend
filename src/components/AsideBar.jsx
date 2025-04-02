@@ -288,8 +288,8 @@ export default function AsideBar({ activePage = "", onToggle }) {
                 <PopoverTrigger asChild>
                   <div
                     className={`flex items-center ${isExpanded
-                        ? "justify-start gap-4 h-10 w-[90%] px-4 rounded-2xl"
-                        : "justify-center w-[2.5em] h-[2.5em] rounded-full"
+                      ? "justify-start gap-4 h-10 w-[90%] px-4 rounded-2xl"
+                      : "justify-center w-[2.5em] h-[2.5em] rounded-full"
                       } cursor-pointer bg-white hover:bg-skyblue-bg-icon transition-all duration-300 ease-in-out hover:scale-105`}
                   >
                     <img
@@ -328,7 +328,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
                       <DialogTrigger asChild>
                         <div className="flex justify-end">
                           <Button
-                            className=" bg-green-confirm"
+                            className=" cursor-pointer bg-green-confirm"
                             onClick={() => document.body.click()}
                           >
                             Editar Perfil
@@ -403,7 +403,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
                           <DialogFooter>
                             <Button
                               type="submit"
-                              className="bg-green-confirm"
+                              className="cursor-pointer bg-green-confirm"
                               disabled={isLoading}
                             >
                               {isLoading ? "Guardando..." : "Guardar cambios"}
@@ -420,8 +420,8 @@ export default function AsideBar({ activePage = "", onToggle }) {
                 <PopoverTrigger asChild>
                   <div
                     className={`flex items-center ${isExpanded
-                        ? "justify-start gap-4 h-10 w-[90%] px-4 rounded-2xl"
-                        : "justify-center w-[2.5em] h-[2.5em] rounded-full"
+                      ? "justify-start gap-4 h-10 w-[90%] px-4 rounded-2xl"
+                      : "justify-center w-[2.5em] h-[2.5em] rounded-full"
                       } cursor-pointer bg-red-bg-icon transition-all duration-300 ease-in-out hover:scale-105`}
                   >
                     <img
@@ -441,7 +441,7 @@ export default function AsideBar({ activePage = "", onToggle }) {
                     </p>
                     <div className="flex justify-end">
                       <button
-                        className="px-3 py-1.5 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
+                        className="cursor-pointer px-3 py-1.5 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
                         onClick={handleLogout}
                       >
                         Confirmar

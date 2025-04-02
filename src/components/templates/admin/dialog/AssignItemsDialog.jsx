@@ -85,22 +85,22 @@ export function AssignItemsDialog({ userId, userName }) {
     setAssigning(true);
     try {
       // Asignar cada item seleccionado al usuario
-      const promises = selectedItems.map(itemId => 
+      const promises = selectedItems.map(itemId =>
         itemService.assignItem(itemId, userId)
       );
-      
+
       await Promise.all(promises);
-      
+
       toast.success(`${selectedItems.length} bien(es) asignado(s) correctamente a ${userName}`, {
         duration: 3000,
         position: "bottom-right",
       });
-      
+
       // Actualizar la lista de items después de asignar
       const updatedItems = items.filter(item => !selectedItems.includes(item.id));
       setItems(updatedItems);
       setFilteredItems(updatedItems);
-      
+
       // Limpiar selección
       setSelectedItems([]);
     } catch (error) {
@@ -126,7 +126,7 @@ export function AssignItemsDialog({ userId, userName }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-green-300/30 transition-colors duration-300 ml-2">
+        <Button className="bg-green-600 hover:bg-green-500 text-white font-semibold rounded-[1em] px-4 py-2 hover:shadow-lg hover:shadow-purple-300 cursor-pointer transition-colors duration-300 ml-2">
           Asignar bienes
         </Button>
       </DialogTrigger>
@@ -139,9 +139,9 @@ export function AssignItemsDialog({ userId, userName }) {
             Selecciona los bienes que deseas asignar al usuario.
           </DialogDescription>
         </DialogHeader>
-        
+
         {/* Barra de búsqueda */}
-        <div className="relative mb-4">
+        <div className="relative mb-1 mt-2">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
           <Input
             placeholder="Buscar bienes..."
@@ -150,7 +150,7 @@ export function AssignItemsDialog({ userId, userName }) {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
+
         <div className="max-h-[60vh] overflow-y-auto pr-2">
           {loading ? (
             <div className="flex justify-center items-center py-8">
@@ -159,14 +159,14 @@ export function AssignItemsDialog({ userId, userName }) {
             </div>
           ) : filteredItems.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
-              {items.length === 0 
-                ? "No hay bienes disponibles para asignar." 
+              {items.length === 0
+                ? "No hay bienes disponibles para asignar."
                 : "No se encontraron bienes que coincidan con la búsqueda."}
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-3 p-3">
               {filteredItems.map((item) => (
-                <div key={item.id} className="flex items-start p-3 border rounded-lg hover:bg-gray-50">
+                <div key={item.id} className="flex items-start p-2 border rounded-lg hover:bg-slate-100 shadow-md shadow-purple-100 overflow-hidden hover:scale-104">
                   <input
                     type="checkbox"
                     id={`item-${item.id}`}
@@ -175,8 +175,8 @@ export function AssignItemsDialog({ userId, userName }) {
                     className="mt-1 w-4 h-4 text-darkpurple-title border-gray-300 rounded focus:ring-purple-500"
                   />
                   <div className="ml-3 flex-1">
-                    <label 
-                      htmlFor={`item-${item.id}`} 
+                    <label
+                      htmlFor={`item-${item.id}`}
                       className="text-darkpurple-title font-medium cursor-pointer"
                     >
                       {item.name}
@@ -203,19 +203,19 @@ export function AssignItemsDialog({ userId, userName }) {
             </div>
           )}
         </div>
-        
-        <DialogFooter className="mt-6 flex justify-end gap-2">
+
+        <DialogFooter className="mt-6 flex justify-end gap-3">
           <Button
             variant="outline"
             onClick={() => setOpen(false)}
-            className="border-gray-300 text-gray-700"
+            className="border-gray-300 text-gray-700 hover:bg-gray-100 hover:shadow-lg hover:shadow-purple-200 cursor-pointer"
           >
-            Cancelar
+            Regresar
           </Button>
           <Button
             onClick={handleAssignItems}
             disabled={selectedItems.length === 0 || assigning}
-            className="bg-green-600 hover:bg-green-700 text-white"
+            className="bg-green-600 hover:bg-green-700 text-white hover:shadow-lg hover:shadow-purple-200 cursor-pointer"
           >
             {assigning ? (
               <>

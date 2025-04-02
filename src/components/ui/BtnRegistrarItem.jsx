@@ -206,6 +206,7 @@ export default function BtnRegistrarItem({ onAgregar }) {
                         onChange={(e) => setName(e.target.value)}
                         className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
                         placeholder="Nombre del bien"
+                        maxLength={255}
                       />
                     </div>
 
@@ -273,6 +274,7 @@ export default function BtnRegistrarItem({ onAgregar }) {
                         onChange={(e) => setCode(e.target.value)}
                         className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
                         placeholder="Código único del bien"
+                        maxLength={50}
                       />
                     </div>
 
@@ -286,6 +288,7 @@ export default function BtnRegistrarItem({ onAgregar }) {
                         onChange={(e) => setSerialNumber(e.target.value)}
                         className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
                         placeholder="Número de serie del bien"
+                        maxLength={50}
                       />
                     </div>
 

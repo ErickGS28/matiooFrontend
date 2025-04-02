@@ -73,7 +73,7 @@ export default function EditCommonAreaDialog({ user, onSave, onStatusChange }) {
               Editar
             </button>
           </DialogTrigger>
-          <DialogContent className="w-[35%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
+          <DialogContent className="w-[35%] h-[50%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
             <DialogHeader>
               <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">Editar área común</DialogTitle>
             </DialogHeader>

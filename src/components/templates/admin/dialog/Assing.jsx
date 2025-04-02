@@ -63,7 +63,7 @@ export function Assign({ userId, userName }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300">
+        <Button className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 hover:shadow-lg hover:shadow-purple-300 cursor-pointer transition-colors duration-300">
           Ver bienes
         </Button>
       </DialogTrigger>
@@ -87,9 +87,9 @@ export function Assign({ userId, userName }) {
               Este usuario no tiene bienes asignados.
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 p-3 mt-2">
               {items.map((item) => (
-                <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg shadow-md">
+                <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-100 shadow-md shadow-purple-100 overflow-hidden hover:scale-104">
                   <div className="flex flex-col">
                     <h3 className="text-darkpurple-title font-medium mb-1">{item.name}</h3>
                     <p className="text-sm text-gray-600">ID: {item.id}</p>
@@ -99,7 +99,7 @@ export function Assign({ userId, userName }) {
                   </div>
                   <Button 
                     onClick={() => handleUnassign(item.id)}
-                    className="ml-4 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition-colors duration-200"
+                    className="ml-4 bg-red-500 hover:bg-red-800 text-white font-semibold py-2 px-4 rounded-md shadow-md transition-colors duration-200 cursor-pointer"
                   >
                     Desasignar
                   </Button>

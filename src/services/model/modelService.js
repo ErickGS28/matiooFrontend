@@ -4,8 +4,6 @@ import { getAuthHeader, handleResponse } from '../utils/authUtils.js';
 // Function to get all models
 export const getAllModels = async () => {
     try {
-        console.log('Ejecutando getAllModels...');
-
         const response = await fetch(`${API_URL}/item-models/all`, {
             headers: getAuthHeader()
         });
@@ -21,8 +19,6 @@ export const getAllModels = async () => {
 // Function to get active models
 export const getActiveModels = async () => {
     try {
-        console.log('Ejecutando getActiveModels...');
-
         const response = await fetch(`${API_URL}/item-models/active`, {
             headers: getAuthHeader()
         });
@@ -37,8 +33,6 @@ export const getActiveModels = async () => {
 // Function to get inactive models
 export const getInactiveModels = async () => {
     try {
-        console.log('Ejecutando getInactiveModels...');
-
         const response = await fetch(`${API_URL}/item-models/inactive`, {
             headers: getAuthHeader()
         });
@@ -53,8 +47,6 @@ export const getInactiveModels = async () => {
 // Function to get a model by ID
 export const getModelById = async (id) => {
     try {
-        console.log(`Ejecutando getModelById con id: ${id}...`);
-
         const response = await fetch(`${API_URL}/item-models/${id}`, {
             headers: getAuthHeader()
         });
@@ -69,8 +61,6 @@ export const getModelById = async (id) => {
 // Function to create a new model
 export const createModel = async (name) => {
     try {
-        console.log(`Creating new model with name: ${name}...`);
-
         const response = await fetch(`${API_URL}/item-models/save`, {
             method: 'POST',
             headers: {
@@ -90,8 +80,6 @@ export const createModel = async (name) => {
 // Function to create a new model with image
 export const createModelWithImage = async (dto, imageFile) => {
     try {
-        console.log(`Creating new model with image...`);
-
         const formData = new FormData();
 
         // Create a Blob with type 'application/json'
@@ -125,8 +113,6 @@ export const createModelWithImage = async (dto, imageFile) => {
 // Function to update a model
 export const updateModel = async (id, name) => {
     try {
-        console.log(`Updating model with ID ${id} to name: ${name}...`);
-
         const response = await fetch(`${API_URL}/item-models/update`, {
             method: 'PUT',
             headers: {
@@ -146,8 +132,6 @@ export const updateModel = async (id, name) => {
 // Function to update a model with image
 export const updateModelWithImage = async (dto, imageFile) => {
     try {
-        console.log(`Updating model with ID ${dto.id} with image...`);
-
         const formData = new FormData();
 
         // Create a Blob with type 'application/json'
@@ -211,8 +195,6 @@ export const fetchModelImage = async (id) => {
 // Function to change model status
 export const changeModelStatus = async (id) => {
     try {
-        console.log(`Changing status for model with ID: ${id}...`);
-
         const response = await fetch(`${API_URL}/item-models/change-status/${id}`, {
             method: 'PUT',
             headers: getAuthHeader()

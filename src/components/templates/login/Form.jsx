@@ -26,7 +26,6 @@ export const Form = ({ setUser }) => {
     }
     
     try {
-      console.log('Attempting login with:', { email });
       const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
@@ -38,7 +37,6 @@ export const Form = ({ setUser }) => {
         body: JSON.stringify({ email, password })
       });
 
-      console.log('Login response status:', response.status);
 
       if (!response.ok) {
         const errorData = await response.text();
@@ -64,9 +62,6 @@ export const Form = ({ setUser }) => {
       
       const tokenPayload = decodeToken(tokenWithBearer);
       if (tokenPayload) {
-        console.log('Role from token:', tokenPayload.role);
-        console.log('User ID from token:', tokenPayload.sub);
-        console.log('Email from token:', tokenPayload.email);
         
         setUser([tokenPayload.email, tokenPayload.role]);
         setError(false);

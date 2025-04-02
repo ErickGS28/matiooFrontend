@@ -171,7 +171,6 @@ export default function ItemType() {
 
     try {
       const newType = await createItemType(newTypeName);
-      console.log("New item type created:", newType);
 
       // Extract the new type from the result property if it exists
       const newTypeData = newType && newType.result ? newType.result : newType;

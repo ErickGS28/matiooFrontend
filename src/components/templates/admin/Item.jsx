@@ -25,24 +25,16 @@ export default function Item() {
     // Función para cargar los bienes
     const fetchItems = async () => {
         try {
-            console.log("Iniciando fetchItems()");
             setLoading(true);
             setError(null);
 
-            // Verificar que itemService esté disponible
-            console.log("itemService:", itemService);
-            console.log("itemService.getAllItems:", itemService.getAllItems);
-
             const response = await itemService.getAllItems();
-            console.log("Respuesta completa de getAllItems:", response);
 
             // La respuesta ya viene procesada como JSON y los items están en response.result
             if (response && response.type === "SUCCESS" && Array.isArray(response.result)) {
-                console.log("Items obtenidos:", response.result);
                 setItems(response.result);
                 setFilteredItems(response.result);
             } else {
-                console.error("Estructura de datos inesperada:", response);
                 setError("La estructura de datos recibida no es la esperada");
             }
         } catch (error) {
@@ -55,17 +47,14 @@ export default function Item() {
 
     // Cargar los bienes al montar el componente
     useEffect(() => {
-        console.log("Componente Item montado, llamando a fetchItems()");
         fetchItems();
     }, []);
 
     // Filtrar los bienes cuando cambia el término de búsqueda
     useEffect(() => {
         if (searchTerm.trim() === "") {
-            console.log("Término de búsqueda vacío, mostrando todos los items:", items.length);
             setFilteredItems(items);
         } else {
-            console.log("Filtrando por término:", searchTerm);
             const filtered = items.filter(
                 (item) =>
                     (item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -73,7 +62,6 @@ export default function Item() {
                     (item.code && item.code.toLowerCase().includes(searchTerm.toLowerCase())) ||
                     (item.serialNumber && item.serialNumber.toLowerCase().includes(searchTerm.toLowerCase()))
             );
-            console.log("Items filtrados:", filtered.length);
             setFilteredItems(filtered);
         }
         setCurrentPage(1);
@@ -83,7 +71,6 @@ export default function Item() {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
-    console.log("Items para la página actual:", currentItems.length);
 
     // Calcular el número total de páginas
     const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
@@ -91,21 +78,16 @@ export default function Item() {
     // Manejar la creación de un nuevo bien
     const handleAddItem = async (newItem) => {
         try {
-            console.log("Creando nuevo item:", newItem);
             const response = await itemService.createItem(newItem);
-            console.log("Respuesta de createItem:", response);
 
             // Verificar si la creación fue exitosa
             if (response && response.type === "SUCCESS") {
-                console.log("Item creado exitosamente");
                 // Recargar los bienes después de crear uno nuevo
                 fetchItems();
             } else {
-                console.error("Error al crear el item:", response);
                 setError(`Error al crear el bien: ${response.text || 'Error desconocido'}`);
             }
         } catch (error) {
-            console.error("Error al crear el item:", error);
             setError(`Error al crear el bien: ${error.message}`);
         }
     };
@@ -113,7 +95,6 @@ export default function Item() {
     // Manejar la actualización de un bien
     const handleUpdateItem = async (updatedItem) => {
         try {
-            console.log("Actualizando item en Item.jsx:", updatedItem);
             
             // Actualizar los arrays de items manteniendo la paginación actual
             const updateItemInArray = (array) => {
@@ -131,7 +112,6 @@ export default function Item() {
             
             // No cambiamos la página actual para mantener la posición en la paginación
         } catch (error) {
-            console.error("Error al actualizar el item en el estado:", error);
             setError(`Error al actualizar el bien: ${error.message}`);
         }
     };

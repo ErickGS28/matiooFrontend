@@ -60,11 +60,8 @@ export default function InternHome() {
           return;
         }
 
-        console.log("ID del usuario:", userData.id);
-
         // Obtener los items asignados al usuario
         const userItems = await itemService.getItemsByAssignedToId(userData.id);
-        console.log("Items obtenidos:", userItems);
 
         setItems(userItems);
         setFilteredItems(userItems);
@@ -92,7 +89,6 @@ export default function InternHome() {
 
           // Obtener los datos completos del usuario usando getUserById
           const response = await getUserById(tokenData.id);
-          console.log("Datos del usuario obtenidos:", response);
 
           if (response && response.result) {
             const userData = response.result;
@@ -129,11 +125,9 @@ export default function InternHome() {
     try {
       // Confirmar con el usuario antes de desasignar
       if (window.confirm("¿Estás seguro de que deseas quitar este bien?")) {
-        console.log("Desasignando item con ID:", itemId);
-
+        
         // Llamar al método unassignItem del itemService
         const response = await itemService.unassignItem(itemId);
-        console.log("Respuesta de desasignación:", response);
 
         // Mostrar mensaje de éxito
         toast.success("Bien desasignado correctamente", {
@@ -169,9 +163,7 @@ export default function InternHome() {
     setIsLoading(true);
 
     try {
-      console.log("Enviando datos para actualizar perfil:", userData);
       const response = await updateUserProfile(userData);
-      console.log("Respuesta de actualización de perfil:", response);
       setDialogOpen(false);
 
       // Recargar los datos del usuario después de actualizar

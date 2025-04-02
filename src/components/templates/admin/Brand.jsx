@@ -170,7 +170,6 @@ export default function Brand() {
 
     try {
       const newBrand = await createBrand(newBrandName);
-      console.log("New brand created:", newBrand);
 
       // Extract the new brand from the result property if it exists
       const newBrandData =

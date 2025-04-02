@@ -59,7 +59,6 @@ export default function TableItem({ data, onUpdateItem }) {
   };
 
   const handleSave = async (updatedItem) => {
-    console.log("TableItem recibió para actualizar:", updatedItem);
 
     try {
       // Asegurarnos que todos los campos necesarios estén presentes y sean del tipo correcto
@@ -76,14 +75,10 @@ export default function TableItem({ data, onUpdateItem }) {
         name: updatedItem.name
       };
 
-      console.log("Objeto formateado para enviar al backend:", itemToUpdate);
-
       // Llamar a la API para actualizar el item
       const response = await itemService.updateItem(itemToUpdate);
-      console.log("Respuesta completa de updateItem:", response);
 
       if (response && response.type === "SUCCESS") {
-        console.log("Actualización exitosa, actualizando estado local");
         
         // Actualizar el estado local
         const updatedItemData = response.result || itemToUpdate;
@@ -132,9 +127,6 @@ export default function TableItem({ data, onUpdateItem }) {
                 {item.brand && item.brand.name ? item.brand.name : 'Sin marca'}
               </td>
               <td className="py-3 px-4">
-                {console.log("TableItem - Item completo:", item)}
-                {console.log("TableItem - ownerId:", item.ownerId)}
-                {console.log("TableItem - assignedToId:", item.assignedToId)}
                 <ViewItemDialog
                   item={{
                     id: item.id,
@@ -162,7 +154,6 @@ export default function TableItem({ data, onUpdateItem }) {
                 />
               </td>
               <td className="py-2 px-4 rounded-r-2xl h-[3.5rem] relative">
-                {console.log("TableItem - Item para EditItemDialog:", item)}
                 <EditItemDialog
                   item={{
                     id: item.id,

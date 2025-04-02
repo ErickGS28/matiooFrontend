@@ -60,7 +60,6 @@ const Model = () => {
         const data = response && response.result ? response.result : response;
 
         if (Array.isArray(data)) {
-          console.log("Models data:", data); // Debug to see the model structure
           setModels(data);
           setFilteredModels(data);
           
@@ -246,12 +245,8 @@ const Model = () => {
         newModel = await createModel(newModelName);
       }
       
-      console.log("New model created:", newModel);
-
       // Extract the new model from the result property if it exists
-      const newModelData = newModel && newModel.result
-        ? newModel.result
-        : newModel;
+      const newModelData = newModel && newModel.result ? newModel.result : newModel;
 
       // If we're viewing active models (default for new models), add it to the list
       if (statusFilter === "active" || statusFilter === "all") {

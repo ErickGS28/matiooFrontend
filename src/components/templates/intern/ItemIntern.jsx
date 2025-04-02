@@ -63,7 +63,6 @@ export default function ItemIntern() {
 
                 // Obtener los items no asignados
                 const response = await itemService.getUnassignedItems();
-                console.log("Items no asignados:", response);
 
                 if (response && response.result) {
                     setItems(response.result);
@@ -101,7 +100,6 @@ export default function ItemIntern() {
 
                     // Obtener los datos completos del usuario usando getUserById
                     const response = await getUserById(tokenData.id);
-                    console.log("Datos del usuario obtenidos:", response);
 
                     if (response && response.result) {
                         const userData = response.result;
@@ -159,11 +157,9 @@ export default function ItemIntern() {
                     "¿Estás seguro de que deseas asignar este bien a tu cuenta?"
                 )
             ) {
-                console.log(`Asignando item ${itemId} al usuario ${currentUserId}`);
-
+                
                 // Llamar al método assignItem del itemService
                 const response = await itemService.assignItem(itemId, currentUserId);
-                console.log("Respuesta de asignación:", response);
 
                 // Mostrar mensaje de éxito
                 toast.success("Bien asignado correctamente", {
@@ -191,9 +187,7 @@ export default function ItemIntern() {
         setIsLoading(true);
 
         try {
-            console.log("Enviando datos para actualizar perfil:", userData);
             const response = await updateUserProfile(userData);
-            console.log("Respuesta de actualización de perfil:", response);
             setDialogOpen(false);
 
             // Recargar los datos del usuario después de actualizar

@@ -73,9 +73,8 @@ export default function AsideBar({ activePage = "", onToggle }) {
     setIsLoading(true);
 
     try {
-      console.log("Enviando datos para actualizar perfil:", userData);
+      
       const response = await updateUserProfile(userData);
-      console.log("Respuesta de actualización de perfil:", response);
       setDialogOpen(false);
 
       // Recargar los datos del usuario después de actualizar
@@ -107,17 +106,6 @@ export default function AsideBar({ activePage = "", onToggle }) {
     }
   };
 
-  // Función para depurar y mostrar los datos del usuario
-  const logUserData = (data) => {
-    console.log("Datos del usuario actualizados:", {
-      id: data.id,
-      fullName: data.fullName,
-      username: data.username,
-      email: data.email,
-      location: data.location
-    });
-  };
-
   // Load user data from token when component mounts or dialog opens
   useEffect(() => {
     const loadUserData = async () => {
@@ -131,7 +119,6 @@ export default function AsideBar({ activePage = "", onToggle }) {
 
           // Obtener los datos completos del usuario usando getUserById
           const response = await getUserById(tokenData.id);
-          console.log("Datos del usuario obtenidos:", response);
 
           if (response && response.result) {
             const userData = response.result;

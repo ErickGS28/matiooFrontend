@@ -57,10 +57,7 @@ export default function responsibleHome() {
           return;
         }
 
-        console.log("ID del usuario:", userData.id);
-
-        const userItems = await itemService.getItemsByAssignedToId(userData.id);
-        console.log("Items obtenidos:", userItems);
+        const userItems = await itemService.getItemsByAssignedToId(userData.id)
 
         setItems(userItems);
         setFilteredItems(userItems);
@@ -84,7 +81,6 @@ export default function responsibleHome() {
           localStorage.setItem("userId", tokenData.id);
 
           const response = await getUserById(tokenData.id);
-          console.log("Datos del usuario obtenidos:", response);
 
           if (response && response.result) {
             const userData = response.result;
@@ -119,10 +115,7 @@ export default function responsibleHome() {
   const handleRemoveItem = async (itemId) => {
     try {
       if (window.confirm("¿Estás seguro de que deseas quitar este bien?")) {
-        console.log("Desasignando item con ID:", itemId);
-
         const response = await itemService.unassignItem(itemId);
-        console.log("Respuesta de desasignación:", response);
 
         toast.success("Bien desasignado correctamente", {
           id: "unassign-success",
@@ -156,9 +149,7 @@ export default function responsibleHome() {
     setIsLoading(true);
 
     try {
-      console.log("Enviando datos para actualizar perfil:", userData);
       const response = await updateUserProfile(userData);
-      console.log("Respuesta de actualización de perfil:", response);
       setDialogOpen(false);
 
       const updatedUserData = await getUserById(userData.id);

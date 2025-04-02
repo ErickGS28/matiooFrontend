@@ -23,7 +23,6 @@ import { getActiveItemTypes } from "@/services/item_type/itemTypeService";
 import { getActiveModels } from "@/services/model/modelService";
 
 export function EditItemDialog({ item, onSave }) {
-  console.log("EditItemDialog - Item recibido:", item);
   
   // Estado inicial: si un campo no existe, se pone 0 (sin selección).
   const [formData, setFormData] = React.useState({
@@ -42,7 +41,6 @@ export function EditItemDialog({ item, onSave }) {
     commonAreaId: 0,
   });
   
-  console.log("EditItemDialog - Estado inicial formData:", formData);
   
   const [responsibleUsers, setResponsibleUsers] = React.useState([]);
   const [allUsers, setAllUsers] = React.useState([]);
@@ -165,7 +163,7 @@ export function EditItemDialog({ item, onSave }) {
         status: formData.status,
       };
 
-      console.log("Enviando actualización:", updatedItem);
+      
 
       // Llamamos a onSave con el objeto final
       await onSave(updatedItem);

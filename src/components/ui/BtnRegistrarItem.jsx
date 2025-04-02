@@ -49,7 +49,6 @@ export default function BtnRegistrarItem({ onAgregar }) {
       const fetchData = async () => {
         setIsLoading(true);
         try {
-          console.log("Cargando datos para el formulario de registro...");
 
           // Cargar usuarios activos
           const usersResponse = await getActiveUsers();
@@ -146,8 +145,6 @@ export default function BtnRegistrarItem({ onAgregar }) {
         : null,
       location: finalLocation,
     };
-
-    console.log("Payload enviado para crear item:", JSON.stringify(payload));
 
     if (onAgregar) {
       onAgregar(payload);

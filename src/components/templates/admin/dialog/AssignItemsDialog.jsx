@@ -27,7 +27,6 @@ export function AssignItemsDialog({ userId, userName }) {
     setLoading(true);
     try {
       const response = await itemService.getUnassignedItems();
-      console.log("Items no asignados:", response);
 
       if (response && response.result) {
         setItems(response.result);

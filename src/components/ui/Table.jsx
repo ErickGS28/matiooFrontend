@@ -40,7 +40,7 @@ export default function Table({ data, onStatusChange, onSave, showRoleColumn = f
     if (onSave) {
       onSave(formData);
     } else {
-      console.log('Datos guardados:', formData);
+      
     }
   };
 

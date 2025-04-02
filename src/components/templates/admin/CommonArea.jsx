@@ -45,8 +45,6 @@ export default function CommonArea() {
           response = await getAllCommonAreas();
         }
 
-        console.log("API Response:", response);
-
         // Extract data from the result property of the response
         const data =
           response && response.result
@@ -54,8 +52,6 @@ export default function CommonArea() {
             : Array.isArray(response)
             ? response
             : [];
-
-        console.log("Processed data:", data);
 
         setCommonAreas(data);
         setFilteredAreas(data);
@@ -154,7 +150,6 @@ export default function CommonArea() {
 
     try {
       const newArea = await createCommonArea(newAreaName);
-      console.log("New area created:", newArea);
 
       // Extract the new area from the result property if it exists
       const newAreaData = newArea && newArea.result ? newArea.result : newArea;

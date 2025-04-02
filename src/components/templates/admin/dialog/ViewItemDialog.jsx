@@ -14,7 +14,6 @@ import { getUserById } from "@/services/users/userService";
 export function ViewItemDialog({ item }) {
   const [isOpen, setIsOpen] = React.useState(false);
 
-  console.log("ViewItemDialog - Item recibido:", item);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

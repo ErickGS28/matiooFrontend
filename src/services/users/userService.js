@@ -16,8 +16,6 @@ export const getAllUsers = async () => {
 // Function to get active users
 export const getActiveUsers = async () => {
     try {
-        console.log('Fetching active users...');
-        
         const response = await fetch(`${API_URL}/users/active`, {
             method: 'GET',
             headers: getAuthHeader()
@@ -25,16 +23,13 @@ export const getActiveUsers = async () => {
         
         return handleResponse(response);
     } catch (error) {
-        console.error('Error in getActiveUsers:', error);
-        throw error;
+        throw new Error('Error al obtener los usuarios activos');
     }
 };
 
 // Function to get inactive users
 export const getInactiveUsers = async () => {
     try {
-        console.log('Fetching inactive users...');
-        
         const response = await fetch(`${API_URL}/users/inactive`, {
             method: 'GET',
             headers: getAuthHeader()
@@ -62,8 +57,6 @@ export const getUserById = async (id) => {
 // Function to create a new user
 export const createUser = async (userData) => {
     try {
-        console.log("Datos enviados a la API:", userData);
-        
         // Usar la ruta correcta según el controlador Spring Boot
         const response = await fetch(`${API_URL}/users/save`, {
             method: 'POST',
@@ -76,13 +69,11 @@ export const createUser = async (userData) => {
         
         // Verificar si la respuesta es vacía
         const text = await response.text();
-        console.log("Respuesta del servidor (texto):", text);
         
         let responseData;
         try {
             // Intentar parsear como JSON solo si hay contenido
             responseData = text ? JSON.parse(text) : {};
-            console.log("Respuesta del servidor (parseada):", responseData);
         } catch (parseError) {
             console.error("Error al parsear la respuesta:", parseError);
             responseData = { message: text || "No se recibió respuesta del servidor" };
@@ -180,7 +171,6 @@ export const sendRecoveryCode = async (email) => {
       }
   
       const result = await response.json();
-      console.log("Respuesta del backend:", result);
       return result;
     } catch (error) {
       console.error("Error en sendRecoveryCode:", error);

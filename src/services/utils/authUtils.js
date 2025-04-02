@@ -11,7 +11,6 @@ export const getAuthHeader = () => {
     }
     // Asegurarse de que el token tenga el prefijo Bearer
     const formattedToken = token.startsWith('Bearer ') ? token.trim() : `Bearer ${token.trim()}`;
-    console.log('Authorization header being sent:', formattedToken);
     return {
         'Authorization': formattedToken,
         'Content-Type': 'application/json',
@@ -40,5 +39,4 @@ export const handleResponse = async (response) => {
  */
 export const logout = () => {
     localStorage.removeItem('token');
-    console.log('User logged out, token removed from localStorage');
 };

@@ -6,9 +6,6 @@ export const itemService = {
      * Obtiene todos los items.
      */
     getAllItems: async () => {
-        console.log("Llamando a getAllItems()");
-        console.log("URL de la API:", `${API_URL}/items/all`);
-        
         try {
             const response = await fetch(`${API_URL}/items/all`, {
                 method: 'GET',
@@ -16,32 +13,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta recibida:", {
-                status: response.status,
-                statusText: response.statusText,
-                ok: response.ok
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items recibidos:", result.result.length);
-                
-                // Mostrar un ejemplo del item recibido
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        owner: sampleItem.owner,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getAllItems:', error);
             throw new Error('Error al obtener la lista de items');
         }
     },
@@ -51,8 +25,6 @@ export const itemService = {
      * @param {number} id
      */
     getItemById: async (id) => {
-        console.log(`Llamando a getItemById(${id})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/id/${id}`, {
                 method: 'GET',
@@ -60,27 +32,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemById:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos del item recibido:", {
-                    id: result.result.id,
-                    name: result.result.name,
-                    ownerId: result.result.ownerId,
-                    owner: result.result.owner,
-                    assignedToId: result.result.assignedToId,
-                    assignedTo: result.result.assignedTo
-                });
-            }
-            
             return result;
         } catch (error) {
-            console.error(`Error en getItemById(${id}):`, error);
             throw new Error(`Error al obtener el item con ID ${id}`);
         }
     },
@@ -90,8 +44,6 @@ export const itemService = {
      * @param {number} modelId
      */
     getItemsByModelId: async (modelId) => {
-        console.log(`Llamando a getItemsByModelId(${modelId})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/byModelId/${modelId}`, {
                 method: 'GET',
@@ -99,32 +51,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemsByModelId:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items recibidos:", result.result.length);
-                // Revisar si los items tienen la información de usuario
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        ownerId: sampleItem.ownerId,
-                        owner: sampleItem.owner,
-                        assignedToId: sampleItem.assignedToId,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getItemsByModelId:', error);
             throw new Error(`Error al obtener items con modelId ${modelId}`);
         }
     },
@@ -134,8 +63,6 @@ export const itemService = {
      * @param {string} modelName
      */
     getItemsByModelName: async (modelName) => {
-        console.log(`Llamando a getItemsByModelName(${modelName})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/byModelName/${modelName}`, {
                 method: 'GET',
@@ -143,32 +70,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemsByModelName:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items recibidos:", result.result.length);
-                // Revisar si los items tienen la información de usuario
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        ownerId: sampleItem.ownerId,
-                        owner: sampleItem.owner,
-                        assignedToId: sampleItem.assignedToId,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getItemsByModelName:', error);
             throw new Error(`Error al obtener items con modelName ${modelName}`);
         }
     },
@@ -178,8 +82,6 @@ export const itemService = {
      * @param {number} brandId
      */
     getItemsByBrandId: async (brandId) => {
-        console.log(`Llamando a getItemsByBrandId(${brandId})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/byBrandId/${brandId}`, {
                 method: 'GET',
@@ -187,32 +89,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemsByBrandId:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items recibidos:", result.result.length);
-                // Revisar si los items tienen la información de usuario
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        ownerId: sampleItem.ownerId,
-                        owner: sampleItem.owner,
-                        assignedToId: sampleItem.assignedToId,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getItemsByBrandId:', error);
             throw new Error(`Error al obtener items con brandId ${brandId}`);
         }
     },
@@ -222,8 +101,6 @@ export const itemService = {
      * @param {string} brandName
      */
     getItemsByBrandName: async (brandName) => {
-        console.log(`Llamando a getItemsByBrandName(${brandName})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/byBrandName/${brandName}`, {
                 method: 'GET',
@@ -231,32 +108,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemsByBrandName:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items recibidos:", result.result.length);
-                // Revisar si los items tienen la información de usuario
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        ownerId: sampleItem.ownerId,
-                        owner: sampleItem.owner,
-                        assignedToId: sampleItem.assignedToId,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getItemsByBrandName:', error);
             throw new Error(`Error al obtener items con brandName ${brandName}`);
         }
     },
@@ -266,8 +120,6 @@ export const itemService = {
      * @param {number} itemTypeId
      */
     getItemsByItemTypeId: async (itemTypeId) => {
-        console.log(`Llamando a getItemsByItemTypeId(${itemTypeId})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/byItemTypeId/${itemTypeId}`, {
                 method: 'GET',
@@ -275,32 +127,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemsByItemTypeId:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items recibidos:", result.result.length);
-                // Revisar si los items tienen la información de usuario
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        ownerId: sampleItem.ownerId,
-                        owner: sampleItem.owner,
-                        assignedToId: sampleItem.assignedToId,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getItemsByItemTypeId:', error);
             throw new Error(`Error al obtener items con itemTypeId ${itemTypeId}`);
         }
     },
@@ -310,8 +139,6 @@ export const itemService = {
      * @param {string} itemTypeName
      */
     getItemsByItemTypeName: async (itemTypeName) => {
-        console.log(`Llamando a getItemsByItemTypeName(${itemTypeName})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/byItemTypeName/${itemTypeName}`, {
                 method: 'GET',
@@ -319,32 +146,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemsByItemTypeName:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items recibidos:", result.result.length);
-                // Revisar si los items tienen la información de usuario
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        ownerId: sampleItem.ownerId,
-                        owner: sampleItem.owner,
-                        assignedToId: sampleItem.assignedToId,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getItemsByItemTypeName:', error);
             throw new Error(`Error al obtener items con itemTypeName ${itemTypeName}`);
         }
     },
@@ -354,8 +158,6 @@ export const itemService = {
      * @param {string} serialNumber
      */
     getItemBySerialNumber: async (serialNumber) => {
-        console.log(`Llamando a getItemBySerialNumber(${serialNumber})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/bySerialNumber/${serialNumber}`, {
                 method: 'GET',
@@ -363,27 +165,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemBySerialNumber:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos del item recibido:", {
-                    id: result.result.id,
-                    name: result.result.name,
-                    ownerId: result.result.ownerId,
-                    owner: result.result.owner,
-                    assignedToId: result.result.assignedToId,
-                    assignedTo: result.result.assignedTo
-                });
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getItemBySerialNumber:', error);
             throw new Error(`Error al obtener item con serialNumber ${serialNumber}`);
         }
     },
@@ -393,8 +177,6 @@ export const itemService = {
      * @param {string} code
      */
     getItemByCode: async (code) => {
-        console.log(`Llamando a getItemByCode(${code})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/byCode/${code}`, {
                 method: 'GET',
@@ -402,27 +184,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemByCode:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos del item recibido:", {
-                    id: result.result.id,
-                    name: result.result.name,
-                    ownerId: result.result.ownerId,
-                    owner: result.result.owner,
-                    assignedToId: result.result.assignedToId,
-                    assignedTo: result.result.assignedTo
-                });
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getItemByCode:', error);
             throw new Error(`Error al obtener item con code ${code}`);
         }
     },
@@ -432,8 +196,6 @@ export const itemService = {
      * @param {number} assignedToId
      */
     getItemsByAssignedToId: async (assignedToId) => {
-        console.log(`Llamando a getItemsByAssignedToId(${assignedToId})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/byAssignedToId/${assignedToId}`, {
                 method: 'GET',
@@ -441,32 +203,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemsByAssignedToId:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items recibidos:", result.result.length);
-                // Revisar si los items tienen la información de usuario
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        ownerId: sampleItem.ownerId,
-                        owner: sampleItem.owner,
-                        assignedToId: sampleItem.assignedToId,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getItemsByAssignedToId:', error);
             throw new Error(`Error al obtener items con assignedToId ${assignedToId}`);
         }
     },
@@ -476,8 +215,6 @@ export const itemService = {
      * @param {string} assignedToFullName
      */
     getItemsByAssignedToFullName: async (assignedToFullName) => {
-        console.log(`Llamando a getItemsByAssignedToFullName(${assignedToFullName})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/byAssignedToFullName/${assignedToFullName}`, {
                 method: 'GET',
@@ -485,32 +222,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemsByAssignedToFullName:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items recibidos:", result.result.length);
-                // Revisar si los items tienen la información de usuario
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        ownerId: sampleItem.ownerId,
-                        owner: sampleItem.owner,
-                        assignedToId: sampleItem.assignedToId,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getItemsByAssignedToFullName:', error);
             throw new Error(`Error al obtener items con assignedToFullName ${assignedToFullName}`);
         }
     },
@@ -520,8 +234,6 @@ export const itemService = {
      * @param {string} location
      */
     getItemByLocation: async (location) => {
-        console.log(`Llamando a getItemByLocation(${location})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/byLocation/${location}`, {
                 method: 'GET',
@@ -529,27 +241,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getItemByLocation:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos del item recibido:", {
-                    id: result.result.id,
-                    name: result.result.name,
-                    ownerId: result.result.ownerId,
-                    owner: result.result.owner,
-                    assignedToId: result.result.assignedToId,
-                    assignedTo: result.result.assignedTo
-                });
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getItemByLocation:', error);
             throw new Error(`Error al obtener item con location ${location}`);
         }
     },
@@ -561,8 +255,6 @@ export const itemService = {
      * @param {Object} dto - Objeto con la información del item (ItemDTO).
      */
     createItem: async (dto) => {
-        console.log("Llamando a createItem con datos:", dto);
-        
         try {
             const response = await fetch(`${API_URL}/items/create`, {
                 method: 'POST',
@@ -574,27 +266,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de createItem:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos del item creado:", {
-                    id: result.result.id,
-                    name: result.result.name,
-                    ownerId: result.result.ownerId,
-                    owner: result.result.owner,
-                    assignedToId: result.result.assignedToId,
-                    assignedTo: result.result.assignedTo
-                });
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en createItem:', error);
             throw new Error('Error al crear el item');
         }
     },
@@ -605,8 +279,6 @@ export const itemService = {
      * @param {Object} dto - Objeto con la información actualizada del item (ItemDTO).
      */
     updateItem: async (dto) => {
-        console.log("Llamando a updateItem con datos:", dto);
-        
         try {
             const response = await fetch(`${API_URL}/items/update`, {
                 method: 'PUT',
@@ -618,27 +290,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de updateItem:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos del item actualizado:", {
-                    id: result.result.id,
-                    name: result.result.name,
-                    ownerId: result.result.ownerId,
-                    owner: result.result.owner,
-                    assignedToId: result.result.assignedToId,
-                    assignedTo: result.result.assignedTo
-                });
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en updateItem:', error);
             throw new Error('Error al actualizar el item');
         }
     },
@@ -648,8 +302,6 @@ export const itemService = {
      * @param {number} id - ID del item.
      */
     changeItemStatus: async (id) => {
-        console.log(`Llamando a changeItemStatus(${id})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/change-status/${id}`, {
                 method: 'PUT',
@@ -657,27 +309,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de changeItemStatus:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos del item con estado cambiado:", {
-                    id: result.result.id,
-                    name: result.result.name,
-                    ownerId: result.result.ownerId,
-                    owner: result.result.owner,
-                    assignedToId: result.result.assignedToId,
-                    assignedTo: result.result.assignedTo
-                });
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en changeItemStatus:', error);
             throw new Error(`Error al cambiar el estado del item con ID ${id}`);
         }
     },
@@ -686,8 +320,6 @@ export const itemService = {
      * Obtiene todos los items activos.
      */
     getActiveItems: async () => {
-        console.log("Llamando a getActiveItems()");
-        
         try {
             const response = await fetch(`${API_URL}/items/active`, {
                 method: 'GET',
@@ -695,32 +327,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getActiveItems:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items activos recibidos:", result.result.length);
-                // Revisar si los items tienen la información de usuario
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item activo recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        ownerId: sampleItem.ownerId,
-                        owner: sampleItem.owner,
-                        assignedToId: sampleItem.assignedToId,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getActiveItems:', error);
             throw new Error('Error al obtener la lista de items activos');
         }
     },
@@ -729,8 +338,6 @@ export const itemService = {
      * Obtiene todos los items inactivos.
      */
     getInactiveItems: async () => {
-        console.log("Llamando a getInactiveItems()");
-        
         try {
             const response = await fetch(`${API_URL}/items/inactive`, {
                 method: 'GET',
@@ -738,32 +345,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getInactiveItems:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items inactivos recibidos:", result.result.length);
-                // Revisar si los items tienen la información de usuario
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item inactivo recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        ownerId: sampleItem.ownerId,
-                        owner: sampleItem.owner,
-                        assignedToId: sampleItem.assignedToId,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getInactiveItems:', error);
             throw new Error('Error al obtener la lista de items inactivos');
         }
     },
@@ -773,8 +357,6 @@ export const itemService = {
      * @param {number} id - ID del item.
      */
     unassignItem: async (id) => {
-        console.log(`Llamando a unassignItem(${id})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/${id}/unassign`, {
                 method: 'PUT',
@@ -782,27 +364,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de unassignItem:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos del item desasignado:", {
-                    id: result.result.id,
-                    name: result.result.name,
-                    ownerId: result.result.ownerId,
-                    owner: result.result.owner,
-                    assignedToId: result.result.assignedToId,
-                    assignedTo: result.result.assignedTo
-                });
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en unassignItem:', error);
             throw new Error(`Error al desasignar el item con ID ${id}`);
         }
     },
@@ -812,40 +376,15 @@ export const itemService = {
      * @returns {Promise<Array>} Lista de items no asignados.
      */
     getUnassignedItems: async () => {
-        console.log('Llamando a getUnassignedItems()');
-        
         try {
             const response = await fetch(`${API_URL}/items/unassigned`, {
                 headers: getAuthHeader(),
                 mode: 'cors'
             });
             
-            console.log("Respuesta de getUnassignedItems:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos de items no asignados recibidos:", result.result.length);
-                // Revisar si los items tienen la información de usuario
-                const sampleItem = result.result[0];
-                if (sampleItem) {
-                    console.log("Ejemplo de item no asignado recibido:", {
-                        id: sampleItem.id,
-                        name: sampleItem.name,
-                        ownerId: sampleItem.ownerId,
-                        owner: sampleItem.owner,
-                        assignedToId: sampleItem.assignedToId,
-                        assignedTo: sampleItem.assignedTo
-                    });
-                }
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en getUnassignedItems:', error);
             throw new Error('Error al obtener los items no asignados');
         }
     },
@@ -857,8 +396,6 @@ export const itemService = {
      * @returns {Promise<Object>} Respuesta de la operación.
      */
     assignItem: async (itemId, userId) => {
-        console.log(`Llamando a assignItem(itemId: ${itemId}, userId: ${userId})`);
-        
         try {
             const response = await fetch(`${API_URL}/items/${itemId}/assign`, {
                 method: 'PUT',
@@ -870,27 +407,9 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            console.log("Respuesta de assignItem:", {
-                status: response.status,
-                statusText: response.statusText
-            });
-            
             const result = await handleResponse(response);
-            
-            if (result && result.result) {
-                console.log("Datos del item asignado:", {
-                    id: result.result.id,
-                    name: result.result.name,
-                    ownerId: result.result.ownerId,
-                    owner: result.result.owner,
-                    assignedToId: result.result.assignedToId,
-                    assignedTo: result.result.assignedTo
-                });
-            }
-            
             return result;
         } catch (error) {
-            console.error('Error en assignItem:', error);
             throw new Error(`Error al asignar el item con ID ${itemId} al usuario con ID ${userId}`);
         }
     }

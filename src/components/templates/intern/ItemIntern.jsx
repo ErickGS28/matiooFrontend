@@ -268,7 +268,7 @@ export default function ItemIntern() {
                                     </span>
                                 </div>
                             </PopoverTrigger>
-                            <PopoverContent className="p-6 ml-[4em] bg-white rounded-2xl shadow-lg border border-purple-100">
+                            <PopoverContent className="p-6 ml-[4em] bg-white rounded-2xl shadow-lg border border-purple-100 transform -translate-x-1/2">
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3 pb-3 border-b border-purple-100">
                                         <img
@@ -392,7 +392,7 @@ export default function ItemIntern() {
                                     </span>
                                 </button>
                             </PopoverTrigger>
-                            <PopoverContent className="p-4 ml-[4em] bg-white rounded-lg shadow-lg border border-gray-200">
+                            <PopoverContent className="p-4 ml-[4em] bg-white rounded-lg shadow-lg border border-gray-200 transform -translate-x-1/4">
                                 <div className="flex flex-col gap-3">
                                     <p className="text-sm font-semibold text-gray-800">
                                         ¿Estás seguro que deseas cerrar sesión?

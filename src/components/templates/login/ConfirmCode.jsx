@@ -57,7 +57,7 @@ export default function ConfirmCode() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-purple-50">
-      <div className="flex justify-center gap-6 w-[900px] h-[500px] shadow-2xl p-6 rounded-lg shadow-purple-300 bg-white">
+      <div className="flex justify-center gap-6 w-3xl h-[500px] shadow-2xl p-6 rounded-2xl shadow-purple-300 bg-white">
         <div className="flex mt-[4em] mb-[4em]">
           <div>
             <section className="text-center">
@@ -83,7 +83,7 @@ export default function ConfirmCode() {
               />
             )}
 
-            <section className="mt-[4em]">
+            <section className="mt-[2em]">
               <form onSubmit={handleSubmit}>
                 <div className="flex justify-center gap-4 mb-6">
                   {digits.map((digit, index) => (
@@ -95,18 +95,18 @@ export default function ConfirmCode() {
                       onChange={(e) => handleChange(e.target.value, index)}
                       onKeyDown={(e) => handleKeyDown(e, index)}
                       ref={(el) => (inputsRef.current[index] = el)}
-                      className="w-12 h-12 text-2xl text-center border-2 border-purple-900 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
+                      className="w-16 h-16 text-2xl text-center border-2 border-purple-900 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 focus:bg-slate-100 transition duration-200"
                     />
                   ))}
                 </div>
 
-                <div className="text-end mt-[3em]">
+                <div className="text-center mt-[3em]">
                   <button
                     type="submit"
                     disabled={loading}
                     className={`${
                       loading ? "opacity-50 cursor-not-allowed" : ""
-                    } bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[180px] shadow shadow-purple-200 cursor-pointer`}
+                    }   border-2 hover:bg-indigo-200 hover:scale-105 border-blue-950 font-semibold py-2 px-4 rounded-full w-[180px] shadow shadow-purple-200 cursor-pointer`}
                   >
                     Confirmar código
                   </button>

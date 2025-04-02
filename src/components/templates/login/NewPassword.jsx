@@ -121,7 +121,7 @@ export default function NewPassword() {
                   disabled={loading}
                   className={`${
                     loading ? "opacity-50 cursor-not-allowed" : ""
-                  } bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[200px] shadow shadow-purple-200 shadow-lg cursor-pointer`}
+                  }  border-2 hover:bg-indigo-200 hover:scale-105 border-blue-950 font-semibold py-2 px-4 rounded-full w-auto shadow shadow-purple-200 cursor-pointer`}
                 >
                   Cambiar contraseña
                 </button>

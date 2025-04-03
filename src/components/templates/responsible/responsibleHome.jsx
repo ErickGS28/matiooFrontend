@@ -23,6 +23,50 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { updateUserProfile, getUserById } from "@/services/users/userService";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFDownloadLink,
+} from "@react-pdf/renderer";
+
+// Estilos para el PDF
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: "column",
+    padding: 10,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  item: {
+    marginBottom: 10,
+  },
+  text: {
+    fontSize: 12,
+  },
+});
+
+// Función para generar el PDF
+const generatePDF = (items) => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <Text style={styles.title}>Bienes Asignados</Text>
+      {items.map((item) => (
+        <View style={styles.item} key={item.id}>
+          <Text style={styles.text}>Nombre: {item.name}</Text>
+          <Text style={styles.text}>Código: {item.code}</Text>
+          <Text style={styles.text}>Descripción: {item.description}</Text>
+          <Text style={styles.text}>Estado: {item.status}</Text>
+        </View>
+      ))}
+    </Page>
+  </Document>
+);
 
 export default function responsibleHome() {
   const [navegar, setNavegar] = useState("");
@@ -57,7 +101,7 @@ export default function responsibleHome() {
           return;
         }
 
-        const userItems = await itemService.getItemsByAssignedToId(userData.id)
+        const userItems = await itemService.getItemsByAssignedToId(userData.id);
 
         setItems(userItems);
         setFilteredItems(userItems);
@@ -178,6 +222,23 @@ export default function responsibleHome() {
       setIsLoading(false);
     }
   };
+
+  // Función para descargar el PDF
+  const DownloadPDFButton = () => (
+    <PDFDownloadLink
+      document={generatePDF(items)}
+      fileName="bienes_asignados_responsable.pdf"
+    >
+      {({ loading }) => (
+        <Button
+          disabled={loading}
+          className="ml-2 text-white rounded-full px-3 py-2 bg-indigo-700 hover:bg-indigo-500 hover:shadow-md hover:shadow-purple-500 transition-colors duration-300"
+        >
+          {loading ? "Generando PDF..." : "Descargar PDF"}
+        </Button>
+      )}
+    </PDFDownloadLink>
+  );
 
   return (
     <>
@@ -342,7 +403,7 @@ export default function responsibleHome() {
                 </button>
               </PopoverTrigger>
               <PopoverContent className="p-4 ml-[4em] bg-white rounded-lg shadow-lg border border-gray-200 transform -translate-x-1/4">
-              <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3">
                   <p className="text-sm font-semibold text-gray-800">
                     ¿Estás seguro que deseas cerrar sesión?
                   </p>
@@ -385,9 +446,8 @@ export default function responsibleHome() {
                   className="w-[25em] rounded-full px-8 border-2 shadow-lg shadow-purple-200 py-2 bg-gray-100 font-medium"
                   placeholder="Buscar bien..."
                 />
-                <button className="ml-2  text-white rounded-full px-3 py-2 bg-indigo-700 hover:bg-indigo-500 hover:shadow-md hover:shadow-purple-500 transition duration-300 ease-in-out">
-                  Descargar PDF
-                </button>
+                {/* Botón Descargar PDF */}
+                <DownloadPDFButton />
               </div>
             </div>
 

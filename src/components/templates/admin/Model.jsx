@@ -422,7 +422,7 @@ const Model = () => {
 
             {/* Empty State */}
             {!loading && !error && (!filteredModels || filteredModels.length === 0) && (
-              <div className="flex flex-col justify-center items-center mt-10">
+              <div className="flex flex-col justify-center items-center mt-20">
                 <p className="text-lg">No hay modelos disponibles.</p>
                 <p className="text-md text-gray-500">
                   {searchQuery ? "Intente con otra búsqueda." : "Agregue uno nuevo con el botón +"}

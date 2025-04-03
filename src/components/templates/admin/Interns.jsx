@@ -281,7 +281,7 @@ export default function Interns() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                className="cursor-pointer absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800"
               >
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
@@ -307,7 +307,7 @@ export default function Interns() {
               id="isCommonArea"
               checked={formData.isCommonArea}
               onChange={handleCheckboxChange}
-              className="h-4 w-4 text-purple-900 rounded border-gray-300 focus:ring-purple-900"
+              className="cursor-pointer h-4 w-4 text-purple-900 rounded border-gray-300 focus:ring-purple-900"
             />
           </div>
           {formData.isCommonArea ? (

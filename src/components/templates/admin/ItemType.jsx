@@ -312,7 +312,7 @@ export default function ItemType() {
             {!loading &&
               !error &&
               (!filteredTypes || filteredTypes.length === 0) && (
-                <div className="flex flex-col justify-center items-center mt-10">
+                <div className="flex flex-col justify-center items-center mt-20">
                   <p className="text-lg">No hay tipos de bien disponibles.</p>
                   <p className="text-md text-gray-500">
                     {searchQuery

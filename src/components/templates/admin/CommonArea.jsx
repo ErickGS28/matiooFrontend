@@ -295,13 +295,15 @@ export default function CommonArea() {
             {!loading &&
               !error &&
               (!filteredAreas || filteredAreas.length === 0) && (
-                <div className="text-center mt-10">
-                  <p className="text-gray-500 text-lg">
-                    {searchQuery
+                <div className="flex flex-col justify-center items-center mt-20">
+                  <p className="text-lg">No hay áreas comunes disponibles.</p>
+                  <p className="text-md text-gray-500">
+                    {/* {searchQuery
                       ? "No se encontraron áreas comunes que coincidan con la búsqueda."
                       : statusFilter === "active"
                       ? "No hay áreas comunes activas."
-                      : "No hay áreas comunes inactivas."}
+                      : "No hay áreas comunes inactivas."} */}
+                    "Agregue uno nuevo con el botón +"
                   </p>
                 </div>
               )}

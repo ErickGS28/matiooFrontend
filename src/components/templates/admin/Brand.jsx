@@ -312,7 +312,7 @@ export default function Brand() {
             {!loading &&
               !error &&
               (!filteredBrands || filteredBrands.length === 0) && (
-                <div className="flex flex-col justify-center items-center mt-10">
+                <div className="flex flex-col justify-center items-center mt-20">
                   <p className="text-lg">No hay marcas disponibles.</p>
                   <p className="text-md text-gray-500">
                     {searchQuery

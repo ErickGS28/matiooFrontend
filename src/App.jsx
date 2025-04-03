@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MantineProvider } from "@mantine/core";
 import { Toaster } from "react-hot-toast";
@@ -24,6 +24,43 @@ const ItemIntern = lazy(() => import("./components/templates/intern/ItemIntern")
 
 function App() {
   const [user, setUser] = useState(null);
+  const [windowSizeValid, setWindowSizeValid] = useState(true);
+  const minWidth = 800;
+  const minHeight = 600;
+
+  const checkWindowSize = () => {
+    if (window.outerWidth < minWidth || window.outerHeight < minHeight) {
+      setWindowSizeValid(false);
+    } else {
+      setWindowSizeValid(true);
+    }
+  };
+
+  useEffect(() => {
+    checkWindowSize(); // Verificar al iniciar
+
+    window.addEventListener('resize', checkWindowSize);
+    return () => window.removeEventListener('resize', checkWindowSize);
+  }, []);
+
+  if (!windowSizeValid) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+          padding: "20px",
+          textAlign: "center"
+        }}
+      >
+        <h2>
+          El tamaño de la ventana es demasiado pequeño. Por favor, redimensiona la ventana a un mínimo de {minWidth}px de ancho y {minHeight}px de alto.
+        </h2>
+      </div>
+    );
+  }
 
   return (
     <Router>
@@ -33,13 +70,13 @@ function App() {
           <div>
             <Suspense fallback={<div>Loading...</div>}>
               <Routes>
-                {/* Public routes */}
+                {/* Rutas públicas */}
                 <Route path="/" element={<Form setUser={setUser} />} />
                 <Route path="/checkEmail" element={<CheckEmail user={user} />} />
                 <Route path="/confirmCode" element={<ConfirmCode user={user} />} />
                 <Route path="/newPassword" element={<NewPassword user={user} />} />
 
-                {/* Admin only routes */}
+                {/* Rutas para ADMIN */}
                 <Route
                   path="/home"
                   element={
@@ -113,7 +150,7 @@ function App() {
                   }
                 />
 
-                {/* Role-specific routes */}
+                {/* Rutas específicas para roles */}
                 <Route
                   path="/responsibleHome"
                   element={

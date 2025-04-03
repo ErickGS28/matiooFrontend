@@ -4,6 +4,8 @@ import { ViewItemDialog } from "@/components/templates/admin/dialog/ViewItemDial
 import { EditItemDialog } from "@/components/templates/admin/dialog/EditItemDialog";
 import { EstadoDialog } from "@/components/templates/admin/dialog/EstadoDialog";
 import { itemService } from "@/services/item/itemService";
+import { toast } from 'react-hot-toast';
+
 
 export default function TableItem({ data, onUpdateItem }) {
   const [items, setItems] = useState(data);
@@ -31,24 +33,26 @@ export default function TableItem({ data, onUpdateItem }) {
 
   const handleConfirmStatusChange = async (itemCode) => {
     try {
-      // Obtener el ID del item para llamar a la API
       const item = items.find(item => item.code === itemCode);
       if (item && item.id) {
-        // Llamar a la API para cambiar el estado
         await itemService.changeItemStatus(item.id);
-
-        // Actualizar el estado local
+  
         setItemStatus((prev) => ({
           ...prev,
           [itemCode]: !prev[itemCode],
         }));
+  
+        // ✅ Mostrar toast de éxito
+        toast.success("Cambio de estado del bien exitoso");
       }
     } catch (error) {
       console.error("Error al cambiar el estado del item:", error);
+      toast.error("Error al cambiar el estado del bien");
     } finally {
       setIsDialogOpen(false);
     }
   };
+  
 
   const handleCancelStatusChange = () => {
     setItemStatus((prev) => ({

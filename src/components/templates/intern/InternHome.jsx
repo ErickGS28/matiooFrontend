@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AssignItemDialog } from "./AssignItemDialog";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { decodeAndDisplayToken } from "@/services/auth/authService";
@@ -31,6 +30,9 @@ export default function InternHome() {
   const [filteredItems, setFilteredItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [itemToRemove, setItemToRemove] = useState(null);
+  const [isRemoveDialogOpen, setIsRemoveDialogOpen] = useState(false);
+
   const [userData, setUserData] = useState({
     id: "",
     fullName: "",
@@ -122,31 +124,34 @@ export default function InternHome() {
   }, [navegar, items]);
 
   const handleRemoveItem = async (itemId) => {
+    setItemToRemove(itemId);
+    setIsRemoveDialogOpen(true);
+  };
+
+  const confirmRemoveItem = async () => {
     try {
-      // Confirmar con el usuario antes de desasignar
-      if (window.confirm("¿Estás seguro de que deseas quitar este bien?")) {
-        
-        // Llamar al método unassignItem del itemService
-        const response = await itemService.unassignItem(itemId);
+      // Llamar al método unassignItem del itemService
+      const response = await itemService.unassignItem(itemToRemove);
 
-        // Mostrar mensaje de éxito
-        toast.success("Bien desasignado correctamente", {
-          id: "unassign-success",
-          duration: 3000,
-        });
+      // Mostrar mensaje de éxito
+      toast.success("Bien desasignado correctamente", {
+        id: "unassign-success",
+        duration: 3000,
+      });
 
-        // Actualizar la lista de items (eliminar el item desasignado)
-        setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-        setFilteredItems((prevItems) =>
-          prevItems.filter((item) => item.id !== itemId)
-        );
-      }
+      // Actualizar la lista de items (eliminar el item desasignado)
+      setItems((prevItems) => prevItems.filter((item) => item.id !== itemToRemove));
+      setFilteredItems((prevItems) =>
+        prevItems.filter((item) => item.id !== itemToRemove)
+      );
     } catch (error) {
       console.error("Error al desasignar el item:", error);
       toast.error("Error al quitar el bien", {
         id: "unassign-error",
         duration: 3000,
       });
+    } finally {
+      setIsRemoveDialogOpen(false);
     }
   };
 
@@ -482,6 +487,36 @@ export default function InternHome() {
           </div>
         </main>
       </div>
+
+      <Dialog
+        open={isRemoveDialogOpen}
+        onOpenChange={setIsRemoveDialogOpen}
+      >
+        <DialogContent className="max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle className="text-darkpurple-title text-[1.5em] font-semibold">
+              Confirmar eliminación
+            </DialogTitle>
+            <DialogDescription>
+              ¿Estás seguro de que deseas quitar este bien?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex justify-end gap-2 mt-4">
+            <Button
+              variant="outline"
+              onClick={() => setIsRemoveDialogOpen(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              className="bg-red-cancel text-white"
+              onClick={confirmRemoveItem}
+            >
+              Confirmar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

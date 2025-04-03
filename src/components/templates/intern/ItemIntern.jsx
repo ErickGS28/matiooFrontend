@@ -25,6 +25,9 @@ import { updateUserProfile, getUserById } from "@/services/users/userService";
 import { Button } from "@/components/ui/button";
 
 export default function ItemIntern() {
+    const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+const [selectedItemId, setSelectedItemId] = useState(null);
+
     const [isLoading, setIsLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [navegar, setNavegar] = useState("");
@@ -489,17 +492,70 @@ export default function ItemIntern() {
                                         </div>
 
                                         <div className="flex justify-end mt-2">
-                                            <Button
-                                                className="py-1 px-3 bg-green-confirm rounded-full text-amber-50"
-                                                onClick={() => handleAssignItem(item.id)}
-                                            >
-                                                Asignar
-                                            </Button>
+                                        <Button
+  className="py-1 px-3 bg-green-confirm rounded-full text-amber-50"
+  onClick={() => {
+    setSelectedItemId(item.id);
+    setConfirmDialogOpen(true);
+  }}
+>
+  Asignar
+</Button>
+
                                         </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
+                        <Dialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
+  <DialogContent className="max-w-[400px]">
+    <DialogHeader>
+      <DialogTitle className="text-darkpurple-title text-[1.5em] font-semibold">
+        Confirmar asignación
+      </DialogTitle>
+      <DialogDescription>
+        ¿Estás seguro de que deseas asignar este bien a tu cuenta?
+      </DialogDescription>
+    </DialogHeader>
+
+    <DialogFooter className="flex justify-end gap-2 mt-4">
+      <Button
+        variant="outline"
+        onClick={() => setConfirmDialogOpen(false)}
+      >
+        Cancelar
+      </Button>
+      <Button
+        className="bg-green-confirm text-white"
+        onClick={async () => {
+          try {
+            const response = await itemService.assignItem(selectedItemId, currentUserId);
+
+            toast.success("Bien asignado correctamente", {
+              id: "assign-success",
+              duration: 3000,
+            });
+
+            // Remover el item asignado
+            setItems((prev) => prev.filter((i) => i.id !== selectedItemId));
+            setFilteredItems((prev) => prev.filter((i) => i.id !== selectedItemId));
+          } catch (error) {
+            console.error("Error al asignar el bien:", error);
+            toast.error("Error al asignar el bien", {
+              id: "assign-error",
+              duration: 3000,
+            });
+          } finally {
+            setConfirmDialogOpen(false);
+          }
+        }}
+      >
+        Confirmar
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
                     </div>
                 </main>
             </div>

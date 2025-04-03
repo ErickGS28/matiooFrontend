@@ -21,6 +21,8 @@ import { getActiveCommonAreas } from "@/services/common_area/commonAreaService";
 import { getActiveBrands } from "@/services/brand/brandService";
 import { getActiveItemTypes } from "@/services/item_type/itemTypeService";
 import { getActiveModels } from "@/services/model/modelService";
+import { toast } from "react-hot-toast";
+
 
 export function EditItemDialog({ item, onSave }) {
   
@@ -170,16 +172,23 @@ export function EditItemDialog({ item, onSave }) {
 
       // Si todo OK
       setIsDialogOpen(false); // Cerrar el diálogo
-      alert("¡Bien guardado!");
+       // ✅ Nuevo toast de éxito
+    toast.success("¡Bien actualizado!", {
+      id: "item-update-success",
+      duration: 3000
+    });
     } catch (error) {
       console.error("Error en handleSave:", error);
-      alert("Error al guardar: " + (error?.message || "Desconocido"));
+      toast.error(`Error al guardar: ${error?.message || "Desconocido"}`, {
+        id: "item-update-error",
+        duration: 4000
+      });
     }
   };
 
   return (
-    <Dialog onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>
+<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+<DialogTrigger asChild>
         <img
           src="/action.png"
           alt="Actions"

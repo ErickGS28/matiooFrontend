@@ -341,9 +341,9 @@ const Model = () => {
                       </button>
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[20em] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)] transform -translate-x-1/2">
-                    <div className="w-[90%] m-auto">
-                      <div className="mt-[2em] flex items-center justify-center border-b border-purple-100">
+                  <PopoverContent className="w-[22em] p-6 bg-white rounded-2xl shadow-lg transform -translate-x-1/2">
+                  <div className="max-h-[24em] overflow-y-auto pr-2">
+                  <div className="mt-[2em] flex items-center justify-center border-b border-purple-100">
                         <img
                           src="/asidebarIMG/notaChida.png"
                           alt="Modelo"

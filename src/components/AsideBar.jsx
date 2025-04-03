@@ -109,62 +109,66 @@ export default function AsideBar({ activePage = "", onToggle }) {
   // Load user data from token when component mounts or dialog opens
   useEffect(() => {
     const loadUserData = async () => {
+      let loaded = false;
+  
       try {
-        // Obtener el ID del usuario desde el token
         const tokenData = decodeAndDisplayToken();
-
-        if (tokenData && tokenData.id) {
-          // Guardar el ID en localStorage para futuras referencias
+  
+        if (tokenData?.id) {
           localStorage.setItem('userId', tokenData.id);
-
-          // Obtener los datos completos del usuario usando getUserById
           const response = await getUserById(tokenData.id);
-
-          if (response && response.result) {
-            const userData = response.result;
+  
+          if (response?.result) {
             const profileData = {
-              id: userData.id,
-              fullName: userData.fullName,
-              username: userData.username,
-              email: userData.email,
-              location: userData.location
+              id: response.result.id,
+              fullName: response.result.fullName,
+              username: response.result.username,
+              email: response.result.email,
+              location: response.result.location,
             };
             setUserData(profileData);
-            logUserData(profileData);
+            loaded = true;
           }
-        } else {
-          console.warn("No se pudo obtener el ID del usuario desde el token");
-
-          // Intentar usar el ID guardado en localStorage como respaldo
+        }
+      } catch (err) {
+        // Error silencioso en producción
+      }
+  
+      if (!loaded) {
+        try {
           const savedUserId = localStorage.getItem('userId');
           if (savedUserId) {
             const response = await getUserById(savedUserId);
-            if (response && response.result) {
-              const userData = response.result;
+  
+            if (response?.result) {
               const profileData = {
-                id: userData.id,
-                fullName: userData.fullName,
-                username: userData.username,
-                email: userData.email,
-                location: userData.location
+                id: response.result.id,
+                fullName: response.result.fullName,
+                username: response.result.username,
+                email: response.result.email,
+                location: response.result.location,
               };
               setUserData(profileData);
-              logUserData(profileData);
+              loaded = true;
             }
           }
+        } catch (err) {
+          // Error silencioso en producción
         }
-      } catch (error) {
-        console.error("Error al cargar los datos del usuario:", error);
+      }
+  
+      if (!loaded) {
         toast.error("No se pudieron cargar los datos del perfil", {
           id: "profile-load-error",
           duration: 3000
         });
       }
     };
-
+  
     loadUserData();
-  }, [dialogOpen]); // Recargar datos cuando se abre el diálogo
-
+  }, [dialogOpen]);
+  
+  
   return (
     <>
       <div

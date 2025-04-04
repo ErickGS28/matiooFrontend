@@ -252,13 +252,14 @@ export default function responsibleHome() {
     if (items.length > 0) {
       const filtered = items.filter(
         (item) =>
-          (item.name && item.name.toLowerCase().includes(navegar.toLowerCase())) ||
-          (item.description && item.description.toLowerCase().includes(navegar.toLowerCase()))
+          (item.name &&
+            item.name.toLowerCase().includes(navegar.toLowerCase())) ||
+          (item.description &&
+            item.description.toLowerCase().includes(navegar.toLowerCase()))
       );
       setFilteredItems(filtered);
     }
   }, [navegar, items]);
-  
 
   const handleRemoveItem = async (itemId) => {
     try {
@@ -336,13 +337,22 @@ export default function responsibleHome() {
       {({ loading }) => (
         <Button
           disabled={loading}
-          className="ml-2 text-white rounded-full px-3 py-2 bg-tranparent hover:bg-indigo-500 hover:shadow-md hover:shadow-purple-500 transition-colors duration-300"
+          className="ml-2 text-white rounded-full px-3 py-2 bg-tranparent hover:bg-tranparent "
         >
-          {loading ? "Generando PDF..." : <img src="./pdf.png" alt="pdf.png" className="w-[3em]" />}
-          
+          {loading ? (
+            <img
+              src="./pdfCargando.png"
+              alt="pdf.png"
+              className="w-[3em] hover:scale-110"
+            />
+          ) : (
+            <img
+              src="./pdf.png"
+              alt="pdf.png"
+              className="w-[3em] hover:scale-110"
+            />
+          )}
         </Button>
-
-        
       )}
     </PDFDownloadLink>
   );

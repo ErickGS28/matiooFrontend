@@ -263,13 +263,14 @@ export default function InternHome() {
     if (items.length > 0) {
       const filtered = items.filter(
         (item) =>
-          (item.name && item.name.toLowerCase().includes(navegar.toLowerCase())) ||
-          (item.description && item.description.toLowerCase().includes(navegar.toLowerCase()))
+          (item.name &&
+            item.name.toLowerCase().includes(navegar.toLowerCase())) ||
+          (item.description &&
+            item.description.toLowerCase().includes(navegar.toLowerCase()))
       );
       setFilteredItems(filtered);
     }
   }, [navegar, items]);
-  
 
   const handleRemoveItem = async (itemId) => {
     setItemToRemove(itemId);
@@ -358,11 +359,23 @@ export default function InternHome() {
     >
       {({ loading }) => (
         <Button
-          disabled={loading}
-          className="ml-2 text-white rounded-full px-3 py-2 bg-indigo-700 hover:bg-indigo-500 hover:shadow-md hover:shadow-purple-500 transition-colors duration-300"
-        >
-          {loading ? "Generando PDF..." : "Descargar PDF"}
-        </Button>
+                  disabled={loading}
+                  className="ml-2 text-white rounded-full px-3 py-2 bg-tranparent hover:bg-tranparent "
+                >
+                  {loading ? (
+                    <img
+                      src="./pdfCargando.png"
+                      alt="pdf.png"
+                      className="w-[3em] hover:scale-110"
+                    />
+                  ) : (
+                    <img
+                      src="./pdf.png"
+                      alt="pdf.png"
+                      className="w-[3em] hover:scale-110"
+                    />
+                  )}
+                </Button>
       )}
     </PDFDownloadLink>
   );

@@ -30,40 +30,97 @@ import {
   View,
   StyleSheet,
   PDFDownloadLink,
+  Image,
 } from "@react-pdf/renderer";
 
-// Estilos para el PDF
 const styles = StyleSheet.create({
-  page: {
-    flexDirection: "column",
-    padding: 10,
-  },
-  title: {
-    fontSize: 20,
+  page: { padding: 30 },
+  header: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
+  logo: { width: 100, height: 50, marginRight: 10 },
+  headerText: { flex: 1, textAlign: "center" },
+  title: { fontSize: 14, fontWeight: "bold", textAlign: "center", marginBottom: 10 },
+  section: { marginBottom: 10 },
+  row: { flexDirection: "row", justifyContent: "space-between", marginBottom: 5 },
+  text: { fontSize: 10, marginBottom: 5 },
+  table: { borderWidth: 1, borderColor: "#000", marginTop: 10 },
+  tableRow: { flexDirection: "row", borderBottomWidth: 1, borderColor: "#000" },
+  tableHeader: {
     fontWeight: "bold",
-    marginBottom: 10,
+    fontSize: 10,
+    backgroundColor: "#f2f2f2",
+    padding: 8,
+    textAlign: "center",
+    borderRightWidth: 1,
+    borderColor: "#000",
+    flex: 1,
   },
-  item: {
-    marginBottom: 10,
+  tableCell: {
+    padding: 8,
+    fontSize: 10,
+    textAlign: "center",
+    borderRightWidth: 1,
+    borderColor: "#000",
+    flex: 1,
   },
-  text: {
-    fontSize: 12,
-  },
+  smallCell: { flex: 0.5 },
+  largeCell: { flex: 2.5 },
+  item: { marginBottom: 20 },
 });
 
-// Función para generar el PDF
 const generatePDF = (items) => (
   <Document>
     <Page size="A4" style={styles.page}>
-      <Text style={styles.title}>Bienes Asignados</Text>
-      {items.map((item) => (
-        <View style={styles.item} key={item.id}>
-          <Text style={styles.text}>Nombre: {item.name}</Text>
-          <Text style={styles.text}>Código: {item.code}</Text>
-          <Text style={styles.text}>Descripción: {item.description}</Text>
-          <Text style={styles.text}>Estado: {item.status}</Text>
+      <View style={styles.header}>
+        <Image src="/utez.png" style={styles.logo} />
+        <View style={styles.headerText}>
+          <Text>UNIVERSIDAD TECNOLÓGICA EMILIANO ZAPATA</Text>
+          <Text style={{ marginBottom: 10 }}>DEL ESTADO DE MORELOS</Text>
+          <Text style={{ fontSize: 10 }}>Organismo Público Descentralizado del Gobierno del Estado de Morelos</Text>
+          <Text style={{ fontSize: 10 }}>RESGUARDO INDIVIDUAL DE ACTIVOS FIJOS</Text>
         </View>
-      ))}
+      </View>
+
+      <Text style={{ ...styles.text, marginBottom: 10 }}>
+        Unidad Administrativa: CENTRO DE DESARROLLO DE SOFTWARE
+      </Text>
+
+      {items.length === 0 ? (
+        <Text style={{ ...styles.text, textAlign: 'center'}}>No hay bienes asignados actualmente. </Text>
+      ) : (
+        items.map((item, index) => (
+          <View style={styles.item} key={item.id}>
+            <Text style={styles.text}>Dueño del bien: {item.owner.fullName.toUpperCase()}</Text>
+            <Text style={styles.text}>
+              Fecha: {new Intl.DateTimeFormat("es-MX", {
+                weekday: "long",
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              }).format(new Date())}
+            </Text>
+            <View style={styles.table}>
+              <View style={styles.tableRow}>
+                <Text style={[styles.tableHeader, styles.smallCell]}>#</Text>
+                <Text style={styles.tableHeader}>Código bien</Text>
+                <Text style={[styles.tableHeader, styles.largeCell]}>Descripción</Text>
+                <Text style={styles.tableHeader}>Marca</Text>
+                <Text style={styles.tableHeader}>Modelo</Text>
+                <Text style={styles.tableHeader}>No. de serie</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={[styles.tableCell, styles.smallCell]}>{index + 1}</Text>
+                <Text style={styles.tableCell}>{item.code}</Text>
+                <Text style={[styles.tableCell, styles.largeCell]}>
+                  El bien llamado {item.name} de tipo {item.itemType.name} está ubicado en {item.location}
+                </Text>
+                <Text style={styles.tableCell}>{item.brand.name}</Text>
+                <Text style={styles.tableCell}>{item.model.name}</Text>
+                <Text style={styles.tableCell}>{item.serialNumber}</Text>
+              </View>
+            </View>
+          </View>
+        ))
+      )}
     </Page>
   </Document>
 );
@@ -282,174 +339,174 @@ export default function InternHome() {
             </Link>
 
             {/* Botón Mi Perfil con Popover */}
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <div className="flex items-center  gap-4 h-10 px-4 rounded-2xl cursor-pointer bg-white hover:bg-skyblue-bg-icon transition-all duration-300 ease-in-out hover:scale-105 rounded-bl-[1.4em] rounded-br-[1.4em] rounded-tl-[0.5em] rounded-tr-[0.5em] border-1 border-gray-500">
-                              <img
-                                src="/asidebarIMG/profile.png"
-                                alt="Perfil"
-                                className="w-[1.3em] min-w-[1.3em] flex-shrink-0"
-                              />
-                              <span className="transition-all duration-200 ease-in-out opacity-100 delay-200">
-                                Mi Perfil
-                              </span>
-                            </div>
-                          </PopoverTrigger>
-                          <PopoverContent className="p-6 ml-[4em] bg-white rounded-2xl shadow-lg border border-purple-100 transform -translate-x-1/2">
-                            <div className="space-y-4">
-                              <div className="flex items-center gap-3 pb-3 border-b border-purple-100">
-                                <img
-                                  src="/asidebarIMG/profile.png"
-                                  alt="Perfil"
-                                  className="w-10 h-10 p-2 bg-purple-50 rounded-full"
-                                />
-                                <div>
-                                  <h3 className="font-semibold text-darkpurple-title">
-                                    Mi Perfil
-                                  </h3>
-                                  <p className="text-sm text-gray-600">
-                                    {userData.email || "Cargando..."}
-                                  </p>
-                                </div>
-                              </div>
-            
-                              <Dialog
-                                open={dialogOpen}
-                                onOpenChange={(open) => {
-                                  setDialogOpen(open);
-                                  // Si se cierra el diálogo, resetear cualquier error
-                                  if (!open) {
-                                    setIsLoading(false);
-                                  }
-                                }}
-                              >
-                                <DialogTrigger asChild>
-                                  <Button
-                                    className="mt-2 bg-green-confirm cursor-pointer"
-                                    onClick={() => document.body.click()}
-                                  >
-                                    Editar Perfil
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[425px]">
-                                  <DialogHeader>
-                                    <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
-                                      Editar Perfil
-                                    </DialogTitle>
-                                    <DialogDescription>
-                                      Correo: {userData.email || "Cargando..."}
-                                    </DialogDescription>
-                                  </DialogHeader>
-                                  <form onSubmit={handleProfileUpdate}>
-                                    <div className="grid gap-4 py-4">
-                                      <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label
-                                          htmlFor="fullName"
-                                          className="text-right text-[1em]"
-                                        >
-                                          Nombre Completo
-                                        </Label>
-                                        <Input
-                                          id="fullName"
-                                          value={userData.fullName || ""}
-                                          onChange={handleInputChange}
-                                          placeholder="Ingrese su nombre completo"
-                                          className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
-                                          required
-                                        />
-                                      </div>
-                                      <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label
-                                          htmlFor="username"
-                                          className="text-right text-[1em]"
-                                        >
-                                          Usuario
-                                        </Label>
-                                        <Input
-                                          id="username"
-                                          value={userData.username || ""}
-                                          onChange={handleInputChange}
-                                          placeholder="Ingrese su nombre de usuario"
-                                          className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
-                                          required
-                                        />
-                                      </div>
-                                      <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label
-                                          htmlFor="email"
-                                          className="text-right text-[1em]"
-                                        >
-                                          Correo
-                                        </Label>
-                                        <Input
-                                          id="email"
-                                          value={userData.email || ""}
-                                          onChange={handleInputChange}
-                                          placeholder="Ingrese su correo electrónico"
-                                          className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
-                                          required
-                                        />
-                                      </div>
-                                      <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label
-                                          htmlFor="location"
-                                          className="text-right text-[1em]"
-                                        >
-                                          Ubicación
-                                        </Label>
-                                        <Input
-                                          id="location"
-                                          value={userData.location || ""}
-                                          onChange={handleInputChange}
-                                          placeholder="Ingrese su ubicación"
-                                          className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
-                                        />
-                                      </div>
-                                    </div>
-                                    <DialogFooter>
-                                      <Button
-                                        type="submit"
-                                        className="bg-green-confirm"
-                                        disabled={isLoading}
-                                      >
-                                        {isLoading ? "Guardando..." : "Guardar cambios"}
-                                      </Button>
-                                    </DialogFooter>
-                                  </form>
-                                </DialogContent>
-                              </Dialog>
-                            </div>
-                          </PopoverContent>
-                        </Popover>
-            
-                        {/* Botón Cerrar sesión */}
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <button className="flex items-center justify-center gap-4 h-10 px-4 rounded-2xl cursor-pointer bg-red-bg-icon transition-all duration-300 ease-in-out hover:scale-105 rounded-bl-[1.4em] rounded-br-[1.4em] rounded-tl-[0.5em] rounded-tr-[0.5em]">
-                              <img
-                                src="/asidebarIMG/closeAccount.png"
-                                alt="Cerrar sesión"
-                                className="w-[1.3em] min-w-[1.3em] flex-shrink-0"
-                              />
-                              <span className="text-white">Cerrar sesión</span>
-                            </button>
-                          </PopoverTrigger>
-                          <PopoverContent className="p-4 ml-[4em] bg-white rounded-lg shadow-lg border border-gray-200 transform -translate-x-1/4">
-                            <div className="flex flex-col gap-3">
-                              <p className="text-sm font-semibold text-gray-800">
-                                ¿Estás seguro que deseas cerrar sesión?
-                              </p>
-                              <div className="flex justify-end">
-                                <button
-                                  className="px-3 py-1.5 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
-                                  onClick={handleLogout}
-                                >
-                                  Confirmar
-                                </button>
-                              </div>
-                            </div>
-                          </PopoverContent>
-                        </Popover>
+            <Popover>
+              <PopoverTrigger asChild>
+                <div className="flex items-center  gap-4 h-10 px-4 rounded-2xl cursor-pointer bg-white hover:bg-skyblue-bg-icon transition-all duration-300 ease-in-out hover:scale-105 rounded-bl-[1.4em] rounded-br-[1.4em] rounded-tl-[0.5em] rounded-tr-[0.5em] border-1 border-gray-500">
+                  <img
+                    src="/asidebarIMG/profile.png"
+                    alt="Perfil"
+                    className="w-[1.3em] min-w-[1.3em] flex-shrink-0"
+                  />
+                  <span className="transition-all duration-200 ease-in-out opacity-100 delay-200">
+                    Mi Perfil
+                  </span>
+                </div>
+              </PopoverTrigger>
+              <PopoverContent className="p-6 ml-[4em] bg-white rounded-2xl shadow-lg border border-purple-100 transform -translate-x-1/2">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 pb-3 border-b border-purple-100">
+                    <img
+                      src="/asidebarIMG/profile.png"
+                      alt="Perfil"
+                      className="w-10 h-10 p-2 bg-purple-50 rounded-full"
+                    />
+                    <div>
+                      <h3 className="font-semibold text-darkpurple-title">
+                        Mi Perfil
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {userData.email || "Cargando..."}
+                      </p>
+                    </div>
+                  </div>
+
+                  <Dialog
+                    open={dialogOpen}
+                    onOpenChange={(open) => {
+                      setDialogOpen(open);
+                      // Si se cierra el diálogo, resetear cualquier error
+                      if (!open) {
+                        setIsLoading(false);
+                      }
+                    }}
+                  >
+                    <DialogTrigger asChild>
+                      <Button
+                        className="mt-2 bg-green-confirm cursor-pointer"
+                        onClick={() => document.body.click()}
+                      >
+                        Editar Perfil
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
+                          Editar Perfil
+                        </DialogTitle>
+                        <DialogDescription>
+                          Correo: {userData.email || "Cargando..."}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <form onSubmit={handleProfileUpdate}>
+                        <div className="grid gap-4 py-4">
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label
+                              htmlFor="fullName"
+                              className="text-right text-[1em]"
+                            >
+                              Nombre Completo
+                            </Label>
+                            <Input
+                              id="fullName"
+                              value={userData.fullName || ""}
+                              onChange={handleInputChange}
+                              placeholder="Ingrese su nombre completo"
+                              className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
+                              required
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label
+                              htmlFor="username"
+                              className="text-right text-[1em]"
+                            >
+                              Usuario
+                            </Label>
+                            <Input
+                              id="username"
+                              value={userData.username || ""}
+                              onChange={handleInputChange}
+                              placeholder="Ingrese su nombre de usuario"
+                              className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
+                              required
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label
+                              htmlFor="email"
+                              className="text-right text-[1em]"
+                            >
+                              Correo
+                            </Label>
+                            <Input
+                              id="email"
+                              value={userData.email || ""}
+                              onChange={handleInputChange}
+                              placeholder="Ingrese su correo electrónico"
+                              className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
+                              required
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label
+                              htmlFor="location"
+                              className="text-right text-[1em]"
+                            >
+                              Ubicación
+                            </Label>
+                            <Input
+                              id="location"
+                              value={userData.location || ""}
+                              onChange={handleInputChange}
+                              placeholder="Ingrese su ubicación"
+                              className="col-span-3 rounded-[1em] py-2 px-4 border-2 border-purple-900 w-full"
+                            />
+                          </div>
+                        </div>
+                        <DialogFooter>
+                          <Button
+                            type="submit"
+                            className="bg-green-confirm"
+                            disabled={isLoading}
+                          >
+                            {isLoading ? "Guardando..." : "Guardar cambios"}
+                          </Button>
+                        </DialogFooter>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </PopoverContent>
+            </Popover>
+
+            {/* Botón Cerrar sesión */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="flex items-center justify-center gap-4 h-10 px-4 rounded-2xl cursor-pointer bg-red-bg-icon transition-all duration-300 ease-in-out hover:scale-105 rounded-bl-[1.4em] rounded-br-[1.4em] rounded-tl-[0.5em] rounded-tr-[0.5em]">
+                  <img
+                    src="/asidebarIMG/closeAccount.png"
+                    alt="Cerrar sesión"
+                    className="w-[1.3em] min-w-[1.3em] flex-shrink-0"
+                  />
+                  <span className="text-white">Cerrar sesión</span>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="p-4 ml-[4em] bg-white rounded-lg shadow-lg border border-gray-200 transform -translate-x-1/4">
+                <div className="flex flex-col gap-3">
+                  <p className="text-sm font-semibold text-gray-800">
+                    ¿Estás seguro que deseas cerrar sesión?
+                  </p>
+                  <div className="flex justify-end">
+                    <button
+                      className="px-3 py-1.5 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
+                      onClick={handleLogout}
+                    >
+                      Confirmar
+                    </button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </nav>

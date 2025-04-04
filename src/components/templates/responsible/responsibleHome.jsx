@@ -30,43 +30,101 @@ import {
   View,
   StyleSheet,
   PDFDownloadLink,
+  Image,
 } from "@react-pdf/renderer";
 
-// Estilos para el PDF
 const styles = StyleSheet.create({
-  page: {
-    flexDirection: "column",
-    padding: 10,
-  },
-  title: {
-    fontSize: 20,
+  page: { padding: 30 },
+  header: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
+  logo: { width: 100, height: 50, marginRight: 10 },
+  headerText: { flex: 1, textAlign: "center" },
+  title: { fontSize: 14, fontWeight: "bold", textAlign: "center", marginBottom: 10 },
+  section: { marginBottom: 10 },
+  row: { flexDirection: "row", justifyContent: "space-between", marginBottom: 5 },
+  text: { fontSize: 10, marginBottom: 5 },
+  table: { borderWidth: 1, borderColor: "#000", marginTop: 10 },
+  tableRow: { flexDirection: "row", borderBottomWidth: 1, borderColor: "#000" },
+  tableHeader: {
     fontWeight: "bold",
-    marginBottom: 10,
+    fontSize: 10,
+    backgroundColor: "#f2f2f2",
+    padding: 8,
+    textAlign: "center",
+    borderRightWidth: 1,
+    borderColor: "#000",
+    flex: 1,
   },
-  item: {
-    marginBottom: 10,
+  tableCell: {
+    padding: 8,
+    fontSize: 10,
+    textAlign: "center",
+    borderRightWidth: 1,
+    borderColor: "#000",
+    flex: 1,
   },
-  text: {
-    fontSize: 12,
-  },
+  smallCell: { flex: 0.5 },
+  largeCell: { flex: 2.5 },
+  item: { marginBottom: 20 },
 });
 
-// Función para generar el PDF
 const generatePDF = (items) => (
   <Document>
     <Page size="A4" style={styles.page}>
-      <Text style={styles.title}>Bienes Asignados</Text>
-      {items.map((item) => (
-        <View style={styles.item} key={item.id}>
-          <Text style={styles.text}>Nombre: {item.name}</Text>
-          <Text style={styles.text}>Código: {item.code}</Text>
-          <Text style={styles.text}>Descripción: {item.description}</Text>
-          <Text style={styles.text}>Estado: {item.status}</Text>
+      <View style={styles.header}>
+        <Image src="/utez.png" style={styles.logo} />
+        <View style={styles.headerText}>
+          <Text>UNIVERSIDAD TECNOLÓGICA EMILIANO ZAPATA</Text>
+          <Text style={{ marginBottom: 10 }}>DEL ESTADO DE MORELOS</Text>
+          <Text style={{ fontSize: 10 }}>Organismo Público Descentralizado del Gobierno del Estado de Morelos</Text>
+          <Text style={{ fontSize: 10 }}>RESGUARDO INDIVIDUAL DE ACTIVOS FIJOS</Text>
         </View>
-      ))}
+      </View>
+
+      <Text style={{ ...styles.text, marginBottom: 10 }}>
+        Unidad Administrativa: CENTRO DE DESARROLLO DE SOFTWARE
+      </Text>
+
+      {items.length === 0 ? (
+        <Text style={{ ...styles.text, textAlign: 'center'}}>No hay bienes asignados actualmente. </Text>
+      ) : (
+        items.map((item, index) => (
+          <View style={styles.item} key={item.id}>
+            <Text style={styles.text}>Dueño del bien: {item.owner.fullName.toUpperCase()}</Text>
+            <Text style={styles.text}>
+              Fecha: {new Intl.DateTimeFormat("es-MX", {
+                weekday: "long",
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              }).format(new Date())}
+            </Text>
+            <View style={styles.table}>
+              <View style={styles.tableRow}>
+                <Text style={[styles.tableHeader, styles.smallCell]}>#</Text>
+                <Text style={styles.tableHeader}>Código bien</Text>
+                <Text style={[styles.tableHeader, styles.largeCell]}>Descripción</Text>
+                <Text style={styles.tableHeader}>Marca</Text>
+                <Text style={styles.tableHeader}>Modelo</Text>
+                <Text style={styles.tableHeader}>No. de serie</Text>
+              </View>
+              <View style={styles.tableRow}>
+                <Text style={[styles.tableCell, styles.smallCell]}>{index + 1}</Text>
+                <Text style={styles.tableCell}>{item.code}</Text>
+                <Text style={[styles.tableCell, styles.largeCell]}>
+                  El bien llamado {item.name} de tipo {item.itemType.name} está ubicado en {item.location}
+                </Text>
+                <Text style={styles.tableCell}>{item.brand.name}</Text>
+                <Text style={styles.tableCell}>{item.model.name}</Text>
+                <Text style={styles.tableCell}>{item.serialNumber}</Text>
+              </View>
+            </View>
+          </View>
+        ))
+      )}
     </Page>
   </Document>
 );
+
 
 export default function responsibleHome() {
   const [navegar, setNavegar] = useState("");

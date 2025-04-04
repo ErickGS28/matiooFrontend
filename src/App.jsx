@@ -4,6 +4,7 @@ import { MantineProvider } from "@mantine/core";
 import { Toaster } from "react-hot-toast";
 import Form from "./components/templates/login/Form";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import ResponsibleInCharge from "./components/templates/responsible/ResponsibleInCharge";
 
 // Lazy load components
 const Home = lazy(() => import("./components/templates/admin/Home"));
@@ -52,7 +53,8 @@ function App() {
           justifyContent: "center",
           height: "100vh",
           padding: "20px",
-          textAlign: "center"
+          textAlign: "center",
+          backgroundColor: "#C5AEFF",
         }}
       >
         <h2>
@@ -159,6 +161,15 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/responsibleInCharge"
+                  element={
+                    <ProtectedRoute allowedRoles="RESPONSIBLE">
+                      <ResponsibleInCharge />
+                    </ProtectedRoute>
+                  }
+                />
+
                 <Route
                   path="/internHome"
                   element={

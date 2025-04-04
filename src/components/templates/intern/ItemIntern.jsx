@@ -496,9 +496,7 @@ export default function ItemIntern() {
                       <p className="text-sm text-gray-200">
                         Código: {item.code}
                       </p>
-                      <p className="text-sm text-gray-200">
-                        Estado: {item.status}
-                      </p>
+                      
                     </div>
 
                     <div className="flex justify-end mt-2">

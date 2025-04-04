@@ -38,9 +38,18 @@ const styles = StyleSheet.create({
   header: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
   logo: { width: 100, height: 50, marginRight: 10 },
   headerText: { flex: 1, textAlign: "center" },
-  title: { fontSize: 14, fontWeight: "bold", textAlign: "center", marginBottom: 10 },
+  title: {
+    fontSize: 14,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 10,
+  },
   section: { marginBottom: 10 },
-  row: { flexDirection: "row", justifyContent: "space-between", marginBottom: 5 },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 5,
+  },
   text: { fontSize: 10, marginBottom: 5 },
   table: { borderWidth: 1, borderColor: "#000", marginTop: 10 },
   tableRow: { flexDirection: "row", borderBottomWidth: 1, borderColor: "#000" },
@@ -68,7 +77,10 @@ const styles = StyleSheet.create({
 });
 
 const generatePDF = (items) => {
-  const assignedToName = items.length > 0 ? items[0].assignedTo.fullName.toUpperCase() : "SIN ASIGNAR";
+  const assignedToName =
+    items.length > 0
+      ? items[0].assignedTo.fullName.toUpperCase()
+      : "SIN ASIGNAR";
 
   return (
     <Document>
@@ -79,27 +91,37 @@ const generatePDF = (items) => {
           <View style={styles.headerText}>
             <Text>UNIVERSIDAD TECNOLÓGICA EMILIANO ZAPATA</Text>
             <Text style={{ marginBottom: 10 }}>DEL ESTADO DE MORELOS</Text>
-            <Text style={{ fontSize: 10 }}>Organismo Público Descentralizado del Gobierno del Estado de Morelos</Text>
-            <Text style={{ fontSize: 10 }}>RESGUARDO INDIVIDUAL DE ACTIVOS FIJOS</Text>
+            <Text style={{ fontSize: 10 }}>
+              Organismo Público Descentralizado del Gobierno del Estado de
+              Morelos
+            </Text>
+            <Text style={{ fontSize: 10 }}>
+              RESGUARDO INDIVIDUAL DE ACTIVOS FIJOS
+            </Text>
           </View>
         </View>
-  
+
         {/* Información general */}
         <Text style={{ ...styles.text, marginBottom: 10 }}>
           Unidad Administrativa: CENTRO DE DESARROLLO DE SOFTWARE
         </Text>
-        <Text style={{ ...styles.text, marginBottom: 10 }}>Asignado a la responsabilidad de: {assignedToName}</Text>
+        <Text style={{ ...styles.text, marginBottom: 10 }}>
+          Asignado a la responsabilidad de: {assignedToName}
+        </Text>
         <Text style={styles.text}>
-          Fecha: {new Intl.DateTimeFormat("es-MX", {
+          Fecha:{" "}
+          {new Intl.DateTimeFormat("es-MX", {
             weekday: "long",
             day: "2-digit",
             month: "long",
             year: "numeric",
           }).format(new Date())}
         </Text>
-  
+
         {items.length === 0 ? (
-          <Text style={{ ...styles.text, textAlign: "center", marginTop: 25 }}>No hay bienes asignados actualmente.</Text>
+          <Text style={{ ...styles.text, textAlign: "center", marginTop: 25 }}>
+            No hay bienes asignados actualmente.
+          </Text>
         ) : (
           <>
             {/* Tabla de bienes */}
@@ -107,18 +129,23 @@ const generatePDF = (items) => {
               <View style={styles.tableRow}>
                 <Text style={[styles.tableHeader, styles.smallCell]}>#</Text>
                 <Text style={styles.tableHeader}>Código bien</Text>
-                <Text style={[styles.tableHeader, styles.largeCell]}>Descripción</Text>
+                <Text style={[styles.tableHeader, styles.largeCell]}>
+                  Descripción
+                </Text>
                 <Text style={styles.tableHeader}>Marca</Text>
                 <Text style={styles.tableHeader}>Modelo</Text>
                 <Text style={styles.tableHeader}>No. de serie</Text>
               </View>
-  
+
               {items.map((item, index) => (
                 <View style={styles.tableRow} key={item.id}>
-                  <Text style={[styles.tableCell, styles.smallCell]}>{index + 1}</Text>
+                  <Text style={[styles.tableCell, styles.smallCell]}>
+                    {index + 1}
+                  </Text>
                   <Text style={styles.tableCell}>{item.code}</Text>
                   <Text style={[styles.tableCell, styles.largeCell]}>
-                    El bien llamado {item.name} de tipo {item.itemType.name} está ubicado en {item.location}
+                    El bien llamado {item.name} de tipo {item.itemType.name}{" "}
+                    está ubicado en {item.location}
                   </Text>
                   <Text style={styles.tableCell}>{item.brand.name}</Text>
                   <Text style={styles.tableCell}>{item.model.name}</Text>
@@ -126,19 +153,22 @@ const generatePDF = (items) => {
                 </View>
               ))}
             </View>
-  
+
             {/* Sección de firma (solo si hay bienes) */}
             <View style={{ marginTop: 40, alignItems: "center" }}>
-              <Text style={{ fontSize: 12 }}>_______________________________</Text>
+              <Text style={{ fontSize: 12 }}>
+                _______________________________
+              </Text>
               <Text style={{ fontSize: 10, marginTop: 5 }}>Enterado</Text>
-              <Text style={{ fontSize: 10, marginTop: 5 }}>{assignedToName}</Text>
+              <Text style={{ fontSize: 10, marginTop: 5 }}>
+                {assignedToName}
+              </Text>
             </View>
           </>
         )}
       </Page>
     </Document>
   );
-  
 };
 
 export default function InternHome() {
@@ -233,12 +263,13 @@ export default function InternHome() {
     if (items.length > 0) {
       const filtered = items.filter(
         (item) =>
-          item.name.toLowerCase().includes(navegar.toLowerCase()) ||
-          item.description.toLowerCase().includes(navegar.toLowerCase())
+          (item.name && item.name.toLowerCase().includes(navegar.toLowerCase())) ||
+          (item.description && item.description.toLowerCase().includes(navegar.toLowerCase()))
       );
       setFilteredItems(filtered);
     }
   }, [navegar, items]);
+  
 
   const handleRemoveItem = async (itemId) => {
     setItemToRemove(itemId);
@@ -576,13 +607,13 @@ export default function InternHome() {
             )}
 
             {/* Cards Container */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mt-[3em]">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mt-[3em]">
               {filteredItems.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-card-bg rounded-lg shadow-md p-4 hover:scale-105 w-[auto]"
+                  className="bg-card-bg rounded-lg shadow-md hover:scale-105 w-[auto]"
                 >
-                  <div className="flex justify-center bg-white rounded-2xl">
+                  <div className="flex justify-center bg-white rounded-lg p-2">
                     <img
                       src={item.imageUrl || "/defaultItem.png"}
                       alt={item.name}
@@ -592,28 +623,25 @@ export default function InternHome() {
                       }}
                     />
                   </div>
-                  <div className="px-3">
-                    <h3 className="text-[1.8em] font-semibold text-mdpurple-htext">
+                  <div className="px-4 py-3 bg-indigo-800 rounded-b-lg border-t-2 border-indigo-950">
+                    <h3 className="text-[1.8em] font-semibold text-white">
                       {item.name}
                     </h3>
                     <div className="flex justify-between gap-4 align-middle">
-                      <p className="text-gray-800">{item.description}</p>
+                      <p className="text-white">{item.description}</p>
                     </div>
                     <div className="flex flex-col gap-2 mt-2">
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-200">
                         Código: {item.code}
                       </p>
-                      <p className="text-sm text-gray-600">
-                        Estado: {item.status}
-                      </p>
-                      <div className="flex justify-end mt-2">
-                        <Button
-                          className="cursor-pointer py-1 px-3 bg-red-cancel rounded-full text-amber-50"
-                          onClick={() => handleRemoveItem(item.id)}
-                        >
-                          Quitar
-                        </Button>
-                      </div>
+                    </div>
+                    <div className="flex justify-end mt-2">
+                      <Button
+                        className="cursor-pointer py-1 px-3 bg-red-cancel rounded-full text-amber-50"
+                        onClick={() => handleRemoveItem(item.id)}
+                      >
+                        Quitar
+                      </Button>
                     </div>
                   </div>
                 </div>

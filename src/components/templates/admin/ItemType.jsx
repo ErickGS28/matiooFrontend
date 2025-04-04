@@ -328,7 +328,7 @@ export default function ItemType() {
               filteredTypes &&
               filteredTypes.length > 0 && (
                 <div className="bg-slate-200 p-4 rounded-lg mt-[3em] min-h-[calc(100vh-250px)]">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {filteredTypes.map((type, index) => (
                       <div
                         key={type.id || index}

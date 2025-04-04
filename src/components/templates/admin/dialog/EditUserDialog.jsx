@@ -108,41 +108,41 @@ export function EditUserDialog({ user, onSave }) {
         <div className="flex flex-col items-center space-y-6">
           <div className="w-full space-y-4">
             <div>
-              <Label className="text-darkpurple-title font-medium">Nombre completo</Label>
+              <Label className="text-sm font-medium text-gray-700">Nombre completo</Label>
               <input
                 type="text"
                 value={formData.fullName}
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, fullName: e.target.value }))
                 }
-                className="mt-2 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                className="border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-2 mb-1 w-full border-1 px-4 py-1 bg-transparent"
               />
             </div>
             <div>
-              <Label className="text-darkpurple-title font-medium">Nombre de usuario</Label>
+              <Label className="text-sm font-medium text-gray-700">Nombre de usuario</Label>
               <input
                 type="text"
                 value={formData.username}
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, username: e.target.value }))
                 }
-                className="mt-2 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                className="border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-2 mb-1 w-full border-1 px-4 py-1 bg-transparent"
               />
             </div>
             <div>
-              <Label className="text-darkpurple-title font-medium">Correo electrónico</Label>
+              <Label className="text-sm font-medium text-gray-700">Correo electrónico</Label>
               <input
                 type="email"
                 value={formData.email}
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, email: e.target.value }))
                 }
-                className="mt-2 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                className="border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-2 mb-1 w-full border-1 px-4 py-1 bg-transparent"
               />
             </div>
             <div>
               <div className="flex items-center space-x-2 mb-2">
-                <Label className="text-darkpurple-title font-medium">Lugar</Label>
+                <Label className="text-sm font-medium text-gray-700">Lugar</Label>
                 <div className="flex items-center space-x-2 ml-4">
                   <input
                     type="checkbox"
@@ -158,7 +158,7 @@ export function EditUserDialog({ user, onSave }) {
                           : "",
                       }));
                     }}
-                    className="h-4 w-4 text-purple-900 rounded border-gray-300 focus:ring-purple-900"
+                    className="h-4 w-4 text-purple-900 rounded border-purple-900 focus:ring-purple-900"
                   />
                   <label
                     htmlFor="isCommonAreaEdit"
@@ -177,25 +177,25 @@ export function EditUserDialog({ user, onSave }) {
                   }
                   disabled={isLoading}
                 >
-                  <SelectTrigger className="rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title">
+                  <SelectTrigger className="mt-3 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
                     <SelectValue placeholder="Selecciona un área común" />
                   </SelectTrigger>
                   <SelectContent className="bg-white border-2 border-purple-900 rounded-[1em] shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
                     {Array.isArray(commonAreas)
                       ? commonAreas.map((area) => (
-                          <SelectItem
-                            key={area.id}
-                            value={area.name}
-                            className="hover:bg-purple-900/10"
-                          >
-                            {area.name}
-                          </SelectItem>
-                        ))
+                        <SelectItem
+                          key={area.id}
+                          value={area.name}
+                          className="hover:bg-purple-900/10"
+                        >
+                          {area.name}
+                        </SelectItem>
+                      ))
                       : (
-                          <SelectItem value="error" disabled>
-                            No hay áreas comunes disponibles
-                          </SelectItem>
-                        )}
+                        <SelectItem value="error" disabled>
+                          No hay áreas comunes disponibles
+                        </SelectItem>
+                      )}
                   </SelectContent>
                 </Select>
               ) : (
@@ -205,13 +205,13 @@ export function EditUserDialog({ user, onSave }) {
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, location: e.target.value }))
                   }
-                  className="mt-2 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+                  className="border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-2 mb-1 w-full border-1 px-4 py-1 bg-transparent"
                   placeholder="Ingrese ubicación"
                 />
               )}
             </div>
             <div>
-              <Label className="text-darkpurple-title font-medium">Estado</Label>
+              <Label className="text-sm font-medium text-gray-700">Estado</Label>
               <div className="mt-3">
                 <div className="flex items-center gap-2">
                   <Switch
@@ -221,7 +221,7 @@ export function EditUserDialog({ user, onSave }) {
                     }
                     className="data-[state=checked]:bg-green-confirm data-[state=unchecked]:bg-gray-600"
                   />
-                  <span className="text-darkpurple-title">
+                  <span className="text-sm font-medium text-darkpurple-title">
                     {formData.status ? "Activo" : "Inactivo"}
                   </span>
                 </div>

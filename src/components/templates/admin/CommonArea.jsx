@@ -204,7 +204,7 @@ export default function CommonArea() {
                     type="search"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full rounded-full px-8 border-2 shadow-lg shadow-purple-200 py-2 bg-gray-100 font-medium"
+                    className="w-full rounded-full px-8 border-2 shadow-lg shadow-purple-200 py-2 bg-gray-50 font-medium"
                     placeholder="Buscar área común..."
                   />
                 </div>
@@ -264,7 +264,7 @@ export default function CommonArea() {
                       <div className="mt-6 flex justify-end">
                         <Button
                           onClick={handleAddArea}
-                          className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
+                          className="cursor-pointer bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
                         >
                           Guardar
                         </Button>
@@ -369,7 +369,7 @@ export default function CommonArea() {
         position="bottom-right"
         toastOptions={{
           style: {
-            background: "rgba(209, 255, 255, 1)", // Azul claro
+            // background: "rgba(209, 255, 255, 1)", // Azul claro
           },
         }}
       />

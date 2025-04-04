@@ -48,11 +48,11 @@ export function ViewUserDialog({ user }) {
               <div className="flex flex-col items-start w-full">
                 <div className="grid grid-cols-1 gap-2 w-full mb-2">
                   <div className="flex justify-between items-center">
-                    <h3 className="text-darkpurple-title font-medium w-30">Nombre completo</h3>
+                    <h3 className="text-darkpurple-title font-medium w-30">Nombre</h3>
                     <p className="text-gray-600 flex-grow text-right">{user.name} {user.lastname}</p>
                   </div>
                   <div className="flex justify-between items-center">
-                    <h3 className="text-darkpurple-title font-medium w-30">Nombre de usuario</h3>
+                    <h3 className="text-darkpurple-title font-medium w-30">Usuario</h3>
                     <p className="text-gray-600 flex-grow text-right">{user.username || "No asignado"}</p>
                   </div>
                   <div className="flex justify-between items-center">

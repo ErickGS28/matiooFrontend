@@ -93,7 +93,7 @@ export default function EditBrandDialog({ brand, onSave }) {
                   <div className="flex justify-end mt-[2em]">
                     <Button 
                       onClick={handleSave} 
-                      className="bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
+                      className="cursor-pointer bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
                       disabled={loading}
                     >
                       {loading ? 'Guardando...' : 'Guardar'}

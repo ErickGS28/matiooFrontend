@@ -64,40 +64,45 @@ const styles = StyleSheet.create({
   },
   smallCell: { flex: 0.5 },
   largeCell: { flex: 2.5 },
-  item: { marginBottom: 20 },
+  item: { marginBottom: 0.5 },
 });
 
-const generatePDF = (items) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.header}>
-        <Image src="/utez.png" style={styles.logo} />
-        <View style={styles.headerText}>
-          <Text>UNIVERSIDAD TECNOLÓGICA EMILIANO ZAPATA</Text>
-          <Text style={{ marginBottom: 10 }}>DEL ESTADO DE MORELOS</Text>
-          <Text style={{ fontSize: 10 }}>Organismo Público Descentralizado del Gobierno del Estado de Morelos</Text>
-          <Text style={{ fontSize: 10 }}>RESGUARDO INDIVIDUAL DE ACTIVOS FIJOS</Text>
+const generatePDF = (items) => {
+  const assignedToName = items.length > 0 ? items[0].assignedTo.fullName.toUpperCase() : "SIN ASIGNAR";
+
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Encabezado del documento */}
+        <View style={styles.header}>
+          <Image src="/utez.png" style={styles.logo} />
+          <View style={styles.headerText}>
+            <Text>UNIVERSIDAD TECNOLÓGICA EMILIANO ZAPATA</Text>
+            <Text style={{ marginBottom: 10 }}>DEL ESTADO DE MORELOS</Text>
+            <Text style={{ fontSize: 10 }}>Organismo Público Descentralizado del Gobierno del Estado de Morelos</Text>
+            <Text style={{ fontSize: 10 }}>RESGUARDO INDIVIDUAL DE ACTIVOS FIJOS</Text>
+          </View>
         </View>
-      </View>
-
-      <Text style={{ ...styles.text, marginBottom: 10 }}>
-        Unidad Administrativa: CENTRO DE DESARROLLO DE SOFTWARE
-      </Text>
-
-      {items.length === 0 ? (
-        <Text style={{ ...styles.text, textAlign: 'center'}}>No hay bienes asignados actualmente. </Text>
-      ) : (
-        items.map((item, index) => (
-          <View style={styles.item} key={item.id}>
-            <Text style={styles.text}>Dueño del bien: {item.owner.fullName.toUpperCase()}</Text>
-            <Text style={styles.text}>
-              Fecha: {new Intl.DateTimeFormat("es-MX", {
-                weekday: "long",
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              }).format(new Date())}
-            </Text>
+  
+        {/* Información general */}
+        <Text style={{ ...styles.text, marginBottom: 10 }}>
+          Unidad Administrativa: CENTRO DE DESARROLLO DE SOFTWARE
+        </Text>
+        <Text style={{ ...styles.text, marginBottom: 10 }}>Asignado a la responsabilidad de: {assignedToName}</Text>
+        <Text style={styles.text}>
+          Fecha: {new Intl.DateTimeFormat("es-MX", {
+            weekday: "long",
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          }).format(new Date())}
+        </Text>
+  
+        {items.length === 0 ? (
+          <Text style={{ ...styles.text, textAlign: "center", marginTop: 25 }}>No hay bienes asignados actualmente.</Text>
+        ) : (
+          <>
+            {/* Tabla de bienes */}
             <View style={styles.table}>
               <View style={styles.tableRow}>
                 <Text style={[styles.tableHeader, styles.smallCell]}>#</Text>
@@ -107,23 +112,34 @@ const generatePDF = (items) => (
                 <Text style={styles.tableHeader}>Modelo</Text>
                 <Text style={styles.tableHeader}>No. de serie</Text>
               </View>
-              <View style={styles.tableRow}>
-                <Text style={[styles.tableCell, styles.smallCell]}>{index + 1}</Text>
-                <Text style={styles.tableCell}>{item.code}</Text>
-                <Text style={[styles.tableCell, styles.largeCell]}>
-                  El bien llamado {item.name} de tipo {item.itemType.name} está ubicado en {item.location}
-                </Text>
-                <Text style={styles.tableCell}>{item.brand.name}</Text>
-                <Text style={styles.tableCell}>{item.model.name}</Text>
-                <Text style={styles.tableCell}>{item.serialNumber}</Text>
-              </View>
+  
+              {items.map((item, index) => (
+                <View style={styles.tableRow} key={item.id}>
+                  <Text style={[styles.tableCell, styles.smallCell]}>{index + 1}</Text>
+                  <Text style={styles.tableCell}>{item.code}</Text>
+                  <Text style={[styles.tableCell, styles.largeCell]}>
+                    El bien llamado {item.name} de tipo {item.itemType.name} está ubicado en {item.location}
+                  </Text>
+                  <Text style={styles.tableCell}>{item.brand.name}</Text>
+                  <Text style={styles.tableCell}>{item.model.name}</Text>
+                  <Text style={styles.tableCell}>{item.serialNumber}</Text>
+                </View>
+              ))}
             </View>
-          </View>
-        ))
-      )}
-    </Page>
-  </Document>
-);
+  
+            {/* Sección de firma (solo si hay bienes) */}
+            <View style={{ marginTop: 40, alignItems: "center" }}>
+              <Text style={{ fontSize: 12 }}>_______________________________</Text>
+              <Text style={{ fontSize: 10, marginTop: 5 }}>Enterado</Text>
+              <Text style={{ fontSize: 10, marginTop: 5 }}>{assignedToName}</Text>
+            </View>
+          </>
+        )}
+      </Page>
+    </Document>
+  );
+  
+};
 
 export default function InternHome() {
   const [navegar, setNavegar] = useState("");

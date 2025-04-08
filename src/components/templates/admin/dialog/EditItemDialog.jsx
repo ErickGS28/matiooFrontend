@@ -203,7 +203,7 @@ export function EditItemDialog({ item, onSave }) {
       >
         <DialogHeader>
           <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">
-            Detalles del bien
+            Actualizar bien
           </DialogTitle>
         </DialogHeader>
 

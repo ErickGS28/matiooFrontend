@@ -387,7 +387,13 @@ export default function Interns() {
                 </div>
               </div>
               <div className="flex justify-center sm:justify-end flex-grow w-full md:w-auto">
-                <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                <Popover open={isPopoverOpen} onOpenChange={(open) => {
+                  setIsPopoverOpen(open);
+                  if (!open) {
+                    // Reset form when popover is closed
+                    resetForm();
+                  }
+                }}>
                   <PopoverTrigger asChild>
                     <Button
                       className="bg-green-confirm text-white font-semibold py-2 px-4 rounded-full w-[160px] shadow-purple-200 shadow-lg cursor-pointer"

@@ -13,6 +13,7 @@ import {
 import { itemService } from "@/services/item/itemService";
 import BtnRegistrarItem from "@/components/ui/BtnRegistrarItem";
 import SelectStatus from "@/components/ui/SelectStatus"; // Importar SelectStatus
+import toast, { Toaster } from "react-hot-toast"; // Importar toast para notificaciones
 
 export default function Item() {
   const [items, setItems] = useState([]);
@@ -97,15 +98,26 @@ export default function Item() {
 
       // Verificar si la creación fue exitosa
       if (response && response.type === "SUCCESS") {
+        // Mostrar toast de éxito
+        toast.success("Bien creado exitosamente", {
+          duration: 3000,
+          position: "bottom-right",
+        });
         // Recargar los bienes después de crear uno nuevo
         fetchItems();
       } else {
-        setError(
-          `Error al crear el bien: ${response.text || "Error desconocido"}`
-        );
+        // Solo mostrar toast de error, sin modificar el estado error
+        toast.error(`Error al crear el bien: ${response.text || "Error desconocido"}`, {
+          duration: 4000,
+          position: "bottom-right",
+        });
       }
     } catch (error) {
-      setError(`Error al crear el bien: ${error.message}`);
+      // Solo mostrar toast de error, sin modificar el estado error
+      toast.error(`Error al crear el bien: ${error.message}`, {
+        duration: 4000,
+        position: "bottom-right",
+      });
     }
   };
 
@@ -237,6 +249,8 @@ export default function Item() {
             </>
           )}
         </div>
+        {/* Componente Toaster para mostrar notificaciones */}
+        <Toaster position="bottom-right" />
       </main>
     </div>
   );

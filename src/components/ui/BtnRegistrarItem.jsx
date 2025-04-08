@@ -157,7 +157,13 @@ export default function BtnRegistrarItem({ onAgregar }) {
   };
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
+    <Popover open={isOpen} onOpenChange={(open) => {
+      setIsOpen(open);
+      if (!open) {
+        // Reset form when popover is closed
+        resetForm();
+      }
+    }}>
       <PopoverTrigger asChild>
         <div>
           <button

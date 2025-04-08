@@ -266,10 +266,18 @@ export const itemService = {
                 mode: 'cors'
             });
             
-            const result = await handleResponse(response);
-            return result;
+            // Obtener el cuerpo de la respuesta como JSON, independientemente del status code
+            const data = await response.json();
+            
+            // Devolver la respuesta completa, incluso si es un error
+            return data;
         } catch (error) {
-            throw new Error('Error al crear el item');
+            // Si ocurre un error al hacer la petición o procesar la respuesta
+            console.error('Error en createItem:', error);
+            return {
+                type: 'ERROR',
+                text: error.message || 'Error al crear el item'
+            };
         }
     },
 

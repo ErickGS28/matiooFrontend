@@ -20,6 +20,7 @@ import { getActiveBrands } from "@/services/brand/brandService";
 import { getActiveItemTypes } from "@/services/item_type/itemTypeService";
 import { getActiveModels } from "@/services/model/modelService";
 import toast, { Toaster } from "react-hot-toast"; // Toaster para alertas
+import { validateNoSpecialChars, validateCode, validateSerialNumber } from "@/components/templates/admin/Item";
 
 export default function BtnRegistrarItem({ onAgregar }) {
   const [name, setName] = useState("");
@@ -42,6 +43,11 @@ export default function BtnRegistrarItem({ onAgregar }) {
   const [itemTypes, setItemTypes] = useState([]);
   const [models, setModels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Validación de campos
+  const [nameError, setNameError] = useState("");
+  const [codeError, setCodeError] = useState("");
+  const [serialNumberError, setSerialNumberError] = useState("");
 
   // Cargar todos los datos cuando se abre el popover
   useEffect(() => {
@@ -115,10 +121,52 @@ export default function BtnRegistrarItem({ onAgregar }) {
     setCommonAreaId("");
   };
 
+  // Manejar cambios en el nombre con validación
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    setName(value);
+    
+    if (value && !validateNoSpecialChars(value)) {
+      setNameError("El nombre no debe contener caracteres especiales");
+    } else {
+      setNameError("");
+    }
+  };
+
+  // Manejar cambios en el código con validación
+  const handleCodeChange = (e) => {
+    const value = e.target.value;
+    setCode(value);
+    
+    if (value && !validateCode(value)) {
+      setCodeError("El código solo debe contener letras, números, guiones o guiones bajos");
+    } else {
+      setCodeError("");
+    }
+  };
+
+  // Manejar cambios en el número de serie con validación
+  const handleSerialNumberChange = (e) => {
+    const value = e.target.value;
+    setSerialNumber(value);
+    
+    if (value && !validateSerialNumber(value)) {
+      setSerialNumberError("El número de serie solo debe contener letras, números, guiones o guiones bajos");
+    } else {
+      setSerialNumberError("");
+    }
+  };
+
   const handleClick = () => {
-    if (!itemTypeId || !brandId || !modelId || !name || !code || !serialNumber) {
-      setFormError("Por favor, completa todos los campos requeridos.");
-      toast.error("Por favor, completa todos los campos requeridos.");
+    // Validar que todos los campos requeridos estén llenos
+    if (!name || !code || !serialNumber || !itemTypeId || !brandId || !modelId) {
+      setFormError("Por favor, complete todos los campos requeridos.");
+      return;
+    }
+
+    // Validar que no haya errores de formato en los campos
+    if (nameError || codeError || serialNumberError) {
+      setFormError("Por favor, corrija los errores en el formulario antes de continuar.");
       return;
     }
 
@@ -209,11 +257,12 @@ export default function BtnRegistrarItem({ onAgregar }) {
                       <Input
                         id="name"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                        onChange={handleNameChange}
+                        className={`w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500 ${nameError ? 'border-red-500' : ''}`}
                         placeholder="Nombre del bien"
                         maxLength={255}
                       />
+                      {nameError && <p className="text-red-500 text-xs mt-1">{nameError}</p>}
                     </div>
 
                     <div>
@@ -277,11 +326,12 @@ export default function BtnRegistrarItem({ onAgregar }) {
                       <Input
                         id="code"
                         value={code}
-                        onChange={(e) => setCode(e.target.value)}
-                        className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                        onChange={handleCodeChange}
+                        className={`w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500 ${codeError ? 'border-red-500' : ''}`}
                         placeholder="Código único del bien"
                         maxLength={50}
                       />
+                      {codeError && <p className="text-red-500 text-xs mt-1">{codeError}</p>}
                     </div>
 
                     <div>
@@ -291,11 +341,12 @@ export default function BtnRegistrarItem({ onAgregar }) {
                       <Input
                         id="serialNumber"
                         value={serialNumber}
-                        onChange={(e) => setSerialNumber(e.target.value)}
-                        className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                        onChange={handleSerialNumberChange}
+                        className={`w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500 ${serialNumberError ? 'border-red-500' : ''}`}
                         placeholder="Número de serie del bien"
                         maxLength={50}
                       />
+                      {serialNumberError && <p className="text-red-500 text-xs mt-1">{serialNumberError}</p>}
                     </div>
 
                     <div>

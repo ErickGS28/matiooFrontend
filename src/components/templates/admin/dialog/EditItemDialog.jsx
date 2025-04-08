@@ -22,7 +22,7 @@ import { getActiveBrands } from "@/services/brand/brandService";
 import { getActiveItemTypes } from "@/services/item_type/itemTypeService";
 import { getActiveModels } from "@/services/model/modelService";
 import { toast } from "react-hot-toast";
-
+import { validateNoSpecialChars, validateCode, validateSerialNumber } from "@/components/templates/admin/Item";
 
 export function EditItemDialog({ item, onSave }) {
 
@@ -43,6 +43,12 @@ export function EditItemDialog({ item, onSave }) {
     commonAreaId: 0,
   });
 
+  // Estado para errores de validación
+  const [formErrors, setFormErrors] = React.useState({
+    name: "",
+    code: "",
+    serialNumber: ""
+  });
 
   const [responsibleUsers, setResponsibleUsers] = React.useState([]);
   const [allUsers, setAllUsers] = React.useState([]);
@@ -120,7 +126,66 @@ export function EditItemDialog({ item, onSave }) {
     fetchData();
   }, []);
 
+  // Validar campos al cambiar
+  const validateField = (name, value) => {
+    let error = "";
+    
+    switch (name) {
+      case "name":
+        if (value && !validateNoSpecialChars(value)) {
+          error = "El nombre no debe contener caracteres especiales";
+        }
+        break;
+      case "code":
+        if (value && !validateCode(value)) {
+          error = "El código solo debe contener letras, números, guiones o guiones bajos";
+        }
+        break;
+      case "serialNumber":
+        if (value && !validateSerialNumber(value)) {
+          error = "El número de serie solo debe contener letras, números, guiones o guiones bajos";
+        }
+        break;
+      default:
+        break;
+    }
+    
+    return error;
+  };
+
+  // Manejar cambios en los campos con validación
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Actualizar el valor del campo
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Validar el campo
+    const error = validateField(name, value);
+    
+    // Actualizar el estado de errores
+    setFormErrors((prev) => ({ ...prev, [name]: error }));
+  };
+
   const handleSave = async () => {
+    // Validar todos los campos antes de guardar
+    const nameError = validateField("name", formData.name);
+    const codeError = validateField("code", formData.code);
+    const serialNumberError = validateField("serialNumber", formData.serialNumber);
+    
+    // Actualizar errores
+    setFormErrors({
+      name: nameError,
+      code: codeError,
+      serialNumber: serialNumberError
+    });
+    
+    // Si hay errores, no continuar
+    if (nameError || codeError || serialNumberError) {
+      toast.error("Por favor, corrija los errores en el formulario antes de continuar.");
+      return;
+    }
+
     try {
       // Si se eligió un área común, sobrescribimos location con ese nombre
       let finalLocation = formData.location;
@@ -165,14 +230,12 @@ export function EditItemDialog({ item, onSave }) {
         status: formData.status,
       };
 
-
-
       // Llamamos a onSave con el objeto final
       await onSave(updatedItem);
 
       // Si todo OK
       setIsDialogOpen(false); // Cerrar el diálogo
-      // ✅ Nuevo toast de éxito
+      // Nuevo toast de éxito
       toast.success("¡Bien actualizado!", {
         id: "item-update-success",
         duration: 3000
@@ -197,7 +260,6 @@ export function EditItemDialog({ item, onSave }) {
         />
       </DialogTrigger>
 
-
       <DialogContent
         className="w-[45%] min-w-[425px] h-[32em] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]"
       >
@@ -216,12 +278,12 @@ export function EditItemDialog({ item, onSave }) {
                 <Label className="text-sm font-medium text-gray-700">Nombre</Label>
                 <input
                   type="text"
+                  name="name"
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, name: e.target.value }))
-                  }
-                  className=" border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-3 mb-4 w-full border-1 px-4 py-1 bg-transparent"
+                  onChange={handleInputChange}
+                  className={`border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-3 mb-4 w-full border-1 px-4 py-1 bg-transparent ${formErrors.name ? 'border-red-500' : ''}`}
                 />
+                {formErrors.name && <p className="text-red-500 text-xs mt-1 mb-2">{formErrors.name}</p>}
               </div>
 
               {/* Tipo de bien */}
@@ -298,29 +360,24 @@ export function EditItemDialog({ item, onSave }) {
                 <Label className="text-sm font-medium text-gray-700">Código</Label>
                 <input
                   type="text"
+                  name="code"
                   value={formData.code}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, code: e.target.value }))
-                  }
-                  className="border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-3 mb-4 w-full border-1 px-4 py-1 bg-transparent"
+                  onChange={handleInputChange}
+                  className={`border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-3 mb-4 w-full border-1 px-4 py-1 bg-transparent ${formErrors.code ? 'border-red-500' : ''}`}
                 />
+                {formErrors.code && <p className="text-red-500 text-xs mt-1 mb-2">{formErrors.code}</p>}
               </div>
-
-
 
               <div>
                 <Label className="text-sm font-medium text-gray-700">Número de Serie</Label>
                 <input
                   type="text"
+                  name="serialNumber"
                   value={formData.serialNumber}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      serialNumber: e.target.value,
-                    }))
-                  }
-                  className="border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-3 mb-4 w-full border-1 px-4 py-1 bg-transparent"
+                  onChange={handleInputChange}
+                  className={`border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-3 mb-4 w-full border-1 px-4 py-1 bg-transparent ${formErrors.serialNumber ? 'border-red-500' : ''}`}
                 />
+                {formErrors.serialNumber && <p className="text-red-500 text-xs mt-1 mb-2">{formErrors.serialNumber}</p>}
               </div>
 
               {/* Dueño */}
@@ -385,18 +442,10 @@ export function EditItemDialog({ item, onSave }) {
               </div>
             </div>
 
-
           </div>
-
-          {/* Botón para guardar */}
 
         </div>
       </DialogContent>
-
-
-
-
-
     </Dialog>
   );
 }

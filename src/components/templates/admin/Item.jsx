@@ -15,6 +15,27 @@ import BtnRegistrarItem from "@/components/ui/BtnRegistrarItem";
 import SelectStatus from "@/components/ui/SelectStatus"; // Importar SelectStatus
 import toast, { Toaster } from "react-hot-toast"; // Importar toast para notificaciones
 
+// Función para validar que no haya caracteres especiales
+export const validateNoSpecialChars = (value) => {
+  // Permitir letras, números, guiones, guiones bajos y espacios
+  const regex = /^[a-zA-Z0-9\-_\s]+$/;
+  return regex.test(value);
+};
+
+// Función para validar código (puede tener formato específico)
+export const validateCode = (code) => {
+  // Permitir letras, números, guiones y guiones bajos (sin espacios)
+  const regex = /^[a-zA-Z0-9\-_]+$/;
+  return regex.test(code);
+};
+
+// Función para validar número de serie (puede tener formato específico)
+export const validateSerialNumber = (serialNumber) => {
+  // Permitir letras, números, guiones y guiones bajos (sin espacios)
+  const regex = /^[a-zA-Z0-9\-_]+$/;
+  return regex.test(serialNumber);
+};
+
 export default function Item() {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -94,6 +115,29 @@ export default function Item() {
   // Manejar la creación de un nuevo bien
   const handleAddItem = async (newItem) => {
     try {
+      // Validar que no haya caracteres especiales en los campos
+      if (!validateNoSpecialChars(newItem.name)) {
+        toast.error("El nombre del bien no debe contener caracteres especiales", {
+          duration: 4000,
+          position: "bottom-right",
+        });
+        return;
+      }
+      if (!validateCode(newItem.code)) {
+        toast.error("El código del bien no debe contener caracteres especiales", {
+          duration: 4000,
+          position: "bottom-right",
+        });
+        return;
+      }
+      if (!validateSerialNumber(newItem.serialNumber)) {
+        toast.error("El número de serie del bien no debe contener caracteres especiales", {
+          duration: 4000,
+          position: "bottom-right",
+        });
+        return;
+      }
+
       const response = await itemService.createItem(newItem);
 
       // Verificar si la creación fue exitosa
@@ -124,6 +168,29 @@ export default function Item() {
   // Manejar la actualización de un bien
   const handleUpdateItem = async (updatedItem) => {
     try {
+      // Validar que no haya caracteres especiales en los campos
+      if (!validateNoSpecialChars(updatedItem.name)) {
+        toast.error("El nombre del bien no debe contener caracteres especiales", {
+          duration: 4000,
+          position: "bottom-right",
+        });
+        return;
+      }
+      if (!validateCode(updatedItem.code)) {
+        toast.error("El código del bien no debe contener caracteres especiales", {
+          duration: 4000,
+          position: "bottom-right",
+        });
+        return;
+      }
+      if (!validateSerialNumber(updatedItem.serialNumber)) {
+        toast.error("El número de serie del bien no debe contener caracteres especiales", {
+          duration: 4000,
+          position: "bottom-right",
+        });
+        return;
+      }
+
       // Actualizar los arrays de items manteniendo la paginación actual
       const updateItemInArray = (array) => {
         return array.map((item) => {

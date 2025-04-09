@@ -75,8 +75,11 @@ export function EditItemDialog({ item, onSave }) {
           );
           setResponsibleUsers(responsible);
 
-          // Todos los usuarios para 'asignado'
-          setAllUsers(usersResponse.result);
+          // Filtrar usuarios que NO tengan rol "ADMIN" para 'asignado'
+          const nonAdminUsers = usersResponse.result.filter(
+            (user) => user.role && user.role !== "ADMIN"
+          );
+          setAllUsers(nonAdminUsers);
         }
 
         // Cargar áreas comunes

@@ -249,6 +249,31 @@ export const itemService = {
     },
 
     /**
+     * Obtiene items por ID del propietario (owner).
+     * @param {number} ownerId
+     */
+    getItemsByOwnerId: async (ownerId) => {
+        try {
+            const response = await fetch(`${API_URL}/items/byOwnerId/${ownerId}`, {
+                method: 'GET',
+                headers: getAuthHeader(),
+                mode: 'cors'
+            });
+            
+            // Si el servidor devuelve 404, significa que no hay items para este propietario
+            // En lugar de lanzar un error, devolvemos un array vacío
+            if (response.status === 404) {
+                return { result: [] };
+            }
+            
+            const result = await handleResponse(response);
+            return result;
+        } catch (error) {
+            throw new Error(`Error al obtener items con ownerId ${ownerId}`);
+        }
+    },
+
+    /**
      * Crea un item.
      * Se recomienda enviar el dto sin el campo "status" (aunque si se envía, se ignora),
      * ya que el back se encarga de establecerlo en true al crear el item.

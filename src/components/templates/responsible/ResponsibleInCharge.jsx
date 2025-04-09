@@ -49,9 +49,9 @@ export default function ResponsibleInCharge() {
     navigate("/");
   };
 
-  // Cargar los items no asignados al montar el componente
+  // Cargar los items donde el usuario actual es el propietario (owner)
   useEffect(() => {
-    const fetchUnassignedItems = async () => {
+    const fetchItemsByOwner = async () => {
       try {
         setLoading(true);
 
@@ -59,27 +59,32 @@ export default function ResponsibleInCharge() {
         const userData = decodeAndDisplayToken();
         if (userData && userData.id) {
           setCurrentUserId(userData.id);
+          
+          // Obtener los items donde el usuario actual es el propietario
+          const response = await itemService.getItemsByOwnerId(userData.id);
+
+          if (response && response.result) {
+            setItems(response.result);
+            setFilteredItems(response.result);
+          } else {
+            setItems([]);
+            setFilteredItems([]);
+          }
         } else {
           console.warn("No se pudo obtener el ID del usuario desde el token");
           toast.error("Error al obtener información del usuario");
-        }
-
-        // Obtener los items no asignados
-        const response = await itemService.getUnassignedItems();
-
-        if (response && response.result) {
-          setItems(response.result);
-          setFilteredItems(response.result);
-        } else {
           setItems([]);
           setFilteredItems([]);
         }
       } catch (error) {
-        console.error("Error al cargar los items no asignados:", error);
-        toast.error("Error al cargar los bienes disponibles", {
-          id: "load-error",
-          duration: 3000,
-        });
+        console.error("Error al cargar los items del propietario:", error);
+        // Solo mostrar error en caso de errores reales (no 404)
+        if (error.message !== "Error al obtener items con ownerId " + currentUserId) {
+          toast.error("Error al cargar los bienes a tu cargo", {
+            id: "load-error",
+            duration: 3000,
+          });
+        }
         setItems([]);
         setFilteredItems([]);
       } finally {
@@ -87,7 +92,7 @@ export default function ResponsibleInCharge() {
       }
     };
 
-    fetchUnassignedItems();
+    fetchItemsByOwner();
   }, []);
 
   // Cargar datos del usuario para el perfil
@@ -461,7 +466,7 @@ export default function ResponsibleInCharge() {
             {!loading && filteredItems.length === 0 && (
               <div className="flex justify-center items-center mt-10">
                 <p className="text-lg text-gray-600">
-                  No hay bienes disponibles para asignar.
+                  No hay bienes a tu cargo actualmente.
                 </p>
               </div>
             )}

@@ -16,8 +16,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { getActiveCommonAreas } from "@/services/common_area/commonAreaService";
 
 export function EditUserDialog({ user, onSave }) {
   const [formData, setFormData] = React.useState({
@@ -26,30 +24,8 @@ export function EditUserDialog({ user, onSave }) {
     username: user.username || "",
     email: user.email || "",
     location: user.location || "",
-    isCommonArea: false,
-    commonAreaId: "",
     role: user.role || "RESPONSIBLE",
-    status: user.status || false,
   });
-
-  const [commonAreas, setCommonAreas] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-
-  React.useEffect(() => {
-    const fetchCommonAreas = async () => {
-      try {
-        setIsLoading(true);
-        const data = await getActiveCommonAreas();
-        setCommonAreas(data);
-      } catch (error) {
-        console.error("Error fetching common areas:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCommonAreas();
-  }, []);
 
   React.useEffect(() => {
     setFormData({
@@ -58,10 +34,7 @@ export function EditUserDialog({ user, onSave }) {
       username: user.username || "",
       email: user.email || "",
       location: user.location || "",
-      isCommonArea: false,
-      commonAreaId: "",
       role: user.role || "RESPONSIBLE",
-      status: user.status || false,
     });
   }, [user]);
 
@@ -71,7 +44,7 @@ export function EditUserDialog({ user, onSave }) {
       fullName: formData.fullName,
       username: formData.username,
       email: formData.email,
-      location: formData.isCommonArea ? formData.commonAreaId : formData.location,
+      location: formData.location,
       role: formData.role,
     };
 
@@ -141,91 +114,15 @@ export function EditUserDialog({ user, onSave }) {
               />
             </div>
             <div>
-              <div className="flex items-center space-x-2 mb-2">
-                <Label className="text-sm font-medium text-gray-700">Lugar</Label>
-                <div className="flex items-center space-x-2 ml-4">
-                  <input
-                    type="checkbox"
-                    id="isCommonAreaEdit"
-                    checked={formData.isCommonArea}
-                    onChange={(e) => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        isCommonArea: e.target.checked,
-                        location: e.target.checked ? "" : prev.location,
-                        commonAreaId: e.target.checked
-                          ? prev.commonAreaId || ""
-                          : "",
-                      }));
-                    }}
-                    className="h-4 w-4 text-purple-900 rounded border-purple-900 focus:ring-purple-900"
-                  />
-                  <label
-                    htmlFor="isCommonAreaEdit"
-                    className="text-sm font-medium text-darkpurple-title"
-                  >
-                    Área común
-                  </label>
-                </div>
-              </div>
-
-              {formData.isCommonArea ? (
-                <Select
-                  value={formData.commonAreaId}
-                  onValueChange={(value) =>
-                    setFormData((prev) => ({ ...prev, commonAreaId: value }))
-                  }
-                  disabled={isLoading}
-                >
-                  <SelectTrigger className="mt-3 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                    <SelectValue placeholder="Selecciona un área común" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border-2 border-purple-900 rounded-[1em] shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
-                    {Array.isArray(commonAreas)
-                      ? commonAreas.map((area) => (
-                        <SelectItem
-                          key={area.id}
-                          value={area.name}
-                          className="hover:bg-purple-900/10"
-                        >
-                          {area.name}
-                        </SelectItem>
-                      ))
-                      : (
-                        <SelectItem value="error" disabled>
-                          No hay áreas comunes disponibles
-                        </SelectItem>
-                      )}
-                  </SelectContent>
-                </Select>
-              ) : (
-                <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, location: e.target.value }))
-                  }
-                  className="border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-2 mb-1 w-full border-1 px-4 py-1 bg-transparent"
-                  placeholder="Ingrese ubicación"
-                />
-              )}
-            </div>
-            <div>
-              <Label className="text-sm font-medium text-gray-700">Estado</Label>
-              <div className="mt-3">
-                <div className="flex items-center gap-2">
-                  <Switch
-                    checked={formData.status}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({ ...prev, status: checked }))
-                    }
-                    className="data-[state=checked]:bg-green-confirm data-[state=unchecked]:bg-gray-600"
-                  />
-                  <span className="text-sm font-medium text-darkpurple-title">
-                    {formData.status ? "Activo" : "Inactivo"}
-                  </span>
-                </div>
-              </div>
+              <Label className="text-sm font-medium text-gray-700">Lugar</Label>
+              <input
+                type="text"
+                value={formData.location}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, location: e.target.value }))
+                }
+                className="border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-2 mb-1 w-full border-1 px-4 py-1 bg-transparent"
+              />
             </div>
             <div className="flex justify-end">
               <Button

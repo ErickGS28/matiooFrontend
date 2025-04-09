@@ -4,6 +4,7 @@ import { MantineProvider } from "@mantine/core";
 import { Toaster } from "react-hot-toast";
 import Form from "./components/templates/login/Form";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import RedirectIfAuthenticated from "./components/auth/RedirectIfAuthenticated";
 import ResponsibleInCharge from "./components/templates/responsible/ResponsibleInCharge";
 
 // Lazy load components
@@ -73,7 +74,11 @@ function App() {
             <Suspense fallback={<div>Loading...</div>}>
               <Routes>
                 {/* Rutas públicas */}
-                <Route path="/" element={<Form setUser={setUser} />} />
+                <Route path="/" element={
+                  <RedirectIfAuthenticated>
+                    <Form setUser={setUser} />
+                  </RedirectIfAuthenticated>
+                } />
                 <Route path="/checkEmail" element={<CheckEmail user={user} />} />
                 <Route path="/confirmCode" element={<ConfirmCode user={user} />} />
                 <Route path="/newPassword" element={<NewPassword user={user} />} />

@@ -3,7 +3,6 @@ import AsideBar from "../../AsideBar";
 import Table from "@/components/ui/Table";
 import toast, { Toaster } from 'react-hot-toast';
 import { getAllUsers, createUser, updateUser, changeUserStatus } from "@/services/users/userService";
-import { getActiveCommonAreas } from "@/services/common_area/commonAreaService";
 import SelectStatus from "../../../components/ui/SelectStatus";
 import {
   Pagination,
@@ -18,14 +17,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 export default function Interns() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [commonAreas, setCommonAreas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,8 +37,6 @@ export default function Interns() {
     password: "",
     email: "",
     location: "",
-    isCommonArea: false,
-    commonAreaId: "",
     role: "INTERN"
   });
 
@@ -69,21 +64,8 @@ export default function Interns() {
     }
   };
 
-  const fetchCommonAreas = async () => {
-    try {
-      const areas = await getActiveCommonAreas();
-      if (areas && areas.result) {
-        setCommonAreas(areas.result);
-      }
-    } catch (error) {
-      console.error("Error fetching common areas:", error);
-      toast.error("Error al cargar las áreas comunes");
-    }
-  };
-
   useEffect(() => {
     fetchUsers();
-    fetchCommonAreas();
   }, []);
 
   // Filtrar usuarios por estado y búsqueda
@@ -117,26 +99,8 @@ export default function Interns() {
     });
   };
 
-  const handleCheckboxChange = (e) => {
-    const { checked } = e.target;
-    setFormData({
-      ...formData,
-      isCommonArea: checked,
-      location: checked ? "" : formData.location,
-      commonAreaId: !checked ? "" : formData.commonAreaId
-    });
-  };
-
-  const handleSelectChange = (value) => {
-    setFormData({
-      ...formData,
-      commonAreaId: value
-    });
-  };
-
   const handleAddIntern = async () => {
-    if (!formData.fullName || !formData.username || !formData.password || !formData.email ||
-      (formData.isCommonArea ? !formData.commonAreaId : !formData.location)) {
+    if (!formData.fullName || !formData.username || !formData.password || !formData.email || !formData.location) {
       toast.error("Por favor, completa todos los campos obligatorios");
       return;
     }
@@ -167,7 +131,7 @@ export default function Interns() {
       username: formData.username,
       password: formData.password,
       email: formData.email,
-      location: formData.isCommonArea ? formData.commonAreaId : formData.location,
+      location: formData.location,
       role: "INTERN"
     };
 
@@ -207,8 +171,6 @@ export default function Interns() {
       password: "",
       email: "",
       location: "",
-      isCommonArea: false,
-      commonAreaId: "",
       role: "INTERN"
     });
     setShowPassword(false);
@@ -300,45 +262,17 @@ export default function Interns() {
               maxLength={100}
             />
           </div>
-          <div className="flex items-center space-x-2">
-            <Label htmlFor="isCommonArea" className="text-sm font-medium text-gray-700">¿Área Común?</Label>
-            <input
-              type="checkbox"
-              id="isCommonArea"
-              checked={formData.isCommonArea}
-              onChange={handleCheckboxChange}
-              className="cursor-pointer h-4 w-4 text-purple-900 rounded border-gray-300 focus:ring-purple-900"
+          <div>
+            <Label htmlFor="location" className="text-sm font-medium text-gray-700">Ubicación</Label>
+            <Input
+              id="location"
+              name="location"
+              value={formData.location}
+              onChange={handleInputChange}
+              className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+              placeholder="Ubicación"
             />
           </div>
-          {formData.isCommonArea ? (
-            <div>
-              <Label htmlFor="commonAreaId" className="text-sm font-medium text-gray-700">Área Común</Label>
-              <Select value={formData.commonAreaId} onValueChange={handleSelectChange}>
-                <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                  <SelectValue placeholder="Selecciona un área común" />
-                </SelectTrigger>
-                <SelectContent>
-                  {commonAreas.map(area => (
-                    <SelectItem key={area.id} value={area.id.toString()}>
-                      {area.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          ) : (
-            <div className="mb-2">
-              <Label htmlFor="location" className="text-sm font-medium text-gray-700">Ubicación</Label>
-              <Input
-                id="location"
-                name="location"
-                value={formData.location}
-                onChange={handleInputChange}
-                className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
-                placeholder="Ubicación"
-              />
-            </div>
-          )}
         </div>
         <div className="flex justify-end mt-4">
           <Button

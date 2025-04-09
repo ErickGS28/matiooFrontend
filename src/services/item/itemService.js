@@ -197,16 +197,30 @@ export const itemService = {
      */
     getItemsByAssignedToId: async (assignedToId) => {
         try {
+            console.log(`Obteniendo items asignados al usuario con ID: ${assignedToId}`);
+            
             const response = await fetch(`${API_URL}/items/byAssignedToId/${assignedToId}`, {
                 method: 'GET',
                 headers: getAuthHeader(),
                 mode: 'cors'
             });
             
+            console.log(`Respuesta del servidor para getItemsByAssignedToId: ${response.status}`);
+            
+            // Si el servidor devuelve 404 o 403, significa que no hay items para este usuario o no tiene permisos
+            // En lugar de lanzar un error, devolvemos un array vacío
+            if (response.status === 404 || response.status === 403) {
+                console.warn(`No se encontraron items asignados al usuario con ID ${assignedToId} o no tiene permisos`);
+                return { result: [] };
+            }
+            
             const result = await handleResponse(response);
+            console.log('Resultado de getItemsByAssignedToId:', result);
             return result;
         } catch (error) {
-            throw new Error(`Error al obtener items con assignedToId ${assignedToId}`);
+            console.error(`Error al obtener items asignados al usuario con ID ${assignedToId}:`, error);
+            // En caso de error, devolvemos un objeto con un array vacío para mantener consistencia
+            return { result: [] };
         }
     },
 

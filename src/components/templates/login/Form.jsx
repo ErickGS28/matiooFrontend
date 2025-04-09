@@ -63,6 +63,16 @@ export const Form = ({ setUser }) => {
       const tokenPayload = decodeToken(tokenWithBearer);
       if (tokenPayload) {
         
+        // Verificar si el usuario está activo
+        if (tokenPayload.status === false) {
+          // Eliminar el token ya que el usuario está inactivo
+          localStorage.removeItem('token');
+          setError(true);
+          setErrorMessage("Tu cuenta está inactiva. Contacta al administrador.");
+          setSuccess(false);
+          return;
+        }
+        
         setUser([tokenPayload.email, tokenPayload.role]);
         setError(false);
         setSuccess(true);

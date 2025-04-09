@@ -1,12 +1,10 @@
 import { API_URL } from '../../constants.js';
 import { getAuthHeader, handleResponse } from '../utils/authUtils.js';
-import { apiRequestWithToken } from '../auth/authService.js';
 
 // Function to get all brands
 export const getAllBrands = async () => {
     try {
-
-        const response = await apiRequestWithToken(`${API_URL}/brands/all`, {
+        const response = await fetch(`${API_URL}/brands/all`, {
             method: 'GET',
             headers: getAuthHeader(),
             mode: 'cors'
@@ -23,8 +21,7 @@ export const getAllBrands = async () => {
 // Function to get active brands
 export const getActiveBrands = async () => {
     try {
-
-        const response = await apiRequestWithToken(`${API_URL}/brands/active`, {
+        const response = await fetch(`${API_URL}/brands/active`, {
             method: 'GET',
             headers: getAuthHeader(),
             mode: 'cors'
@@ -40,8 +37,7 @@ export const getActiveBrands = async () => {
 // Function to get inactive brands
 export const getInactiveBrands = async () => {
     try {
-
-        const response = await apiRequestWithToken(`${API_URL}/brands/inactive`, {
+        const response = await fetch(`${API_URL}/brands/inactive`, {
             method: 'GET',
             headers: getAuthHeader(),
             mode: 'cors'
@@ -57,7 +53,7 @@ export const getInactiveBrands = async () => {
 // Function to get a brand by ID
 export const getBrandById = async (id) => {
     try {
-        const response = await apiRequestWithToken(`${API_URL}/brands/${id}`, {
+        const response = await fetch(`${API_URL}/brands/${id}`, {
             method: 'GET',
             headers: getAuthHeader(),
             mode: 'cors'
@@ -73,7 +69,7 @@ export const getBrandById = async (id) => {
 // Function to create a new brand
 export const createBrand = async (brandName) => {
     try {
-        const response = await apiRequestWithToken(`${API_URL}/brands/save`, {
+        const response = await fetch(`${API_URL}/brands/save`, {
             method: 'POST',
             headers: getAuthHeader(),
             mode: 'cors',
@@ -90,7 +86,7 @@ export const createBrand = async (brandName) => {
 // Function to update a brand
 export const updateBrand = async (id, name) => {
     try {
-        const response = await apiRequestWithToken(`${API_URL}/brands/update`, {
+        const response = await fetch(`${API_URL}/brands/update`, {
             method: 'PUT',
             headers: getAuthHeader(),
             mode: 'cors',
@@ -107,7 +103,7 @@ export const updateBrand = async (id, name) => {
 // Function to change brand status
 export const changeBrandStatus = async (id) => {
     try {
-        const response = await apiRequestWithToken(`${API_URL}/brands/change-status/${id}`, {
+        const response = await fetch(`${API_URL}/brands/change-status/${id}`, {
             method: 'PUT',
             headers: getAuthHeader(),
             mode: 'cors'

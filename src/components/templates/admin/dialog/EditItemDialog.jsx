@@ -414,6 +414,68 @@ export function EditItemDialog({ item, onSave }) {
                 />
               </div>
 
+              {/* Ubicación */}
+              <div className="flex items-center space-x-2 mt-4">
+                <Label
+                  htmlFor="useCommonArea"
+                  className="text-sm font-medium text-gray-700 cursor-pointer"
+                >
+                  Usar área común
+                </Label>
+                <input
+                  type="checkbox"
+                  id="useCommonArea"
+                  checked={formData.useCommonArea}
+                  onChange={(e) => 
+                    setFormData((prev) => ({
+                      ...prev,
+                      useCommonArea: e.target.checked
+                    }))
+                  }
+                  className="h-4 w-4 text-purple-900 rounded border-gray-300 focus:ring-purple-900"
+                />
+              </div>
+
+              {formData.useCommonArea ? (
+                <div>
+                  <Label
+                    htmlFor="commonArea"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Área común
+                  </Label>
+                  <SelectWithSearch
+                    value={formData.commonAreaId.toString()}
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        commonAreaId: parseInt(value)
+                      }))
+                    }
+                    placeholder="Selecciona un área común"
+                    items={commonAreas.map(area => ({ id: area.id.toString(), name: area.name }))}
+                    triggerClassName="mt-3 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                  />
+                </div>
+              ) : (
+                <div>
+                  <Label
+                    htmlFor="location"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Ubicación
+                  </Label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    className="border-purple-900 shadow-sm rounded-md focus:border-purple-500 focus:ring-purple-500 mt-3 mb-4 w-full border-1 px-4 py-1 bg-transparent"
+                    placeholder="Ubicación del bien"
+                  />
+                </div>
+              )}
+
               <div className="flex justify-end mt-4">
                 <Button
                   onClick={handleSave}

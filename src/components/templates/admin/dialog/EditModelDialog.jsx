@@ -124,7 +124,6 @@ export default function EditModelDialog({ model, onSave }) {
         onSave(updatedModel);
       }
 
-      toast.success("Modelo actualizado correctamente");
       setIsOpen(false);
     } catch (error) {
       console.error("Error updating model:", error);

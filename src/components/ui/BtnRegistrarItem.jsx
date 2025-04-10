@@ -339,58 +339,38 @@ export default function BtnRegistrarItem({ onAgregar }) {
                       <Label htmlFor="owner" className="text-sm font-medium text-gray-700">
                         Dueño
                       </Label>
-                      <Select value={ownerId || "none"} onValueChange={setOwnerId}>
-                        <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                          <SelectValue placeholder="Selecciona un dueño" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="none">Sin dueño</SelectItem>
-                          {responsibleUsers && responsibleUsers.length > 0 ? (
-                            responsibleUsers.map((user) => (
-                              <SelectItem
-                                key={user.id}
-                                value={user.id.toString()}
-                              >
-                                {user.fullName ||
-                                  `${user.name || ""} ${user.surname || ""}`}
-                              </SelectItem>
-                            ))
-                          ) : (
-                            <SelectItem value="no-users" disabled>
-                              No hay responsables disponibles
-                            </SelectItem>
-                          )}
-                        </SelectContent>
-                      </Select>
+                      <SelectWithSearch
+                        value={ownerId || "none"}
+                        onValueChange={setOwnerId}
+                        placeholder="Selecciona un dueño"
+                        items={[
+                          { id: "none", name: "Sin dueño" },
+                          ...responsibleUsers.map(user => ({
+                            id: user.id.toString(),
+                            name: user.fullName || `${user.name || ""} ${user.surname || ""}`
+                          }))
+                        ]}
+                        triggerClassName="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                      />
                     </div>
 
                     <div>
                       <Label htmlFor="assignedTo" className="text-sm font-medium text-gray-700">
                         Asignado a
                       </Label>
-                      <Select value={assignedToId || "none"} onValueChange={setAssignedToId}>
-                        <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                          <SelectValue placeholder="Selecciona un usuario" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="none">Sin asignar</SelectItem>
-                          {allUsers && allUsers.length > 0 ? (
-                            allUsers.map((user) => (
-                              <SelectItem
-                                key={user.id}
-                                value={user.id.toString()}
-                              >
-                                {user.fullName ||
-                                  `${user.name || ""} ${user.surname || ""}`}
-                              </SelectItem>
-                            ))
-                          ) : (
-                            <SelectItem value="no-users" disabled>
-                              No hay usuarios disponibles
-                            </SelectItem>
-                          )}
-                        </SelectContent>
-                      </Select>
+                      <SelectWithSearch
+                        value={assignedToId || "none"}
+                        onValueChange={setAssignedToId}
+                        placeholder="Selecciona un usuario"
+                        items={[
+                          { id: "none", name: "Sin asignar" },
+                          ...allUsers.map(user => ({
+                            id: user.id.toString(),
+                            name: user.fullName || `${user.name || ""} ${user.surname || ""}`
+                          }))
+                        ]}
+                        triggerClassName="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                      />
                     </div>
 
                     <div className="flex items-center space-x-2">
@@ -417,24 +397,16 @@ export default function BtnRegistrarItem({ onAgregar }) {
                         >
                           Área común
                         </Label>
-                        <Select
+                        <SelectWithSearch
                           value={commonAreaId}
                           onValueChange={setCommonAreaId}
-                        >
-                          <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                            <SelectValue placeholder="Selecciona un área común" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {commonAreas.map((area) => (
-                              <SelectItem
-                                key={area.id}
-                                value={area.id.toString()}
-                              >
-                                {area.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                          placeholder="Selecciona un área común"
+                          items={commonAreas.map(area => ({
+                            id: area.id.toString(),
+                            name: area.name
+                          }))}
+                          triggerClassName="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                        />
                       </div>
                     ) : (
                       <div>

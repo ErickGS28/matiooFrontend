@@ -645,27 +645,29 @@ export default function InternHome() {
               {filteredItems.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-card-bg rounded-lg shadow-md hover:scale-105 w-[auto]"
+                  className="bg-card-bg rounded-lg shadow-md hover:scale-105 w-full flex flex-col overflow-hidden"
                 >
-                  <div className="flex justify-center bg-white rounded-lg p-2">
+                  <div className="flex justify-center bg-white rounded-t-lg p-2 h-[150px] flex-shrink-0">
                     <img
                       src={item.imageUrl || "/defaultItem.png"}
                       alt={item.name}
-                      className="mx-auto mb-4 w-[8em]"
+                      className="mx-auto h-full object-contain"
                       onError={(e) => {
                         e.target.src = "/defaultItem.png";
                       }}
                     />
                   </div>
-                  <div className="px-4 py-3 bg-indigo-800 rounded-b-lg border-t-2 border-indigo-950">
-                    <h3 className="text-[1.8em] font-semibold text-white">
+                  <div className="px-4 py-3 bg-indigo-800 rounded-b-lg border-t-2 border-indigo-950 flex-grow">
+                    <h3 className="text-[1.5em] font-semibold text-white truncate" title={item.name}>
                       {item.name}
                     </h3>
                     <div className="flex justify-between gap-4 align-middle">
-                      <p className="text-white">{item.description}</p>
+                      <p className="text-white text-sm line-clamp-2 h-[40px]" title={item.description}>
+                        {item.description}
+                      </p>
                     </div>
                     <div className="flex flex-col gap-2 mt-2">
-                      <p className="text-sm text-gray-200">
+                      <p className="text-sm text-gray-200 truncate" title={`Código: ${item.code}`}>
                         Código: {item.code}
                       </p>
                     </div>

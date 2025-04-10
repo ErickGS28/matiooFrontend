@@ -10,6 +10,12 @@ export default function Table({ data, onStatusChange, onSave, showRoleColumn = f
   const [currentUser, setCurrentUser] = useState(null); // El usuario que está siendo modificado
   const [tempStatus, setTempStatus] = useState(null); // Guardamos el estado temporal del Switch
 
+  // Función para truncar texto largo y agregar puntos suspensivos
+  const truncateText = (text, maxLength = 20) => {
+    if (!text) return "";
+    return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+  };
+
   // Función para abrir el modal de cambio de estado
   const handleStatusChange = (userId) => {
     const user = data.find((user) => user.id === userId);
@@ -73,11 +79,15 @@ export default function Table({ data, onStatusChange, onSave, showRoleColumn = f
               key={index}
               className={`hover:scale-105 ${index % 2 === 0 ? "bg-skyblue-row shadow-md shadow-sky-200" : "bg-lightpurple-row shadow-md shadow-purple-300"} rounded-l-2xl rounded-r-2xl group transform transition-transform duration-300`}
             >
-              <td className="py-3 px-4 rounded-l-2xl font-semibold text-darkpurple-title">
-                {user.fullName || `${user.name} ${user.lastname}`.trim()}
+              <td className="py-3 px-4 rounded-l-2xl font-semibold text-darkpurple-title truncate max-w-[200px]" title={user.fullName || `${user.name} ${user.lastname}`.trim()}>
+                {truncateText(user.fullName || `${user.name} ${user.lastname}`.trim(), 25)}
               </td>
-              <td className="py-3 px-4 font-semibold text-darkpurple-title">{user.email}</td>
-              <td className="py-3 px-4 font-semibold text-darkpurple-title">{user.location}</td>
+              <td className="py-3 px-4 font-semibold text-darkpurple-title truncate max-w-[200px]" title={user.email}>
+                {truncateText(user.email, 25)}
+              </td>
+              <td className="py-3 px-4 font-semibold text-darkpurple-title truncate max-w-[150px]" title={user.location}>
+                {truncateText(user.location, 20)}
+              </td>
               <td className="py-3 px-4">
                 <ViewUserDialog user={user} />
               </td>

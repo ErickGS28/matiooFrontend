@@ -26,23 +26,28 @@ import { toast } from "react-hot-toast";
 import { validateNoSpecialChars, validateCode, validateSerialNumber } from "@/components/templates/admin/Item";
 
 export function EditItemDialog({ item, onSave }) {
+  // Estado para controlar si el diálogo está abierto o no
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
-  // Estado inicial: si un campo no existe, se pone 0 (sin selección).
-  const [formData, setFormData] = React.useState({
-    id: item.id || 0,
-    name: item.name || "",
-    itemTypeId: item.itemType ? item.itemType.id : 0,
-    brandId: item.brand ? item.brand.id : 0,
-    modelId: item.model ? item.model.id : 0,
-    ownerId: item.ownerId || (item.owner ? item.owner.id : 0),  // Usar ownerId si está disponible
-    serialNumber: item.serialNumber || "",
-    code: item.code || "",
-    location: item.location || "",
-    assignedToId: item.assignedToId || (item.assignedTo ? item.assignedTo.id : 0), // Usar assignedToId si está disponible
-    status: item.status !== undefined ? item.status : true,
+  // Función para inicializar el estado del formulario con los datos del item
+  const initializeFormData = (itemData) => ({
+    id: itemData.id || 0,
+    name: itemData.name || "",
+    itemTypeId: itemData.itemType ? itemData.itemType.id : 0,
+    brandId: itemData.brand ? itemData.brand.id : 0,
+    modelId: itemData.model ? itemData.model.id : 0,
+    ownerId: itemData.ownerId || (itemData.owner ? itemData.owner.id : 0),
+    serialNumber: itemData.serialNumber || "",
+    code: itemData.code || "",
+    location: itemData.location || "",
+    assignedToId: itemData.assignedToId || (itemData.assignedTo ? itemData.assignedTo.id : 0),
+    status: itemData.status !== undefined ? itemData.status : true,
     useCommonArea: false,
     commonAreaId: 0,
   });
+
+  // Estado del formulario
+  const [formData, setFormData] = React.useState(initializeFormData(item));
 
   // Estado para errores de validación
   const [formErrors, setFormErrors] = React.useState({
@@ -57,78 +62,87 @@ export function EditItemDialog({ item, onSave }) {
   const [brands, setBrands] = React.useState([]);
   const [itemTypes, setItemTypes] = React.useState([]);
   const [models, setModels] = React.useState([]);
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
+  // Actualizar el estado del formulario cuando cambia el item o se abre el diálogo
+  React.useEffect(() => {
+    if (isDialogOpen) {
+      setFormData(initializeFormData(item));
+    }
+  }, [item, isDialogOpen]);
 
   // Cargar usuarios y áreas comunes cuando se abre el diálogo
   React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Cargar usuarios
-        const usersResponse = await getAllUsers();
-        if (
-          usersResponse &&
-          usersResponse.type === "SUCCESS" &&
-          Array.isArray(usersResponse.result)
-        ) {
-          // Filtrar usuarios con rol "RESPONSIBLE" para 'dueño'
-          const responsible = usersResponse.result.filter(
-            (user) => user.role && user.role === "RESPONSIBLE"
-          );
-          setResponsibleUsers(responsible);
+    if (isDialogOpen) {
+      fetchData();
+    }
+  }, [isDialogOpen]);
 
-          // Filtrar usuarios que NO tengan rol "ADMIN" para 'asignado'
-          const nonAdminUsers = usersResponse.result.filter(
-            (user) => user.role && user.role !== "ADMIN"
-          );
-          setAllUsers(nonAdminUsers);
-        }
+  // Función para cargar todos los datos necesarios
+  const fetchData = async () => {
+    try {
+      // Cargar usuarios
+      const usersResponse = await getAllUsers();
+      if (
+        usersResponse &&
+        usersResponse.type === "SUCCESS" &&
+        Array.isArray(usersResponse.result)
+      ) {
+        // Filtrar usuarios con rol "RESPONSIBLE" para 'dueño'
+        const responsible = usersResponse.result.filter(
+          (user) => user.role && user.role === "RESPONSIBLE"
+        );
+        setResponsibleUsers(responsible);
 
-        // Cargar áreas comunes
-        const areasResponse = await getActiveCommonAreas();
-        if (
-          areasResponse &&
-          areasResponse.type === "SUCCESS" &&
-          Array.isArray(areasResponse.result)
-        ) {
-          setCommonAreas(areasResponse.result);
-        }
-
-        // Cargar marcas
-        const brandsResponse = await getActiveBrands();
-        if (
-          brandsResponse &&
-          brandsResponse.type === "SUCCESS" &&
-          Array.isArray(brandsResponse.result)
-        ) {
-          setBrands(brandsResponse.result);
-        }
-
-        // Cargar tipos de item
-        const typesResponse = await getActiveItemTypes();
-        if (
-          typesResponse &&
-          typesResponse.type === "SUCCESS" &&
-          Array.isArray(typesResponse.result)
-        ) {
-          setItemTypes(typesResponse.result);
-        }
-
-        // Cargar modelos
-        const modelsResponse = await getActiveModels();
-        if (
-          modelsResponse &&
-          modelsResponse.type === "SUCCESS" &&
-          Array.isArray(modelsResponse.result)
-        ) {
-          setModels(modelsResponse.result);
-        }
-      } catch (error) {
-        console.error("Error al cargar datos:", error);
+        // Filtrar usuarios que NO tengan rol "ADMIN" para 'asignado'
+        const nonAdminUsers = usersResponse.result.filter(
+          (user) => user.role && user.role !== "ADMIN"
+        );
+        setAllUsers(nonAdminUsers);
       }
-    };
 
-    fetchData();
-  }, []);
+      // Cargar áreas comunes
+      const areasResponse = await getActiveCommonAreas();
+      if (
+        areasResponse &&
+        areasResponse.type === "SUCCESS" &&
+        Array.isArray(areasResponse.result)
+      ) {
+        setCommonAreas(areasResponse.result);
+      }
+
+      // Cargar marcas
+      const brandsResponse = await getActiveBrands();
+      if (
+        brandsResponse &&
+        brandsResponse.type === "SUCCESS" &&
+        Array.isArray(brandsResponse.result)
+      ) {
+        setBrands(brandsResponse.result);
+      }
+
+      // Cargar tipos de item
+      const typesResponse = await getActiveItemTypes();
+      if (
+        typesResponse &&
+        typesResponse.type === "SUCCESS" &&
+        Array.isArray(typesResponse.result)
+      ) {
+        setItemTypes(typesResponse.result);
+      }
+
+      // Cargar modelos
+      const modelsResponse = await getActiveModels();
+      if (
+        modelsResponse &&
+        modelsResponse.type === "SUCCESS" &&
+        Array.isArray(modelsResponse.result)
+      ) {
+        setModels(modelsResponse.result);
+      }
+    } catch (error) {
+      console.error("Error al cargar datos:", error);
+    }
+  };
 
   // Validar campos al cambiar
   const validateField = (name, value) => {

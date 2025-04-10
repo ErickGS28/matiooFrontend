@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 
 
 export default function TableItem({ data, onUpdateItem }) {
-  const [items, setItems] = useState(data);
+  // Eliminamos el estado local de items y usamos directamente los datos proporcionados por el componente padre
   const [itemStatus, setItemStatus] = useState({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
@@ -16,7 +16,6 @@ export default function TableItem({ data, onUpdateItem }) {
 
   // Inicializar el estado de los switches cuando cambian los datos
   useEffect(() => {
-    setItems(data);
     // Crear un objeto con el estado de cada item basado en su propiedad status
     const initialStatus = {};
     data.forEach(item => {
@@ -26,14 +25,14 @@ export default function TableItem({ data, onUpdateItem }) {
   }, [data]);
 
   const handleStatusChange = (itemCode) => {
-    setCurrentItem(items.find(item => item.code === itemCode));
+    setCurrentItem(data.find(item => item.code === itemCode));
     setTempStatus(itemStatus[itemCode]);
     setIsDialogOpen(true);
   };
 
   const handleConfirmStatusChange = async (itemCode) => {
     try {
-      const item = items.find(item => item.code === itemCode);
+      const item = data.find(item => item.code === itemCode);
       if (item && item.id) {
         await itemService.changeItemStatus(item.id);
   
@@ -42,7 +41,7 @@ export default function TableItem({ data, onUpdateItem }) {
           [itemCode]: !prev[itemCode],
         }));
   
-        // ✅ Mostrar toast de éxito
+        // Mostrar toast de éxito
         toast.success("Cambio de estado del bien exitoso");
       }
     } catch (error) {
@@ -84,19 +83,10 @@ export default function TableItem({ data, onUpdateItem }) {
 
       if (response && response.type === "SUCCESS") {
         
-        // Actualizar el estado local
-        const updatedItemData = response.result || itemToUpdate;
-        
         // Actualizar el estado en el componente padre (Item.jsx) si existe el callback
         if (onUpdateItem && typeof onUpdateItem === 'function') {
+          const updatedItemData = response.result || itemToUpdate;
           onUpdateItem(updatedItemData);
-        } else {
-          // Si no hay callback, actualizar el estado local como antes
-          setItems(prevItems =>
-            prevItems.map(item =>
-              item.id === itemToUpdate.id ? { ...item, ...updatedItemData } : item
-            )
-          );
         }
       }
     } catch (error) {
@@ -118,7 +108,7 @@ export default function TableItem({ data, onUpdateItem }) {
           </tr>
         </thead>
         <tbody>
-          {items.map((item, index) => (
+          {data.map((item, index) => (
             <tr
               key={index}
               className={`hover:scale-105 ${index % 2 === 0 ? "bg-skyblue-row shadow-md shadow-sky-200" : "bg-lightpurple-row shadow-md shadow-purple-300"} rounded-l-2xl rounded-r-2xl group transform transition-transform duration-300`}

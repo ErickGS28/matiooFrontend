@@ -212,8 +212,7 @@ export default function InternHome() {
         console.log("Obteniendo items para el usuario con ID:", userData.id);
         
         // Obtener los items asignados al usuario
-        // Usar ID 1 (admin) para desarrollo si hay problemas de permisos
-        const userItems = await itemService.getItemsByAssignedToId(userData.role === 'ADMIN' ? userData.id : 1);
+        const userItems = await itemService.getItemsByAssignedToId(userData.id);
         console.log("Items obtenidos:", userItems);
         
         if (Array.isArray(userItems)) {
@@ -271,16 +270,6 @@ export default function InternHome() {
       } catch (error) {
         console.error("Error al cargar los datos del usuario:", error);
         toast.error("Error al cargar los datos del perfil");
-        
-        // Datos de fallback para desarrollo
-        console.warn("Usando datos de usuario de fallback debido a error");
-        setUserData({
-          id: 1,
-          fullName: "Usuario Administrador",
-          username: "admin",
-          email: "admin@example.com",
-          location: "Oficina Principal",
-        });
       }
     };
 

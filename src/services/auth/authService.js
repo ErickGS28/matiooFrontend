@@ -204,15 +204,11 @@ export const apiRequestWithToken = async (url, options = {}) => {
  * @returns {Object|null} - Decoded token payload or null if error
  */
 export const decodeAndDisplayToken = () => {
-    // Token de fallback para desarrollo (ADMIN)
-    const fallbackToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlkIjoxLCJzdGF0dXMiOnRydWUsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxODAwMDAwMDAwfQ.8JwYLF8oIDHBJJtBF_wvqZXuzn0UZ-8c3_D5c9-5NwQ';
-    
     // Intentar obtener el token del localStorage
     const token = localStorage.getItem('token');
     if (!token) {
-        console.warn('No token found in localStorage, using fallback token');
-        localStorage.setItem('token', `Bearer ${fallbackToken}`);
-        return decodeToken(fallbackToken);
+        console.warn('No token found in localStorage');
+        return null;
     }
     
     try {
@@ -223,9 +219,7 @@ export const decodeAndDisplayToken = () => {
         return decodeToken(tokenWithoutBearer);
     } catch (error) {
         console.error('Error decoding token:', error);
-        console.warn('Using fallback token due to error');
-        localStorage.setItem('token', `Bearer ${fallbackToken}`);
-        return decodeToken(fallbackToken);
+        return null;
     }
 };
 

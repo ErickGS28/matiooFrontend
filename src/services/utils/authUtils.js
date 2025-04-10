@@ -5,16 +5,11 @@
  * @returns {Object} Headers object with Authorization
  */
 export const getAuthHeader = () => {
-    // Token de fallback para desarrollo (ADMIN)
-    const fallbackToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlkIjoxLCJzdGF0dXMiOnRydWUsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxODAwMDAwMDAwfQ.8JwYLF8oIDHBJJtBF_wvqZXuzn0UZ-8c3_D5c9-5NwQ';
-    
     try {
         const token = localStorage.getItem('token');
         if (!token) {
-            console.warn('No authentication token found, using fallback token');
-            localStorage.setItem('token', `Bearer ${fallbackToken}`);
+            console.warn('No authentication token found');
             return {
-                'Authorization': `Bearer ${fallbackToken}`,
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             };
@@ -28,10 +23,8 @@ export const getAuthHeader = () => {
             'Accept': 'application/json'
         };
     } catch (error) {
-        console.warn('Error getting auth token, using fallback token', error);
-        localStorage.setItem('token', `Bearer ${fallbackToken}`);
+        console.warn('Error getting auth token', error);
         return {
-            'Authorization': `Bearer ${fallbackToken}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         };

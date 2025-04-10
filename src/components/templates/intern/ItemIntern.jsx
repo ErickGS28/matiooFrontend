@@ -98,11 +98,12 @@ export default function ItemIntern() {
         const tokenData = decodeAndDisplayToken();
 
         if (tokenData && tokenData.id) {
-          // Guardar el ID en localStorage para futuras referencias
-          localStorage.setItem("userId", tokenData.id);
+          // Usar el ID del token sin sobrescribir el localStorage
+          const userId = tokenData.id;
+          console.log("Obteniendo datos del usuario con ID:", userId);
 
           // Obtener los datos completos del usuario usando getUserById
-          const response = await getUserById(tokenData.id);
+          const response = await getUserById(userId);
 
           if (response && response.result) {
             const userData = response.result;

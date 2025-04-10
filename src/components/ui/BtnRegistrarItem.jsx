@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SelectWithSearch } from "@/components/ui/select-with-search";
 import { getActiveUsers } from "@/services/users/userService";
 import { getActiveCommonAreas } from "@/services/common_area/commonAreaService";
 import { getActiveBrands } from "@/services/brand/brandService";
@@ -269,54 +270,39 @@ export default function BtnRegistrarItem({ onAgregar }) {
                       <Label htmlFor="itemType" className="text-sm font-medium text-gray-700">
                         Tipo de bien
                       </Label>
-                      <Select value={itemTypeId} onValueChange={setItemTypeId}>
-                        <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                          <SelectValue placeholder="Selecciona un tipo" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {itemTypes.map((type) => (
-                            <SelectItem key={type.id} value={type.id.toString()}>
-                              {type.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <SelectWithSearch
+                        value={itemTypeId}
+                        onValueChange={setItemTypeId}
+                        placeholder="Selecciona un tipo"
+                        items={itemTypes}
+                        triggerClassName="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                      />
                     </div>
 
                     <div>
                       <Label htmlFor="brand" className="text-sm font-medium text-gray-700">
                         Marca
                       </Label>
-                      <Select value={brandId} onValueChange={setBrandId}>
-                        <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                          <SelectValue placeholder="Selecciona una marca" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {brands.map((brand) => (
-                            <SelectItem key={brand.id} value={brand.id.toString()}>
-                              {brand.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <SelectWithSearch
+                        value={brandId}
+                        onValueChange={setBrandId}
+                        placeholder="Selecciona una marca"
+                        items={brands}
+                        triggerClassName="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                      />
                     </div>
 
                     <div>
                       <Label htmlFor="model" className="text-sm font-medium text-gray-700">
                         Modelo
                       </Label>
-                      <Select value={modelId} onValueChange={setModelId}>
-                        <SelectTrigger className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                          <SelectValue placeholder="Selecciona un modelo" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {models.map((model) => (
-                            <SelectItem key={model.id} value={model.id.toString()}>
-                              {model.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <SelectWithSearch
+                        value={modelId}
+                        onValueChange={setModelId}
+                        placeholder="Selecciona un modelo"
+                        items={models}
+                        triggerClassName="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                      />
                     </div>
 
                     <div>

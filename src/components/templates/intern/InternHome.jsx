@@ -249,11 +249,8 @@ export default function InternHome() {
         console.log("Token data:", tokenData);
 
         if (tokenData && tokenData.id) {
-          // Guardar el ID en localStorage para futuras referencias
-          localStorage.setItem("userId", tokenData.id);
-
-          // Usar ID 1 (admin) para desarrollo si hay problemas de permisos
-          const userId = tokenData.role === 'ADMIN' ? tokenData.id : 1;
+          // Usar el ID del token o el que ya estu00e9 en localStorage
+          const userId = tokenData.id;
           console.log("Obteniendo datos del usuario con ID:", userId);
           
           // Obtener los datos completos del usuario usando getUserById
@@ -268,16 +265,6 @@ export default function InternHome() {
               username: userData.username || "",
               email: userData.email || "",
               location: userData.location || "",
-            });
-          } else {
-            // Datos de fallback para desarrollo
-            console.warn("Usando datos de usuario de fallback");
-            setUserData({
-              id: userId,
-              fullName: "Usuario Administrador",
-              username: "admin",
-              email: "admin@example.com",
-              location: "Oficina Principal",
             });
           }
         }

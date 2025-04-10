@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { updateModel, updateModelWithImage, getModelImageUrl, fetchModelImage } from "../../../../services/model/modelService"
 import { toast } from "react-hot-toast"
 
+
 export default function EditModelDialog({ model, onSave }) {
   // Initialize formData with default values
   const [formData, setFormData] = React.useState({
@@ -140,11 +141,11 @@ export default function EditModelDialog({ model, onSave }) {
           Editar
         </button>
       </DialogTrigger>
-      <DialogContent className="w-[30%] h-[80%] min-w-[425px] max-w-[90vw] p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
-        <DialogHeader>
-          <DialogTitle className="text-darkpurple-title text-[1.8em] font-semibold">Editar modelo</DialogTitle>
+      <DialogContent className="w-full md:w-[80%] lg:w-[60%] xl:w-[40%] max-h-[80vh] h-auto overflow-y-auto p-4 sm:p-6 bg-white rounded-2xl shadow-[0_4px_20px_-4px_rgba(88,28,135,0.3)]">
+        <DialogHeader className="mb-2">
+          <DialogTitle className="text-darkpurple-title text-[1.3em] sm:text-[1.5em] font-semibold">Editar modelo</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-6">
+        <div className="grid gap-3 sm:gap-4 overflow-y-auto">
           <div>
             <Label className="text-darkpurple-title font-medium">Nombre</Label>
             <input
@@ -155,13 +156,13 @@ export default function EditModelDialog({ model, onSave }) {
             />
           </div>
 
-          <div className="mt-3">
-            <Label className="text-darkpurple-title font-medium">Imagen actual</Label>
-            <div className="mt-3 flex justify-center">
+          <div className="mt-2">
+            <Label className="text-darkpurple-title font-medium text-sm sm:text-base">Imagen actual</Label>
+            <div className="mt-2 flex justify-center">
               <img
                 src={imagePreview || modelImage || "/defaultModel.png"}
                 alt={formData.name}
-                className="w-[10em] h-[10em] object-contain rounded-md border-2 border-purple-200"
+                className="w-[6em] sm:w-[8em] h-[6em] sm:h-[8em] object-contain rounded-md border-2 border-purple-200"
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = "/defaultModel.png";
@@ -170,20 +171,20 @@ export default function EditModelDialog({ model, onSave }) {
             </div>
           </div>
 
-          <div className="mt-4">
-            <Label className="text-darkpurple-title font-medium">Cambiar imagen (opcional)</Label>
+          <div className="mt-2">
+            <Label className="text-darkpurple-title font-medium text-sm sm:text-base">Cambiar imagen (opcional)</Label>
             <input
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="cursor-pointer mt-3 w-full rounded-[1em] border-2 border-purple-900 px-4 py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
+              className="cursor-pointer mt-2 w-full text-xs sm:text-sm rounded-[0.8em] border-2 border-purple-900 px-2 py-1 sm:py-2 bg-transparent text-darkpurple-title focus:outline-none focus:ring-2 focus:ring-purple-900/50"
             />
           </div>
 
-          <div className="flex justify-end mt-[2em]">
+          <div className="flex justify-end mt-3">
             <Button
               onClick={handleSave}
-              className="cursor-pointer bg-darkpurple-title hover:bg-purple-900 text-white font-semibold rounded-[1em] px-4 py-2 shadow-md shadow-purple-300/30 transition-colors duration-300"
+              className="cursor-pointer bg-darkpurple-title hover:bg-purple-900 text-white font-semibold text-xs sm:text-sm rounded-[0.8em] px-2 sm:px-3 py-1 shadow-md shadow-purple-300/30 transition-colors duration-300"
               disabled={loading}
             >
               {loading ? 'Guardando...' : 'Guardar'}

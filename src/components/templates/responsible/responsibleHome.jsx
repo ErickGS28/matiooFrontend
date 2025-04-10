@@ -225,9 +225,11 @@ export default function responsibleHome() {
         const tokenData = decodeAndDisplayToken();
 
         if (tokenData && tokenData.id) {
-          localStorage.setItem("userId", tokenData.id);
+          // Usar el ID del token sin sobrescribir el localStorage
+          const userId = tokenData.id;
+          console.log("Obteniendo datos del usuario con ID:", userId);
 
-          const response = await getUserById(tokenData.id);
+          const response = await getUserById(userId);
 
           if (response && response.result) {
             const userData = response.result;

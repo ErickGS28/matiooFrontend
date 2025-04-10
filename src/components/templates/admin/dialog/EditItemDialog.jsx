@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { SelectWithSearch } from "@/components/ui/select-with-search";
 import { getAllUsers } from "@/services/users/userService";
 import { getActiveCommonAreas } from "@/services/common_area/commonAreaService";
 import { getActiveBrands } from "@/services/brand/brandService";
@@ -292,67 +293,43 @@ export function EditItemDialog({ item, onSave }) {
               {/* Tipo de bien */}
               <div>
                 <Label className="text-sm font-medium text-gray-700">Tipo de bien</Label>
-                <Select
+                <SelectWithSearch
                   value={formData.itemTypeId.toString()}
                   onValueChange={(value) =>
                     setFormData((prev) => ({ ...prev, itemTypeId: value }))
                   }
-                >
-                  <SelectTrigger className="mt-3 mb-4 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                  <SelectValue placeholder="Selecciona un tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {itemTypes.map((type) => (
-                      <SelectItem key={type.id} value={type.id.toString()}>
-                        {type.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  placeholder="Selecciona un tipo"
+                  items={itemTypes}
+                  triggerClassName="mt-3 mb-4 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                />
               </div>
 
               {/* Marca */}
               <div>
                 <Label className="text-sm font-medium text-gray-700" >Marca</Label>
-                <Select
+                <SelectWithSearch
                   value={formData.brandId.toString()}
                   onValueChange={(value) =>
                     setFormData((prev) => ({ ...prev, brandId: value }))
                   }
-                >
-                  <SelectTrigger className="mt-3 mb-4 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                  <SelectValue placeholder="Selecciona una marca" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {brands.map((brand) => (
-                      <SelectItem key={brand.id} value={brand.id.toString()}>
-                        {brand.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  placeholder="Selecciona una marca"
+                  items={brands}
+                  triggerClassName="mt-3 mb-4 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                />
               </div>
 
               {/* Modelo */}
               <div>
                 <Label className="text-sm font-medium text-gray-700">Modelo</Label>
-                <Select
+                <SelectWithSearch
                   value={formData.modelId.toString()}
                   onValueChange={(value) =>
                     setFormData((prev) => ({ ...prev, modelId: value }))
                   }
-                >
-                  <SelectTrigger className="mt-3 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                  <SelectValue placeholder="Selecciona un modelo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {models.map((model) => (
-                      <SelectItem key={model.id} value={model.id.toString()}>
-                        {model.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  placeholder="Selecciona un modelo"
+                  items={models}
+                  triggerClassName="mt-3 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                />
               </div>
             </div>
 
@@ -386,7 +363,7 @@ export function EditItemDialog({ item, onSave }) {
               {/* Dueño */}
               <div>
                 <Label className="text-sm font-medium text-gray-700">Dueño</Label>
-                <Select
+                <SelectWithSearch
                   value={formData.ownerId > 0 ? formData.ownerId.toString() : "none"}
                   onValueChange={(value) =>
                     setFormData((prev) => ({
@@ -394,25 +371,19 @@ export function EditItemDialog({ item, onSave }) {
                       ownerId: value === "none" ? 0 : parseInt(value),
                     }))
                   }
-                >
-                  <SelectTrigger className="mt-3 mb-4 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                    <SelectValue placeholder="Selecciona un dueño" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Sin dueño</SelectItem>
-                    {responsibleUsers.map((user) => (
-                      <SelectItem key={user.id} value={user.id.toString()}>
-                        {user.fullName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  placeholder="Selecciona un dueño"
+                  items={[
+                    { id: "none", name: "Sin dueño" },
+                    ...responsibleUsers.map(user => ({ id: user.id.toString(), name: user.fullName }))
+                  ]}
+                  triggerClassName="mt-3 mb-4 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                />
               </div>
 
               {/* Asignado a */}
               <div>
                 <Label className="text-sm font-medium text-gray-700">Asignado a</Label>
-                <Select
+                <SelectWithSearch
                   value={formData.assignedToId > 0 ? formData.assignedToId.toString() : "none"}
                   onValueChange={(value) =>
                     setFormData((prev) => ({
@@ -420,19 +391,13 @@ export function EditItemDialog({ item, onSave }) {
                       assignedToId: value === "none" ? 0 : parseInt(value),
                     }))
                   }
-                >
-                  <SelectTrigger className="mt-3 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                    <SelectValue placeholder="Selecciona un usuario" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Sin asignar</SelectItem>
-                    {allUsers.map((user) => (
-                      <SelectItem key={user.id} value={user.id.toString()}>
-                        {user.fullName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  placeholder="Selecciona un usuario"
+                  items={[
+                    { id: "none", name: "Sin asignar" },
+                    ...allUsers.map(user => ({ id: user.id.toString(), name: user.fullName }))
+                  ]}
+                  triggerClassName="mt-3 w-full border-purple-900 rounded-md shadow-sm focus:border-purple-500 focus:ring-purple-500"
+                />
               </div>
 
               <div className="flex justify-end mt-4">

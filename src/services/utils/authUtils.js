@@ -99,4 +99,5 @@ export const handleResponse = async (response) => {
  */
 export const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
 };
